@@ -15,15 +15,24 @@ ThemeData get appDarkThemeData {
       onBackground: Color(0xFFF0F0F0),
       surface: Color(0xFF1A1A1A),
       onSurface: Color(0xFFF0F0F0),
+      surfaceTint: Color(0x00000000),
     ),
     disabledColor: const Color(0xFF3F3F3F),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(const Color(0xFFA81818)),
+        foregroundColor: MaterialStateProperty.all(const Color(0xFFF0F0F0)),
+        padding: MaterialStateProperty.all(
+          const EdgeInsets.symmetric(vertical: 12),
+        ),
+        shape: MaterialStateProperty.all(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+        ),
         textStyle: MaterialStateProperty.all(
           const TextStyle(
-            color: Color(0xFFF0F0F0),
             fontFamily: fontFamily,
             fontSize: 20,
+            fontWeight: FontWeight.bold,
           ),
         ),
       ),
@@ -32,13 +41,26 @@ ThemeData get appDarkThemeData {
       _SuccessTheme(success: Color(0xFF318E31)),
     ],
     inputDecorationTheme: const InputDecorationTheme(
+      contentPadding: EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 10,
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Color(0xFF222222)),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Color(0xFF222222)),
+      ),
       fillColor: Color(0xFF222222),
+      filled: true,
       hintStyle: TextStyle(
         color: Color(0xFF808080),
         fontFamily: fontFamily,
       ),
       iconColor: Color(0xFF808080),
     ),
+    scaffoldBackgroundColor: const Color(0xFF101010),
+    shadowColor: const Color(0x3F000000),
     textTheme: const TextTheme(
       headlineSmall: TextStyle(
         color: Color(0xFFF0F0F0),
@@ -62,7 +84,6 @@ ThemeData get appDarkThemeData {
       ),
     ),
     useMaterial3: true,
-    shadowColor: const Color(0x3F000000),
   );
 }
 
