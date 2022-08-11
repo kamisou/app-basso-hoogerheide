@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
-  LoginPage({Key? key}) : super(key: key);
+  LoginPage({super.key});
 
   final FocusNode _passwordFocus = FocusNode();
 
@@ -27,7 +27,7 @@ class LoginPage extends StatelessWidget {
                     horizontal: 20,
                     vertical: 32,
                   ),
-                  child: Form(child: _form(context)),
+                  child: Form(child: _formBuilder(context)),
                 ),
               ),
             ],
@@ -37,7 +37,7 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Widget _form(BuildContext context) {
+  Widget _formBuilder(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -66,6 +66,7 @@ class LoginPage extends StatelessWidget {
           ),
           keyboardType: TextInputType.visiblePassword,
           obscureText: true,
+          onEditingComplete: () {},
         ),
         const SizedBox(height: 20),
         ElevatedButton(

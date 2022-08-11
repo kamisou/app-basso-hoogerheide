@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({
-    Key? key,
+    super.key,
     required this.initialWork,
-  }) : super(key: key);
+  });
 
   /// Work to be executed while the splash screen is shown.
   /// Should return the route to be redirected to after finished.

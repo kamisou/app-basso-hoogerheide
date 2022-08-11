@@ -1,5 +1,7 @@
+import 'package:basso_hoogerheide/constants/app_configuration.dart';
 import 'package:basso_hoogerheide/constants/theme_data.dart';
-import 'package:basso_hoogerheide/interface/encrypted_storage.dart';
+import 'package:basso_hoogerheide/controllers/profile.dart';
+import 'package:basso_hoogerheide/interfaces/encrypted_storage.dart';
 import 'package:basso_hoogerheide/pages/home.dart';
 import 'package:basso_hoogerheide/pages/login.dart';
 import 'package:basso_hoogerheide/pages/splash.dart';
@@ -7,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class App extends ConsumerWidget {
-  const App({Key? key}) : super(key: key);
+  const App({super.key});
 
   final AppTheme _appTheme = const AppTheme();
 
@@ -19,9 +21,18 @@ class App extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       home: SplashPage(
         initialWork: () async {
-          final encryptedStorage = ref.read(encryptedStorageProvider);
-          final token = await encryptedStorage.read('session_token');
-          return token != null ? '/home' : '/login';
+          final encryptedStorage = ref.read(storageProvider);
+          final config = ref.read(appConfigProvider);
+          await encryptedStorage.initialize();
+
+          final token = encryptedStorage.read(config.sessionTokenStorageKey);
+          if (token != null) {
+            final profile = ref.read(profileProvider);
+            profile.getUser();
+            return '/home';
+          }
+
+          return '/login';
         },
       ),
       restorationScopeId: 'basso_hoogerheide',
