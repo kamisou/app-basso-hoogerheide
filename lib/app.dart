@@ -9,11 +9,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class App extends ConsumerWidget {
   const App({Key? key}) : super(key: key);
 
+  final AppTheme _appTheme = const AppTheme();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
-      color: appDarkThemeData.colorScheme.primary,
-      darkTheme: appDarkThemeData,
+      color: _appTheme.dark.colorScheme.primary,
+      darkTheme: _appTheme.dark,
       debugShowCheckedModeBanner: false,
       home: SplashPage(
         initialWork: () async {
