@@ -6,6 +6,12 @@ class AppTheme {
   ThemeData get dark {
     const String fontFamily = 'Source Sans Pro';
     return ThemeData(
+      cardTheme: CardTheme(
+        margin: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(4),
+        ),
+      ),
       colorScheme: const ColorScheme(
         brightness: Brightness.dark,
         primary: Color(0xFFA81818),
@@ -43,6 +49,11 @@ class AppTheme {
       extensions: const [
         _SuccessThemeExtension(success: Color(0xFF318E31)),
       ],
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(32),
+        ),
+      ),
       inputDecorationTheme: const InputDecorationTheme(
         contentPadding: EdgeInsets.symmetric(
           horizontal: 16,
