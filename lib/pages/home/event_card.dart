@@ -41,7 +41,7 @@ class _EventCardState extends State<EventCard> {
             child: Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 10,
-                vertical: 8,
+                vertical: 4,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
