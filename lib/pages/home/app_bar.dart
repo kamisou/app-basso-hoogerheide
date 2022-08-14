@@ -1,58 +1,18 @@
 import 'package:flutter/material.dart';
 
-class HomeAppBar extends StatefulWidget {
+class HomeAppBar extends StatelessWidget {
   const HomeAppBar({
     super.key,
-    required this.controller,
     required this.pageTitles,
   });
 
-  final PageController controller;
-
   final List<String> pageTitles;
-
-  @override
-  State<HomeAppBar> createState() => _HomeAppBarState();
-}
-
-class _HomeAppBarState extends State<HomeAppBar> {
-  static const double _titleTabExtent = 120;
-
-  final PageController _pageController = PageController();
-
-  int _index = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    widget.controller.addListener(_controllerListener);
-  }
-
-  void _controllerListener() {
-    if (widget.controller.hasClients) {
-      final int index = widget.controller.page!.round();
-      if (index != _index) {
-        setState(() => _index = index);
-      }
-      _pageController.jumpTo(widget.controller.page! * _titleTabExtent);
-    }
-  }
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 40,
-      margin: const EdgeInsets.only(
-        left: 24,
-        right: 24,
-        top: 32,
-      ),
+      margin: const EdgeInsets.only(left: 24, right: 24, top: 32),
       child: Row(
         children: [
           SizedBox(
@@ -77,26 +37,32 @@ class _HomeAppBarState extends State<HomeAppBar> {
           ),
           const SizedBox(width: 50),
           Expanded(
-            child: ListView.builder(
-              controller: _pageController,
-              itemCount: widget.pageTitles.length,
-              itemExtent: _titleTabExtent,
-              physics: const NeverScrollableScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (_, index) => Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    widget.pageTitles[index],
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          fontWeight: index == _index
-                              ? FontWeight.bold
-                              : FontWeight.normal,
-                        ),
-                  ),
+            child: ShaderMask(
+              shaderCallback: (bounds) => const LinearGradient(
+                colors: [
+                  Color(0xFFFFFFFF),
+                  Color(0x00FFFFFF),
                 ],
+                end: Alignment(.65, 0),
+              ).createShader(bounds),
+              child: ListView.builder(
+                itemCount: pageTitles.length,
+                itemExtent: 100,
+                physics: const NeverScrollableScrollPhysics(
+                  parent: ClampingScrollPhysics(),
+                ),
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (_, index) => Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      pageTitles[index],
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.titleMedium!,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

@@ -51,7 +51,6 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: [
               HomeAppBar(
-                controller: _pageController,
                 pageTitles: _pageBodies.map((e) => e.title).toList(),
               ),
               const SizedBox(height: 40),

@@ -35,10 +35,10 @@ class CalendarPage extends HomePageBody {
       padding: const EdgeInsets.symmetric(horizontal: 20),
     );
   }
-  
+
   @override
-  VoidCallback? get fabAction => null;
-  
+  VoidCallback? get fabAction => () {};
+
   @override
   String get title => 'Agenda';
 }
