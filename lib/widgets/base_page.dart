@@ -1,7 +1,6 @@
 import 'package:basso_hoogerheide/pages/calendar/calendar.dart';
+import 'package:basso_hoogerheide/widgets/base_page_body.dart';
 import 'package:flutter/material.dart';
-
-import 'base_page_body.dart';
 
 class BasePage extends StatefulWidget {
   const BasePage({super.key});
