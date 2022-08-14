@@ -1,10 +1,14 @@
+import 'package:basso_hoogerheide/widgets/avatar_circle.dart';
 import 'package:flutter/material.dart';
 
 class HomeAppBar extends StatelessWidget {
   const HomeAppBar({
     super.key,
+    required this.controller,
     required this.pageTitles,
   });
+
+  final ScrollController controller;
 
   final List<String> pageTitles;
 
@@ -15,25 +19,9 @@ class HomeAppBar extends StatelessWidget {
       margin: const EdgeInsets.only(left: 24, right: 24, top: 32),
       child: Row(
         children: [
-          SizedBox(
-            height: 40,
-            width: 40,
-            child: Material(
-              color: Theme.of(context).colorScheme.surface,
-              type: MaterialType.circle,
-              child: InkWell(
-                borderRadius: BorderRadius.circular(20),
-                onTap: () => Navigator.pushNamed(context, '/profile'),
-                child: Center(
-                  child: Text(
-                    'JM',
-                    style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                ),
-              ),
-            ),
+          const AvatarCircle(
+            avatarUrl: '',
+            initials: 'JM',
           ),
           const SizedBox(width: 50),
           Expanded(

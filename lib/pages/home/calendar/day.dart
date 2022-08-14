@@ -1,5 +1,5 @@
 import 'package:basso_hoogerheide/data_objects/calendar/event.dart';
-import 'package:basso_hoogerheide/pages/calendar/event_card.dart';
+import 'package:basso_hoogerheide/pages/home/calendar/event_card.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

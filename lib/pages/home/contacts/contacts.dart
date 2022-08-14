@@ -1,3 +1,4 @@
+import 'package:basso_hoogerheide/pages/home/contacts/contact_tile.dart';
 import 'package:basso_hoogerheide/widgets/base_page_body.dart';
 import 'package:flutter/material.dart';
 
@@ -7,7 +8,7 @@ class ContactsPage extends HomePageBody {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemBuilder: (context, index) => const Text('A'),
+      itemBuilder: (_, index) => const ContactTile(),
     );
   }
 

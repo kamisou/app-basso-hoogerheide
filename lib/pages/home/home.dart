@@ -1,6 +1,6 @@
-import 'package:basso_hoogerheide/pages/calendar/calendar.dart';
-import 'package:basso_hoogerheide/pages/contacts/contacts.dart';
 import 'package:basso_hoogerheide/pages/home/app_bar.dart';
+import 'package:basso_hoogerheide/pages/home/calendar/calendar.dart';
+import 'package:basso_hoogerheide/pages/home/contacts/contacts.dart';
 import 'package:basso_hoogerheide/widgets/base_page_body.dart';
 import 'package:flutter/material.dart';
 
@@ -51,6 +51,7 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: [
               HomeAppBar(
+                controller: _pageController,
                 pageTitles: _pageBodies.map((e) => e.title).toList(),
               ),
               const SizedBox(height: 40),
