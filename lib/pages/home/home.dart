@@ -32,7 +32,7 @@ class HomePage extends StatelessWidget {
                         child: InkWell(
                           // TODO: go to profile
                           borderRadius: BorderRadius.circular(20),
-                          onTap: () {},
+                          onTap: () => Navigator.pushNamed(context, '/profile'),
                           child: Center(
                             child: Text(
                               'JM',
