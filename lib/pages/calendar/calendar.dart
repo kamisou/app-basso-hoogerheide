@@ -4,11 +4,7 @@ import 'package:basso_hoogerheide/widgets/base_page_body.dart';
 import 'package:flutter/material.dart';
 
 class CalendarPage extends HomePageBody {
-  const CalendarPage({
-    super.key,
-    required super.title,
-    super.fabAction,
-  });
+  const CalendarPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,4 +35,10 @@ class CalendarPage extends HomePageBody {
       padding: const EdgeInsets.symmetric(horizontal: 20),
     );
   }
+  
+  @override
+  VoidCallback? get fabAction => null;
+  
+  @override
+  String get title => 'Agenda';
 }

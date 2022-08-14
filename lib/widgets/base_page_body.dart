@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 
 abstract class HomePageBody extends StatelessWidget {
-  const HomePageBody({
-    super.key,
-    required this.title,
-    this.fabAction,
-  });
+  const HomePageBody({super.key});
 
-  final String title;
+  String get title;
 
-  final VoidCallback? fabAction;
+  VoidCallback? get fabAction;
 }

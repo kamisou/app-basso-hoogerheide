@@ -3,36 +3,38 @@ import 'package:flutter/material.dart';
 class HomeAppBar extends StatefulWidget {
   const HomeAppBar({
     super.key,
-    required this.curve,
-    required this.duration,
+    required this.controller,
     required this.pageTitles,
-    required this.selectedPageIndex,
   });
 
-  final Curve curve;
-
-  final Duration duration;
+  final PageController controller;
 
   final List<String> pageTitles;
-
-  final int selectedPageIndex;
 
   @override
   State<HomeAppBar> createState() => _HomeAppBarState();
 }
 
 class _HomeAppBarState extends State<HomeAppBar> {
+  static const double _titleTabExtent = 120;
+
   final PageController _pageController = PageController();
 
+  int _index = 0;
+
   @override
-  void didUpdateWidget(covariant HomeAppBar oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.selectedPageIndex != oldWidget.selectedPageIndex) {
-      _pageController.animateToPage(
-        widget.selectedPageIndex,
-        duration: widget.duration,
-        curve: widget.curve,
-      );
+  void initState() {
+    super.initState();
+    widget.controller.addListener(_controllerListener);
+  }
+
+  void _controllerListener() {
+    if (widget.controller.hasClients) {
+      final int index = widget.controller.page!.round();
+      if (index != _index) {
+        setState(() => _index = index);
+      }
+      _pageController.jumpTo(widget.controller.page! * _titleTabExtent);
     }
   }
 
@@ -60,7 +62,6 @@ class _HomeAppBarState extends State<HomeAppBar> {
               color: Theme.of(context).colorScheme.surface,
               type: MaterialType.circle,
               child: InkWell(
-                // TODO: go to profile
                 borderRadius: BorderRadius.circular(20),
                 onTap: () => Navigator.pushNamed(context, '/profile'),
                 child: Center(
@@ -79,20 +80,22 @@ class _HomeAppBarState extends State<HomeAppBar> {
             child: ListView.builder(
               controller: _pageController,
               itemCount: widget.pageTitles.length,
+              itemExtent: _titleTabExtent,
               physics: const NeverScrollableScrollPhysics(),
               scrollDirection: Axis.horizontal,
-              itemBuilder: (_, index) => Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
+              itemBuilder: (_, index) => Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     widget.pageTitles[index],
+                    overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          fontWeight: index == widget.selectedPageIndex
+                          fontWeight: index == _index
                               ? FontWeight.bold
                               : FontWeight.normal,
                         ),
                   ),
-                  const SizedBox(width: 32),
                 ],
               ),
             ),
