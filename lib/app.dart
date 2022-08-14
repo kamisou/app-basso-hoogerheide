@@ -1,8 +1,8 @@
 import 'package:basso_hoogerheide/constants/theme_data.dart';
+import 'package:basso_hoogerheide/pages/home/home.dart';
 import 'package:basso_hoogerheide/pages/login.dart';
 import 'package:basso_hoogerheide/pages/profile.dart';
 import 'package:basso_hoogerheide/pages/splash.dart';
-import 'package:basso_hoogerheide/widgets/base_page.dart';
 import 'package:flutter/material.dart';
 
 class App extends StatelessWidget {
@@ -22,7 +22,7 @@ class App extends StatelessWidget {
       restorationScopeId: 'basso_hoogerheide',
       routes: {
         '/login': (_) => LoginPage(),
-        '/home': (_) => const BasePage(),
+        '/home': (_) => const HomePage(),
         '/profile': (_) => const ProfilePage(),
       },
       themeMode: ThemeMode.dark,

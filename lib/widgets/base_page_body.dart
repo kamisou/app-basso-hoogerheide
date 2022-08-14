@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-abstract class BasePageBody extends StatelessWidget {
-  const BasePageBody({
+abstract class HomePageBody extends StatelessWidget {
+  const HomePageBody({
     super.key,
     required this.title,
     this.fabAction,
