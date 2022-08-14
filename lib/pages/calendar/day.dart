@@ -1,7 +1,8 @@
 import 'package:basso_hoogerheide/data_objects/calendar/event.dart';
-import 'package:basso_hoogerheide/pages/home/event_card.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+import 'event_card.dart';
 
 class DayWidget extends StatelessWidget {
   const DayWidget({
