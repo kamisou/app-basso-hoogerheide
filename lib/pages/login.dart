@@ -66,6 +66,7 @@ class LoginPage extends StatelessWidget {
           ),
           keyboardType: TextInputType.visiblePassword,
           obscureText: true,
+          // TODO: ir para home
           onEditingComplete: () {},
         ),
         const SizedBox(height: 20),

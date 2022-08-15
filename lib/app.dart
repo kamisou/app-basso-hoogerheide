@@ -17,6 +17,7 @@ class App extends StatelessWidget {
       darkTheme: _appTheme.dark,
       debugShowCheckedModeBanner: false,
       home: SplashPage(
+        // TODO: lógica de inicialização
         initialWork: () async => '/home',
       ),
       restorationScopeId: 'basso_hoogerheide',

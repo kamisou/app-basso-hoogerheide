@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 class AvatarCircle extends StatelessWidget {
   const AvatarCircle({
@@ -26,19 +27,35 @@ class AvatarCircle extends StatelessWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Text(
-              initials,
-              style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                    fontWeight: FontWeight.bold,
+            avatarUrl?.isNotEmpty ?? false
+                ? Image.network(
+                    avatarUrl!,
+                    height: radius,
+                    width: radius,
+                    errorBuilder: (_, __, ___) => Text(
+                      initials,
+                      style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                    loadingBuilder: (_, child, loadingProgress) {
+                      if (loadingProgress == null) {
+                        return child;
+                      }
+                      return Shimmer.fromColors(
+                        baseColor: Theme.of(context).colorScheme.surface,
+                        highlightColor:
+                            Theme.of(context).inputDecorationTheme.fillColor!,
+                        child: child,
+                      );
+                    },
+                  )
+                : Text(
+                    initials,
+                    style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
-            ),
-            if (avatarUrl?.isNotEmpty ?? false)
-              Image.network(
-                avatarUrl!,
-                height: radius,
-                width: radius,
-                errorBuilder: (_, __, ___) => const SizedBox.shrink(),
-              ),
           ],
         ),
       ),

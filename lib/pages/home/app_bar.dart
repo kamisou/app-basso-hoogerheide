@@ -55,7 +55,7 @@ class HomeAppBar extends StatelessWidget {
             ),
           ),
           GestureDetector(
-            // TODO: leave app
+            // TODO: sair do app
             onTap: () {},
             child: const Icon(Icons.exit_to_app),
           ),
