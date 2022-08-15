@@ -1,3 +1,4 @@
+import 'package:basso_hoogerheide/constants/theme_data.dart';
 import 'package:basso_hoogerheide/data_objects/calendar/calendar_event.dart';
 import 'package:basso_hoogerheide/widgets/key_value_text.dart';
 import 'package:flutter/material.dart';
@@ -15,14 +16,12 @@ class EventCard extends StatefulWidget {
 }
 
 class _EventCardState extends State<EventCard> {
-  static const Curve _expandAnimationCurve = Curves.easeInOut;
-
-  static const Duration _expandAnimationDuration = Duration(milliseconds: 200);
-
   bool _expanded = false;
 
   @override
   Widget build(BuildContext context) {
+    final curveAndDuration =
+        Theme.of(context).extension<CurveAndDurationExtension>()!;
     return Column(
       children: [
         Card(
@@ -55,7 +54,7 @@ class _EventCardState extends State<EventCard> {
                   ),
                   Text(
                     widget.event.startTime.format(context),
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
                   ),
@@ -65,10 +64,10 @@ class _EventCardState extends State<EventCard> {
           ),
         ),
         AnimatedSwitcher(
-          duration: _expandAnimationDuration,
-          reverseDuration: _expandAnimationDuration,
-          switchInCurve: _expandAnimationCurve,
-          switchOutCurve: _expandAnimationCurve,
+          duration: curveAndDuration.duration,
+          reverseDuration: curveAndDuration.duration,
+          switchInCurve: curveAndDuration.curve,
+          switchOutCurve: curveAndDuration.curve,
           child: _expanded
               ? Container(
                   decoration: BoxDecoration(

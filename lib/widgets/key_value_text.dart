@@ -16,7 +16,8 @@ class KeyValueText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle textStyle = style ?? Theme.of(context).textTheme.titleMedium!;
+    final TextStyle? textStyle =
+        style ?? Theme.of(context).textTheme.titleMedium;
     return RichText(
       text: TextSpan(
         children: [
@@ -26,7 +27,7 @@ class KeyValueText extends StatelessWidget {
           ),
         ],
         text: '$keyString: ',
-        style: textStyle.copyWith(fontWeight: FontWeight.bold),
+        style: textStyle?.copyWith(fontWeight: FontWeight.bold),
       ),
     );
   }

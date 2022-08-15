@@ -7,6 +7,7 @@ class AppTheme {
     const String fontFamily = 'Source Sans Pro';
     return ThemeData(
       cardTheme: CardTheme(
+        clipBehavior: Clip.antiAlias,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(4),
@@ -47,7 +48,11 @@ class AppTheme {
         ),
       ),
       extensions: const [
-        _SuccessThemeExtension(success: Color(0xFF318E31)),
+        SuccessThemeExtension(success: Color(0xFF318E31)),
+        CurveAndDurationExtension(
+          curve: Curves.easeInOutQuad,
+          duration: Duration(milliseconds: 200),
+        ),
       ],
       floatingActionButtonTheme: FloatingActionButtonThemeData(
         shape: RoundedRectangleBorder(
@@ -102,20 +107,57 @@ class AppTheme {
   }
 }
 
-class _SuccessThemeExtension extends ThemeExtension<_SuccessThemeExtension> {
+class SuccessThemeExtension extends ThemeExtension<SuccessThemeExtension> {
+  const SuccessThemeExtension({this.success});
+
   final Color? success;
 
-  const _SuccessThemeExtension({this.success});
+  @override
+  ThemeExtension<SuccessThemeExtension> copyWith({Color? success}) =>
+      SuccessThemeExtension(success: this.success ?? success);
 
   @override
-  ThemeExtension<_SuccessThemeExtension> copyWith({Color? success}) =>
-      _SuccessThemeExtension(success: this.success ?? success);
+  ThemeExtension<SuccessThemeExtension> lerp(
+    ThemeExtension<SuccessThemeExtension>? other,
+    double t,
+  ) {
+    if (other is! SuccessThemeExtension) return this;
+    return SuccessThemeExtension(
+      success: Color.lerp(success, other.success, t),
+    );
+  }
+}
+
+class CurveAndDurationExtension
+    extends ThemeExtension<CurveAndDurationExtension> {
+  const CurveAndDurationExtension({
+    required this.curve,
+    required this.duration,
+  });
+
+  final Curve curve;
+
+  final Duration duration;
 
   @override
-  ThemeExtension<_SuccessThemeExtension> lerp(
-      ThemeExtension<_SuccessThemeExtension>? other, double t) {
-    if (other is! _SuccessThemeExtension) return this;
-    return _SuccessThemeExtension(
-        success: Color.lerp(success, other.success, t));
+  ThemeExtension<CurveAndDurationExtension> copyWith({
+    Curve? curve,
+    Duration? duration,
+  }) =>
+      CurveAndDurationExtension(
+        curve: curve ?? this.curve,
+        duration: duration ?? this.duration,
+      );
+
+  @override
+  ThemeExtension<CurveAndDurationExtension> lerp(
+    ThemeExtension<CurveAndDurationExtension>? other,
+    double _,
+  ) {
+    if (other is! CurveAndDurationExtension) return this;
+    return CurveAndDurationExtension(
+      curve: other.curve,
+      duration: other.duration,
+    );
   }
 }

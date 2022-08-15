@@ -9,7 +9,7 @@ class ProfilePage extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'Perfil',
-          style: Theme.of(context).textTheme.titleMedium!.copyWith(
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
         ),

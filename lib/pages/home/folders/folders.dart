@@ -25,9 +25,9 @@ class FoldersPage extends HomePageBody {
         const SizedBox(height: 32),
         Expanded(
           child: ListView.builder(
-            padding: const EdgeInsets.only(left: 40, right: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             itemBuilder: (_, index) => const Padding(
-              padding: EdgeInsets.only(bottom: 32),
+              padding: EdgeInsets.only(bottom: 20),
               child: FolderCard(
                 folder: PersonFolder(
                   id: 1523,
@@ -45,7 +45,7 @@ class FoldersPage extends HomePageBody {
                   ),
                   processInfo: ProcessInfo(
                     nature: 'Trabalhista',
-                    color: 0xF39C12,
+                    color: 0xFFF39C12,
                   ),
                   files: [],
                 ),

@@ -43,7 +43,7 @@ class DayWidget extends StatelessWidget {
                   child: Text(
                     date.day.toString(),
                     style:
-                        Theme.of(context).textTheme.headlineSmall!.copyWith(
+                        Theme.of(context).textTheme.headlineSmall?.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
                   ),
@@ -57,7 +57,7 @@ class DayWidget extends StatelessWidget {
                 Text(
                   DateFormat("'de 'MMMM' de 'yyyy").format(date),
                   style: isToday
-                      ? Theme.of(context).textTheme.headlineSmall!.copyWith(
+                      ? Theme.of(context).textTheme.headlineSmall?.copyWith(
                             fontWeight: FontWeight.bold,
                           )
                       : Theme.of(context).textTheme.titleMedium,

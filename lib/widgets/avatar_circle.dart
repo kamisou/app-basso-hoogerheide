@@ -34,7 +34,7 @@ class AvatarCircle extends StatelessWidget {
                     width: radius,
                     errorBuilder: (_, __, ___) => Text(
                       initials,
-                      style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
                     ),
@@ -52,7 +52,7 @@ class AvatarCircle extends StatelessWidget {
                   )
                 : Text(
                     initials,
-                    style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
                   ),
