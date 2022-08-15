@@ -1,4 +1,4 @@
-import 'package:basso_hoogerheide/data_objects/calendar/event.dart';
+import 'package:basso_hoogerheide/data_objects/calendar/calendar_event.dart';
 import 'package:basso_hoogerheide/pages/home/calendar/day.dart';
 import 'package:basso_hoogerheide/widgets/base_page_body.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +17,7 @@ class CalendarPage extends HomePageBody {
           date: DateTime(2022, 6, 25).add(Duration(days: index)),
           today: today,
           events: [
-            const Event(
+            const CalendarEvent(
               startTime: TimeOfDay(hour: 8, minute: 0),
               endTime: TimeOfDay(hour: 8, minute: 50),
               title: 'Pagamento para João da Silva',
@@ -26,7 +26,7 @@ class CalendarPage extends HomePageBody {
               color: Color(0xFFA81818),
             ),
             if (index % 16 == 0)
-              const Event(
+              const CalendarEvent(
                 startTime: TimeOfDay(hour: 9, minute: 0),
                 endTime: TimeOfDay(hour: 15, minute: 00),
                 title: 'Atendimento Maria Silva',

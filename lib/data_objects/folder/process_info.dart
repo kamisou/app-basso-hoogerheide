@@ -1,0 +1,26 @@
+class ProcessInfo {
+  const ProcessInfo({
+    required this.nature,
+    required this.color,
+    this.process,
+    this.protocolDate,
+    this.district,
+    this.division,
+  });
+
+  final String nature;
+
+  final int color;
+
+  // TODO: procurador (obrigatório, será relacionado com conta)
+
+  final int? process;
+
+  final DateTime? protocolDate;
+
+  final String? district;
+
+  final String? division;
+
+  // TODO: status? (localização no site, pode ser que vincule com as notas)
+}

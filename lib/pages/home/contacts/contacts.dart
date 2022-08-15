@@ -12,13 +12,14 @@ class ContactsPage extends HomePageBody {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 40, right: 40, bottom: 32),
+          padding: const EdgeInsets.symmetric(horizontal: 40),
           child: SearchBar(
             hintText: 'Pesquisar contato...',
             // TODO: atualizar lista de contatos
             onChanged: (value) {},
           ),
         ),
+        const SizedBox(height: 32),
         Expanded(
           child: ListView.builder(
             padding: const EdgeInsets.only(left: 40, right: 16),

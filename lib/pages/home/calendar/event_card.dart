@@ -1,4 +1,4 @@
-import 'package:basso_hoogerheide/data_objects/calendar/event.dart';
+import 'package:basso_hoogerheide/data_objects/calendar/calendar_event.dart';
 import 'package:basso_hoogerheide/widgets/key_value_text.dart';
 import 'package:flutter/material.dart';
 
@@ -8,7 +8,7 @@ class EventCard extends StatefulWidget {
     required this.event,
   });
 
-  final Event event;
+  final CalendarEvent event;
 
   @override
   State<EventCard> createState() => _EventCardState();

@@ -1,4 +1,4 @@
-import 'package:basso_hoogerheide/data_objects/calendar/event.dart';
+import 'package:basso_hoogerheide/data_objects/calendar/calendar_event.dart';
 import 'package:basso_hoogerheide/pages/home/calendar/event_card.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -15,7 +15,7 @@ class DayWidget extends StatelessWidget {
 
   final DateTime today;
 
-  final List<Event> events;
+  final List<CalendarEvent> events;
 
   @override
   Widget build(BuildContext context) {

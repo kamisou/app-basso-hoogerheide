@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class Event {
-  const Event({
+class CalendarEvent {
+  const CalendarEvent({
     required this.startTime,
     required this.endTime,
     required this.title,
