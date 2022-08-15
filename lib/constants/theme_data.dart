@@ -89,7 +89,7 @@ class AppTheme {
         labelSmall: TextStyle(
           color: Color(0xFFF0F0F0),
           fontFamily: fontFamily,
-          fontSize: 11,
+          fontSize: 12,
         ),
         titleMedium: TextStyle(
           color: Color(0xFFF0F0F0),

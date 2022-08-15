@@ -1,4 +1,5 @@
 import 'package:basso_hoogerheide/data_objects/calendar/event.dart';
+import 'package:basso_hoogerheide/widgets/key_value_text.dart';
 import 'package:flutter/material.dart';
 
 class EventCard extends StatefulWidget {
@@ -81,20 +82,17 @@ class _EventCardState extends State<EventCard> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      _bodyTextBuilder(
-                        context,
-                        'Horário de Início: ',
-                        widget.event.startTime.format(context),
+                      KeyValueText(
+                        keyString: 'Horário de Início',
+                        valueString: widget.event.startTime.format(context),
                       ),
-                      _bodyTextBuilder(
-                        context,
-                        'Horário de Fim: ',
-                        widget.event.endTime.format(context),
+                      KeyValueText(
+                        keyString: 'Horário de Fim',
+                        valueString: widget.event.endTime.format(context),
                       ),
-                      _bodyTextBuilder(
-                        context,
-                        'Descrição: ',
-                        widget.event.description,
+                      KeyValueText(
+                        keyString: 'Descrição',
+                        valueString: widget.event.description,
                       ),
                     ],
                   ),
@@ -105,23 +103,6 @@ class _EventCardState extends State<EventCard> {
                 ),
         ),
       ],
-    );
-  }
-
-  Widget _bodyTextBuilder(BuildContext context, String text, String value) {
-    return RichText(
-      text: TextSpan(
-        children: [
-          TextSpan(
-            text: value,
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-        ],
-        text: text,
-        style: Theme.of(context).textTheme.titleMedium!.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
-      ),
     );
   }
 }

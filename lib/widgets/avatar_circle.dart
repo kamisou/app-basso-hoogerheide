@@ -21,6 +21,7 @@ class AvatarCircle extends StatelessWidget {
       width: radius,
       child: Material(
         color: Theme.of(context).colorScheme.surface,
+        clipBehavior: Clip.antiAlias,
         type: MaterialType.circle,
         child: Stack(
           alignment: Alignment.center,
@@ -36,6 +37,7 @@ class AvatarCircle extends StatelessWidget {
                 avatarUrl!,
                 height: radius,
                 width: radius,
+                errorBuilder: (_, __, ___) => const SizedBox.shrink(),
               ),
           ],
         ),
