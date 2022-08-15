@@ -76,6 +76,7 @@ class AppTheme {
       ),
       scaffoldBackgroundColor: const Color(0xFF101010),
       shadowColor: const Color(0x3F000000),
+      splashColor: const Color(0x08FFFFFF),
       textTheme: const TextTheme(
         headlineSmall: TextStyle(
           color: Color(0xFFF0F0F0),

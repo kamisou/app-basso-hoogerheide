@@ -12,7 +12,7 @@ class ContactsPage extends HomePageBody {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 40),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: SearchBar(
             hintText: 'Pesquisar contato...',
             // TODO: atualizar lista de contatos
@@ -22,7 +22,7 @@ class ContactsPage extends HomePageBody {
         const SizedBox(height: 32),
         Expanded(
           child: ListView.builder(
-            padding: const EdgeInsets.only(left: 40, right: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             itemBuilder: (_, index) => const Padding(
               padding: EdgeInsets.only(bottom: 32),
               child: ContactTile(
