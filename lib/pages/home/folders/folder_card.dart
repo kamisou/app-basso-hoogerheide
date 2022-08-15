@@ -196,6 +196,29 @@ class _FolderCardState extends State<FolderCard> {
             keyString: 'Vara',
             valueString: process.division!.toString(),
           ),
+        _cardSection(context, Icons.file_present_outlined, 'Arquivos'),
+        ...widget.folder.files.map(
+          (e) => Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    e.title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Icon(
+                  Icons.delete_outlined,
+                  color: Theme.of(context).colorScheme.error,
+                ),
+              ],
+            ),
+          ),
+        ),
         const SizedBox(height: 16),
       ],
     );

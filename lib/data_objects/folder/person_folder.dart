@@ -1,5 +1,6 @@
 import 'package:basso_hoogerheide/data_objects/folder/address_info.dart';
 import 'package:basso_hoogerheide/data_objects/folder/contact_info.dart';
+import 'package:basso_hoogerheide/data_objects/folder/file.dart';
 import 'package:basso_hoogerheide/data_objects/folder/folder.dart';
 import 'package:basso_hoogerheide/data_objects/folder/process_info.dart';
 
@@ -12,7 +13,7 @@ class PersonFolder extends Folder {
     required ContactInfo contactInfo,
     required AddressInfo addressInfo,
     required ProcessInfo processInfo,
-    required List<String> files,
+    required List<FolderFile> files,
     this.rg,
   }) : super(
           id: id,

@@ -1,5 +1,6 @@
 import 'package:basso_hoogerheide/data_objects/folder/address_info.dart';
 import 'package:basso_hoogerheide/data_objects/folder/contact_info.dart';
+import 'package:basso_hoogerheide/data_objects/folder/file.dart';
 import 'package:basso_hoogerheide/data_objects/folder/process_info.dart';
 
 abstract class Folder {
@@ -15,7 +16,7 @@ abstract class Folder {
 
   final ProcessInfo processInfo;
 
-  final List<String> files;
+  final List<FolderFile> files;
 
   const Folder({
     required this.id,

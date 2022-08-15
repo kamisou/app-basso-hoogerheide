@@ -19,7 +19,7 @@ class AppTheme {
         onPrimary: Color(0xFFF0F0F0),
         secondary: Color(0xFF1A1A1A),
         onSecondary: Color(0xFFF0F0F0),
-        error: Color(0xFFFA2D00),
+        error: Color(0xFFF34923),
         onError: Color(0xFFF0F0F0),
         background: Color(0xFF101010),
         onBackground: Color(0xFFF0F0F0),

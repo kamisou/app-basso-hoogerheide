@@ -1,5 +1,6 @@
 import 'package:basso_hoogerheide/data_objects/folder/address_info.dart';
 import 'package:basso_hoogerheide/data_objects/folder/contact_info.dart';
+import 'package:basso_hoogerheide/data_objects/folder/file.dart';
 import 'package:basso_hoogerheide/data_objects/folder/person_folder.dart';
 import 'package:basso_hoogerheide/data_objects/folder/process_info.dart';
 import 'package:basso_hoogerheide/pages/home/folders/folder_card.dart';
@@ -47,7 +48,18 @@ class FoldersPage extends HomePageBody {
                     nature: 'Trabalhista',
                     color: 0xFFF39C12,
                   ),
-                  files: [],
+                  files: [
+                    FolderFile(
+                      title: 'COMPROVANTE DE RESIDÊNCIA.pdf',
+                      url: 'http://www.bassoadvogados.adv.br/painel/clientes/'
+                          'download/1550/COMPROVANTE%20DE%20RESIDENCIA%20GENI%20(2).pdf',
+                    ),
+                    FolderFile(
+                      title: 'CONTRATO DE HONORARIOS GENI.pdf',
+                      url: 'http://www.bassoadvogados.adv.br/painel/clientes/'
+                          'download/1550/CONTRATO%20DE%20HONORARIOS%20GENI.pdf',
+                    ),
+                  ],
                 ),
               ),
             ),
