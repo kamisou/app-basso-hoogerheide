@@ -49,10 +49,6 @@ class AppTheme {
       ),
       extensions: const [
         SuccessThemeExtension(success: Color(0xFF318E31)),
-        CurveAndDurationExtension(
-          curve: Curves.easeInOutQuad,
-          duration: Duration(milliseconds: 200),
-        ),
       ],
       floatingActionButtonTheme: FloatingActionButtonThemeData(
         shape: RoundedRectangleBorder(
@@ -124,40 +120,6 @@ class SuccessThemeExtension extends ThemeExtension<SuccessThemeExtension> {
     if (other is! SuccessThemeExtension) return this;
     return SuccessThemeExtension(
       success: Color.lerp(success, other.success, t),
-    );
-  }
-}
-
-class CurveAndDurationExtension
-    extends ThemeExtension<CurveAndDurationExtension> {
-  const CurveAndDurationExtension({
-    required this.curve,
-    required this.duration,
-  });
-
-  final Curve curve;
-
-  final Duration duration;
-
-  @override
-  ThemeExtension<CurveAndDurationExtension> copyWith({
-    Curve? curve,
-    Duration? duration,
-  }) =>
-      CurveAndDurationExtension(
-        curve: curve ?? this.curve,
-        duration: duration ?? this.duration,
-      );
-
-  @override
-  ThemeExtension<CurveAndDurationExtension> lerp(
-    ThemeExtension<CurveAndDurationExtension>? other,
-    double _,
-  ) {
-    if (other is! CurveAndDurationExtension) return this;
-    return CurveAndDurationExtension(
-      curve: other.curve,
-      duration: other.duration,
     );
   }
 }

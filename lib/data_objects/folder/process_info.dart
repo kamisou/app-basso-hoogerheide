@@ -2,7 +2,7 @@ class ProcessInfo {
   const ProcessInfo({
     required this.nature,
     required this.color,
-    this.process,
+    this.number,
     this.protocolDate,
     this.district,
     this.division,
@@ -14,7 +14,7 @@ class ProcessInfo {
 
   // TODO: procurador (obrigatório, será relacionado com conta)
 
-  final int? process;
+  final int? number;
 
   final DateTime? protocolDate;
 

@@ -1,7 +1,11 @@
 import 'package:basso_hoogerheide/constants/theme_data.dart';
+import 'package:basso_hoogerheide/data_objects/folder/address_info.dart';
 import 'package:basso_hoogerheide/data_objects/folder/company_folder.dart';
+import 'package:basso_hoogerheide/data_objects/folder/contact_info.dart';
 import 'package:basso_hoogerheide/data_objects/folder/folder.dart';
 import 'package:basso_hoogerheide/data_objects/folder/person_folder.dart';
+import 'package:basso_hoogerheide/data_objects/folder/process_info.dart';
+import 'package:basso_hoogerheide/widgets/key_value_text.dart';
 import 'package:flutter/material.dart';
 
 class FolderCard extends StatefulWidget {
@@ -21,8 +25,6 @@ class _FolderCardState extends State<FolderCard> {
 
   @override
   Widget build(BuildContext context) {
-    final curveAndDuration =
-        Theme.of(context).extension<CurveAndDurationExtension>()!;
     return Stack(
       alignment: Alignment.topRight,
       children: [
@@ -48,11 +50,8 @@ class _FolderCardState extends State<FolderCard> {
                           _cardHeader(context),
                           Column(
                             children: [
-                              AnimatedSwitcher(
-                                duration: curveAndDuration.duration,
-                                reverseDuration: curveAndDuration.duration,
-                                switchInCurve: curveAndDuration.curve,
-                                switchOutCurve: curveAndDuration.curve,
+                              AnimatedContainer(
+                                duration: const Duration(milliseconds: 300),
                                 child: _expanded
                                     ? _cardBody(context)
                                     : const SizedBox(
@@ -124,28 +123,116 @@ class _FolderCardState extends State<FolderCard> {
   }
 
   Widget _cardBody(BuildContext context) {
+    final AddressInfo address = widget.folder.addressInfo;
+    final ContactInfo contact = widget.folder.contactInfo;
+    final ProcessInfo process = widget.folder.processInfo;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (widget.folder.writtenOff)
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(4),
-              color:
-                  Theme.of(context).extension<SuccessThemeExtension>()?.success,
-            ),
-            padding: const EdgeInsets.symmetric(
-              horizontal: 7,
-              vertical: 1,
-            ),
-            child: Text(
-              'Baixado',
-              style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(4),
+            color:
+                Theme.of(context).extension<SuccessThemeExtension>()?.success,
           ),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 7,
+            vertical: 1,
+          ),
+          child: Text(
+            'Baixado',
+            style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+        ),
+        _cardSection(context, Icons.home_outlined, 'Endereço'),
+        Text(
+          '${address.street} - ${address.district}',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        Text(
+          '${address.city} - ${address.state}',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        if (address.cep != null)
+          Text(
+            address.cep!,
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+        _cardSection(context, Icons.phone_outlined, 'Contato'),
+        if (contact.email != null)
+          KeyValueText(
+            keyString: 'E-mail',
+            valueString: contact.email!,
+          ),
+        if (contact.telephone != null)
+          KeyValueText(
+            keyString: 'Telefone',
+            valueString: contact.telephone!,
+          ),
+        if (contact.cellular != null)
+          KeyValueText(
+            keyString: 'Celular',
+            valueString: contact.cellular!,
+          ),
+        _cardSection(context, Icons.description_outlined, 'Detalhes'),
+        KeyValueText(
+          keyString: 'Natureza',
+          valueString: process.nature,
+        ),
+        if (process.number != null)
+          KeyValueText(
+            keyString: 'N° do Processo',
+            valueString: process.number!.toString(),
+          ),
+        if (process.district != null)
+          KeyValueText(
+            keyString: 'Comarca',
+            valueString: process.district!.toString(),
+          ),
+        if (process.division != null)
+          KeyValueText(
+            keyString: 'Vara',
+            valueString: process.division!.toString(),
+          ),
+        const SizedBox(height: 16),
       ],
+    );
+  }
+
+  Widget _cardSection(
+    BuildContext context,
+    IconData icon,
+    String title,
+  ) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: Theme.of(context).disabledColor,
+            width: 2,
+          ),
+        ),
+      ),
+      margin: const EdgeInsets.only(top: 16, bottom: 10),
+      padding: const EdgeInsets.only(bottom: 4),
+      child: Row(
+        children: [
+          Icon(
+            icon,
+            color: Theme.of(context).disabledColor,
+          ),
+          const SizedBox(width: 10),
+          Text(
+            title,
+            style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: Theme.of(context).disabledColor,
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+        ],
+      ),
     );
   }
 }

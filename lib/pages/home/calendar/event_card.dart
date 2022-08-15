@@ -20,8 +20,6 @@ class _EventCardState extends State<EventCard> {
 
   @override
   Widget build(BuildContext context) {
-    final curveAndDuration =
-        Theme.of(context).extension<CurveAndDurationExtension>()!;
     return Column(
       children: [
         Card(
@@ -63,11 +61,8 @@ class _EventCardState extends State<EventCard> {
             ),
           ),
         ),
-        AnimatedSwitcher(
-          duration: curveAndDuration.duration,
-          reverseDuration: curveAndDuration.duration,
-          switchInCurve: curveAndDuration.curve,
-          switchOutCurve: curveAndDuration.curve,
+        AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
           child: _expanded
               ? Container(
                   decoration: BoxDecoration(
