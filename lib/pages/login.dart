@@ -66,13 +66,11 @@ class LoginPage extends StatelessWidget {
           ),
           keyboardType: TextInputType.visiblePassword,
           obscureText: true,
-          // TODO: ir para home
-          onEditingComplete: () {},
+          onEditingComplete: () => _signIn(context),
         ),
         const SizedBox(height: 20),
         ElevatedButton(
-          // TODO: ir para home
-          onPressed: () {},
+          onPressed: () => _signIn(context),
           child: const Text('Login'),
         ),
         const SizedBox(height: 18),
@@ -89,4 +87,8 @@ class LoginPage extends StatelessWidget {
       ],
     );
   }
+
+  // TODO: ir para home
+  void _signIn(BuildContext context) =>
+      Navigator.pushReplacementNamed(context, '/home');
 }

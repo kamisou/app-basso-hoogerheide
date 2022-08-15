@@ -24,7 +24,7 @@ class App extends StatelessWidget {
         // TODO: lógica de inicialização
         initialWork: () async {
           await _initializeLocale();
-          return '/home';
+          return '/login';
         },
       ),
       restorationScopeId: 'basso_hoogerheide',
