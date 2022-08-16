@@ -1,3 +1,4 @@
+import 'package:basso_hoogerheide/data_objects/app_user.dart';
 import 'package:basso_hoogerheide/data_objects/folder/address_info.dart';
 import 'package:basso_hoogerheide/data_objects/folder/contact_info.dart';
 import 'package:basso_hoogerheide/data_objects/folder/file.dart';
@@ -27,39 +28,46 @@ class FoldersPage extends HomePageBody {
         Expanded(
           child: ListView.builder(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            itemBuilder: (_, index) => const Padding(
-              padding: EdgeInsets.only(bottom: 20),
+            itemBuilder: (_, index) => Padding(
+              padding: const EdgeInsets.only(bottom: 20),
               child: FolderCard(
                 folder: PersonFolder(
                   id: 1523,
                   name: 'Maria da Silva',
                   writtenOff: true,
                   cpf: '333.333.333-33',
-                  contactInfo: ContactInfo(
+                  contactInfo: const ContactInfo(
                     telephone: '(42) 9 9999-9999',
                   ),
-                  addressInfo: AddressInfo(
+                  addressInfo: const AddressInfo(
                     street: 'Avenida dos Pinheiros',
                     district: 'Pilatos',
                     city: 'Carambeí',
                     state: 'PR',
                   ),
-                  processInfo: ProcessInfo(
+                  processInfo: const ProcessInfo(
                     nature: 'Trabalhista',
                     color: 0xFFF39C12,
+                    attorney: AppUser(
+                      name: 'João Marcos',
+                      email: 'kamisou@outlook.com',
+                      division: 'Admin',
+                    ),
                   ),
                   files: [
-                    FolderFile(
+                    const FolderFile(
                       title: 'COMPROVANTE DE RESIDÊNCIA.pdf',
                       url: 'http://www.bassoadvogados.adv.br/painel/clientes/'
                           'download/1550/COMPROVANTE%20DE%20RESIDENCIA%20GENI%20(2).pdf',
                     ),
-                    FolderFile(
+                    const FolderFile(
                       title: 'CONTRATO DE HONORARIOS GENI.pdf',
                       url: 'http://www.bassoadvogados.adv.br/painel/clientes/'
                           'download/1550/CONTRATO%20DE%20HONORARIOS%20GENI.pdf',
                     ),
                   ],
+                  annotations: [],
+                  timestamp: DateTime.now(),
                 ),
               ),
             ),

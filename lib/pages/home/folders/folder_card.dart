@@ -211,11 +211,41 @@ class _FolderCardState extends State<FolderCard> {
                   ),
                 ),
                 const SizedBox(width: 16),
-                Icon(
-                  Icons.delete_outlined,
-                  color: Theme.of(context).colorScheme.error,
+                GestureDetector(
+                  // TODO: deletar arquivo da pasta
+                  onTap: () {},
+                  child: Icon(
+                    Icons.delete_outlined,
+                    color: Theme.of(context).colorScheme.error,
+                  ),
                 ),
               ],
+            ),
+          ),
+        ),
+        Container(
+          width: double.infinity,
+          margin: const EdgeInsets.only(top: 16),
+          child: ElevatedButton(
+            onPressed: () => Navigator.pushNamed(
+              context,
+              '/annotations',
+              arguments: widget.folder,
+            ),
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(
+                Theme.of(context).disabledColor,
+              ),
+              overlayColor: MaterialStateProperty.all(
+                Theme.of(context).splashColor,
+              ),
+              padding: MaterialStateProperty.all(EdgeInsets.zero),
+            ),
+            child: Text(
+              'Visualizar Anotações',
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
           ),
         ),

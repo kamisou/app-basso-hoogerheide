@@ -1,4 +1,5 @@
 import 'package:basso_hoogerheide/data_objects/folder/address_info.dart';
+import 'package:basso_hoogerheide/data_objects/folder/annotations.dart';
 import 'package:basso_hoogerheide/data_objects/folder/contact_info.dart';
 import 'package:basso_hoogerheide/data_objects/folder/file.dart';
 import 'package:basso_hoogerheide/data_objects/folder/folder.dart';
@@ -14,6 +15,8 @@ class CompanyFolder extends Folder {
     required AddressInfo addressInfo,
     required ProcessInfo processInfo,
     required List<FolderFile> files,
+    required List<Annotations> annotations,
+    required DateTime timestamp,
   }) : super(
           id: id,
           name: name,
@@ -22,6 +25,8 @@ class CompanyFolder extends Folder {
           addressInfo: addressInfo,
           processInfo: processInfo,
           files: files,
+          annotations: annotations,
+          timestamp: timestamp,
         );
 
   final String cnpj;

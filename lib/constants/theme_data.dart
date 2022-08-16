@@ -6,6 +6,14 @@ class AppTheme {
   ThemeData get dark {
     const String fontFamily = 'Source Sans Pro';
     return ThemeData(
+      appBarTheme: const AppBarTheme(
+        titleTextStyle: TextStyle(
+          color: Color(0xFFF0F0F0),
+          fontFamily: fontFamily,
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
       cardTheme: CardTheme(
         clipBehavior: Clip.antiAlias,
         margin: EdgeInsets.zero,

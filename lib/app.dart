@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:basso_hoogerheide/constants/theme_data.dart';
+import 'package:basso_hoogerheide/pages/home/folders/annotations.dart';
 import 'package:basso_hoogerheide/pages/home/home.dart';
 import 'package:basso_hoogerheide/pages/login.dart';
 import 'package:basso_hoogerheide/pages/profile.dart';
@@ -32,6 +33,7 @@ class App extends StatelessWidget {
         '/login': (_) => LoginPage(),
         '/home': (_) => const HomePage(),
         '/profile': (_) => const ProfilePage(),
+        '/annotations': (_) => const AnnotationsPage(),
       },
       themeMode: ThemeMode.dark,
       title: 'Basso Hoogerheide',

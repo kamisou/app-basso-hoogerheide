@@ -52,9 +52,12 @@ class _HomeAppBarState extends State<HomeAppBar> {
       margin: const EdgeInsets.only(left: 24, right: 24, top: 32),
       child: Row(
         children: [
-          const AvatarCircle(
-            avatarUrl: '',
-            initials: 'JM',
+          GestureDetector(
+            onTap: () => Navigator.pushNamed(context, '/profile'),
+            child: const AvatarCircle(
+              avatarUrl: '',
+              initials: 'JM',
+            ),
           ),
           const SizedBox(width: 50),
           Expanded(
