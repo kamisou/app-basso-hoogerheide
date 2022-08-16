@@ -26,7 +26,7 @@ class AppTheme {
         brightness: Brightness.dark,
         primary: Color(0xFFA81818),
         onPrimary: Color(0xFFF0F0F0),
-        secondary: Color(0xFF1A1A1A),
+        secondary: Color(0xFF808080),
         onSecondary: Color(0xFFF0F0F0),
         error: Color(0xFFF34923),
         onError: Color(0xFFF0F0F0),

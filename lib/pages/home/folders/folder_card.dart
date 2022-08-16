@@ -263,7 +263,7 @@ class _FolderCardState extends State<FolderCard> {
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            color: Theme.of(context).disabledColor,
+            color: Theme.of(context).colorScheme.secondary,
             width: 2,
           ),
         ),
@@ -274,13 +274,13 @@ class _FolderCardState extends State<FolderCard> {
         children: [
           Icon(
             icon,
-            color: Theme.of(context).disabledColor,
+            color: Theme.of(context).colorScheme.secondary,
           ),
           const SizedBox(width: 10),
           Text(
             title,
             style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: Theme.of(context).disabledColor,
+                  color: Theme.of(context).colorScheme.secondary,
                   fontWeight: FontWeight.bold,
                 ),
           ),

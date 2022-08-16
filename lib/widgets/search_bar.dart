@@ -42,13 +42,13 @@ class _SearchBarState extends State<SearchBar> {
         enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide(
             width: 2,
-            color: Theme.of(context).inputDecorationTheme.iconColor!,
+            color: Theme.of(context).colorScheme.secondary,
           ),
         ),
         focusedBorder: UnderlineInputBorder(
           borderSide: BorderSide(
             width: 2,
-            color: Theme.of(context).inputDecorationTheme.iconColor!,
+            color: Theme.of(context).colorScheme.secondary,
           ),
         ),
         hintText: widget.hintText,

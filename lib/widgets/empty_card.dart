@@ -22,7 +22,7 @@ class EmptyCard extends StatelessWidget {
               children: [
                 Icon(
                   icon,
-                  color: Theme.of(context).disabledColor,
+                  color: Theme.of(context).colorScheme.secondary,
                   size: 42,
                 ),
                 const SizedBox(height: 8),
@@ -31,7 +31,7 @@ class EmptyCard extends StatelessWidget {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: Theme.of(context).disabledColor,
+                        color: Theme.of(context).colorScheme.secondary,
                       ),
                 ),
               ],
