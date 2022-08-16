@@ -64,7 +64,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
                   Color(0xFFFFFFFF),
                   Color(0x00FFFFFF),
                 ],
-                end: Alignment(.65, 0),
+                begin: Alignment(-.5, 0),
               ).createShader(bounds),
               child: ListView(
                 controller: _controller,
@@ -93,6 +93,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
               ),
             ),
           ),
+          const SizedBox(width: 32),
           GestureDetector(
             // TODO: sair do app
             onTap: () {},

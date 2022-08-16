@@ -1,4 +1,3 @@
-import 'package:basso_hoogerheide/data_objects/calendar/calendar_event.dart';
 import 'package:basso_hoogerheide/pages/home/calendar/day.dart';
 import 'package:basso_hoogerheide/widgets/base_page_body.dart';
 import 'package:flutter/material.dart';
@@ -15,26 +14,8 @@ class CalendarPage extends HomePageBody {
       itemBuilder: (_, index) => Padding(
         padding: const EdgeInsets.only(bottom: 32),
         child: DayWidget(
-          date: DateTime.now().add(Duration(days: index)),
+          date: today.add(Duration(days: index)),
           today: today,
-          events: [
-            const CalendarEvent(
-              startTime: TimeOfDay(hour: 8, minute: 0),
-              endTime: TimeOfDay(hour: 8, minute: 50),
-              title: 'Pagamento para João da Silva',
-              description:
-                  'Delenit est justo odio vero consetetur adipiscing amet sit dolore.',
-              color: Color(0xFFA81818),
-            ),
-            if (index % 16 == 0)
-              const CalendarEvent(
-                startTime: TimeOfDay(hour: 9, minute: 0),
-                endTime: TimeOfDay(hour: 15, minute: 00),
-                title: 'Atendimento Maria Silva',
-                description: 'Delenit est justo odio vero consetetur.',
-                color: Color(0xFF1840A8),
-              ),
-          ],
         ),
       ),
     );

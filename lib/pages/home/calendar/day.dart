@@ -8,14 +8,14 @@ class DayWidget extends StatelessWidget {
     super.key,
     required this.date,
     required this.today,
-    required this.events,
+    this.events,
   });
 
   final DateTime date;
 
   final DateTime today;
 
-  final List<CalendarEvent> events;
+  final List<CalendarEvent>? events;
 
   @override
   Widget build(BuildContext context) {
@@ -42,10 +42,9 @@ class DayWidget extends StatelessWidget {
                   width: 48,
                   child: Text(
                     date.day.toString(),
-                    style:
-                        Theme.of(context).textTheme.headlineSmall?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                 )
               ],
@@ -67,14 +66,15 @@ class DayWidget extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 24),
-        ListView.separated(
-          itemBuilder: (_, index) => EventCard(event: events[index]),
-          separatorBuilder: (_, __) => const SizedBox(height: 10),
-          itemCount: events.length,
-          padding: EdgeInsets.zero,
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-        ),
+        if (events != null)
+          ListView.separated(
+            itemBuilder: (_, index) => EventCard(event: events![index]),
+            separatorBuilder: (_, __) => const SizedBox(height: 10),
+            itemCount: events!.length,
+            padding: EdgeInsets.zero,
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+          ),
       ],
     );
   }
