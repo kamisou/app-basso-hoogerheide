@@ -20,6 +20,7 @@ class AppTheme {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(4),
         ),
+        surfaceTintColor: const Color(0x00000000),
       ),
       colorScheme: const ColorScheme(
         brightness: Brightness.dark,

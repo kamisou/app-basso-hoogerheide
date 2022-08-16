@@ -1,7 +1,10 @@
-import 'package:basso_hoogerheide/pages/home/folders/folder_list.dart';
+import 'package:basso_hoogerheide/data_objects/folder/folder.dart';
+import 'package:basso_hoogerheide/pages/home/folders/folder_card.dart';
 import 'package:basso_hoogerheide/widgets/base_page_body.dart';
+import 'package:basso_hoogerheide/widgets/collection.dart';
+import 'package:basso_hoogerheide/widgets/empty_card.dart';
 import 'package:basso_hoogerheide/widgets/search_bar.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class FoldersPage extends HomePageBody {
   const FoldersPage({super.key});
@@ -19,7 +22,16 @@ class FoldersPage extends HomePageBody {
           ),
         ),
         const SizedBox(height: 32),
-        const Expanded(child: FolderList(folders: [])),
+        Expanded(
+          child: Collection<Folder>(
+            collection: const [],
+            itemBuilder: (_, item) => FolderCard(folder: item),
+            emptyWidget: const EmptyCard(
+              icon: Icons.folder_off_outlined,
+              message: 'Nenhuma pasta encontrada',
+            ),
+          ),
+        ),
       ],
     );
   }

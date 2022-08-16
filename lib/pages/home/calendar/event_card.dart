@@ -25,11 +25,9 @@ class _EventCardState extends State<EventCard> {
           color: widget.event.color,
           shape: _expanded
               ? const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(4),
-                    topRight: Radius.circular(4),
-                    bottomLeft: Radius.zero,
-                    bottomRight: Radius.zero,
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(4),
+                    bottom: Radius.zero,
                   ),
                 )
               : null,

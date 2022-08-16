@@ -2,6 +2,7 @@ import 'package:basso_hoogerheide/pages/home/app_bar.dart';
 import 'package:basso_hoogerheide/pages/home/calendar/calendar.dart';
 import 'package:basso_hoogerheide/pages/home/contacts/contacts.dart';
 import 'package:basso_hoogerheide/pages/home/folders/folders.dart';
+import 'package:basso_hoogerheide/pages/home/models/models.dart';
 import 'package:basso_hoogerheide/widgets/base_page_body.dart';
 import 'package:flutter/material.dart';
 
@@ -17,6 +18,7 @@ class _HomePageState extends State<HomePage> {
     const CalendarPage(),
     const ContactsPage(),
     const FoldersPage(),
+    const ModelsPage(),
   ];
 
   final PageController _pageController = PageController();

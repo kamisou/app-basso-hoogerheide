@@ -99,7 +99,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
           const SizedBox(width: 32),
           GestureDetector(
             // TODO: sair do app
-            onTap: () {},
+            onTap: () => Navigator.pushReplacementNamed(context, '/login'),
             child: const Icon(Icons.exit_to_app),
           ),
         ],

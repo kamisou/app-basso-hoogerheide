@@ -1,5 +1,5 @@
-class FolderFile {
-  const FolderFile({
+class DownloadableFile {
+  const DownloadableFile({
     required this.title,
     required this.url,
   });
