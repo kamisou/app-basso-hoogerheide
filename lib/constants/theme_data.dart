@@ -106,6 +106,11 @@ class AppTheme {
           fontFamily: fontFamily,
           fontSize: 16,
         ),
+        titleLarge: TextStyle(
+          color: Color(0xFFF0F0F0),
+          fontFamily: fontFamily,
+          fontSize: 18,
+        ),
       ),
       useMaterial3: true,
     );

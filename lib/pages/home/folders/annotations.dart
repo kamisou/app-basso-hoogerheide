@@ -1,4 +1,3 @@
-import 'package:basso_hoogerheide/data_objects/folder/annotations.dart';
 import 'package:basso_hoogerheide/data_objects/folder/folder.dart';
 import 'package:flutter/material.dart';
 
@@ -12,9 +11,7 @@ class AnnotationsPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('${folder.id} - ${folder.name}'),
       ),
-      body: Row(
-        children: [],
-      ),
+      body: Row(children: const []),
     );
   }
 }
