@@ -92,15 +92,15 @@ class AppTheme {
           fontFamily: fontFamily,
           fontSize: 24,
         ),
+        labelMedium: TextStyle(
+          color: Color(0xFFF0F0F0),
+          fontFamily: fontFamily,
+          fontSize: 12,
+        ),
         labelLarge: TextStyle(
           color: Color(0xFFF0F0F0),
           fontFamily: fontFamily,
           fontSize: 14,
-        ),
-        labelSmall: TextStyle(
-          color: Color(0xFFF0F0F0),
-          fontFamily: fontFamily,
-          fontSize: 12,
         ),
         titleMedium: TextStyle(
           color: Color(0xFFF0F0F0),

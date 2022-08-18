@@ -13,7 +13,7 @@ class ContactTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle? detailStyle = Theme.of(context).textTheme.labelSmall;
+    final TextStyle? detailStyle = Theme.of(context).textTheme.labelMedium;
     return Row(
       children: [
         AvatarCircle(

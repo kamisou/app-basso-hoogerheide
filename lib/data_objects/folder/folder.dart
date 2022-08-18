@@ -1,6 +1,6 @@
 import 'package:basso_hoogerheide/data_objects/downloadable_file.dart';
 import 'package:basso_hoogerheide/data_objects/folder/address_info.dart';
-import 'package:basso_hoogerheide/data_objects/folder/annotations.dart';
+import 'package:basso_hoogerheide/data_objects/folder/annotation.dart';
 import 'package:basso_hoogerheide/data_objects/folder/contact_info.dart';
 import 'package:basso_hoogerheide/data_objects/folder/process_info.dart';
 
@@ -19,7 +19,7 @@ abstract class Folder {
 
   final List<DownloadableFile> files;
 
-  final List<Annotations> annotations;
+  final List<Annotation> annotations;
 
   final DateTime timestamp;
 

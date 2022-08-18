@@ -1,7 +1,7 @@
 import 'package:basso_hoogerheide/data_objects/app_user.dart';
 
-class Annotations {
-  const Annotations({
+class Annotation {
+  const Annotation({
     required this.description,
     required this.author,
     required this.timestamp,

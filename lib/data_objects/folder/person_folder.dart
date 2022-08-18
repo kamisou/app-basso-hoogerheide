@@ -1,6 +1,6 @@
 import 'package:basso_hoogerheide/data_objects/downloadable_file.dart';
 import 'package:basso_hoogerheide/data_objects/folder/address_info.dart';
-import 'package:basso_hoogerheide/data_objects/folder/annotations.dart';
+import 'package:basso_hoogerheide/data_objects/folder/annotation.dart';
 import 'package:basso_hoogerheide/data_objects/folder/contact_info.dart';
 import 'package:basso_hoogerheide/data_objects/folder/folder.dart';
 import 'package:basso_hoogerheide/data_objects/folder/process_info.dart';
@@ -15,7 +15,7 @@ class PersonFolder extends Folder {
     required AddressInfo addressInfo,
     required ProcessInfo processInfo,
     required List<DownloadableFile> files,
-    required List<Annotations> annotations,
+    required List<Annotation> annotations,
     required DateTime timestamp,
     this.rg,
   }) : super(

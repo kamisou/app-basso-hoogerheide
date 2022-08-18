@@ -1,5 +1,6 @@
 import 'package:basso_hoogerheide/data_objects/app_user.dart';
 import 'package:basso_hoogerheide/data_objects/folder/address_info.dart';
+import 'package:basso_hoogerheide/data_objects/folder/annotation.dart';
 import 'package:basso_hoogerheide/data_objects/folder/contact_info.dart';
 import 'package:basso_hoogerheide/data_objects/folder/folder.dart';
 import 'package:basso_hoogerheide/data_objects/folder/person_folder.dart';
@@ -56,7 +57,17 @@ class FoldersPage extends HomePageBody {
                   ),
                 ),
                 files: [],
-                annotations: [],
+                annotations: [
+                  Annotation(
+                    description: 'Descrição da edição',
+                    author: const AppUser(
+                      name: 'João Marcos',
+                      email: 'kamisou@outlook.com',
+                      division: 'blabla',
+                    ),
+                    timestamp: DateTime.now(),
+                  ),
+                ],
                 timestamp: DateTime.now(),
               ),
             ],
