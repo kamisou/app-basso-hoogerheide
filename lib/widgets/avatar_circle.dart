@@ -1,6 +1,5 @@
 import 'package:basso_hoogerheide/widgets/shimmering_image.dart';
 import 'package:flutter/material.dart';
-import 'package:shimmer/shimmer.dart';
 
 class AvatarCircle extends StatelessWidget {
   const AvatarCircle({
