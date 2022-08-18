@@ -101,12 +101,23 @@ class _FolderCardState extends State<FolderCard> {
                         fontWeight: FontWeight.bold,
                       ),
                 ),
-                Text(
-                  widget.folder is PersonFolder
-                      ? (widget.folder as PersonFolder).cpf
-                      : (widget.folder as CompanyFolder).cnpj,
-                  style: Theme.of(context).textTheme.titleMedium,
-                )
+                if (widget.folder is PersonFolder)
+                  KeyValueText(
+                    keyString: 'CPF',
+                    valueString: (widget.folder as PersonFolder).cpf,
+                  )
+                else
+                  KeyValueText(
+                    keyString: 'CNPJ',
+                    valueString: (widget.folder as CompanyFolder).cnpj,
+                  ),
+                if (_expanded &&
+                    widget.folder is PersonFolder &&
+                    (widget.folder as PersonFolder).rg != null)
+                  KeyValueText(
+                    keyString: 'RG',
+                    valueString: (widget.folder as PersonFolder).rg!,
+                  ),
               ],
             ),
           ),
