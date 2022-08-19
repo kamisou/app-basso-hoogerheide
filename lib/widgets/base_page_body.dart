@@ -5,5 +5,5 @@ abstract class HomePageBody extends StatelessWidget {
 
   String get title;
 
-  VoidCallback? get fabAction;
+  void Function(BuildContext)? get fabAction;
 }

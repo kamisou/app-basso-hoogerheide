@@ -38,7 +38,7 @@ class ContactsPage extends HomePageBody {
 
   @override
   // TODO: adicionar contato
-  VoidCallback? get fabAction => () {};
+  void Function(BuildContext)? get fabAction => (context) {};
 
   @override
   String get title => 'Contatos';

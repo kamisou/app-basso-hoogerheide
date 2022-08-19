@@ -84,7 +84,7 @@ class FoldersPage extends HomePageBody {
 
   @override
   // TODO: adicionar pasta
-  VoidCallback? get fabAction => () {};
+  void Function(BuildContext)? get fabAction => (context) {};
 
   @override
   String get title => 'Clientes';

@@ -69,6 +69,9 @@ class AppTheme {
           horizontal: 16,
           vertical: 10,
         ),
+        disabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Color(0xFF222222)),
+        ),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Color(0xFF222222)),
         ),

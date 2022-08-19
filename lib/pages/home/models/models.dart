@@ -57,7 +57,7 @@ class ModelsPage extends HomePageBody {
   }
 
   @override
-  VoidCallback? get fabAction => null;
+  void Function(BuildContext)? get fabAction => null;
 
   @override
   String get title => 'Modelos';

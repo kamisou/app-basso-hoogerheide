@@ -70,7 +70,8 @@ class _HomePageState extends State<HomePage> {
         ),
         floatingActionButton: _pageBodies[_pageIndex].fabAction != null
             ? FloatingActionButton(
-                onPressed: _pageBodies[_pageIndex].fabAction,
+                onPressed: () =>
+                    _pageBodies[_pageIndex].fabAction!.call(context),
                 child: const Icon(Icons.add),
               )
             : null,
