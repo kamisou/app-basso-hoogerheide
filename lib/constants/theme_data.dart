@@ -95,6 +95,14 @@ class AppTheme {
           fontFamily: fontFamily,
         ),
         iconColor: Color(0xFF808080),
+        labelStyle: TextStyle(
+          color: Color(0xFF808080),
+          fontFamily: fontFamily,
+        ),
+        floatingLabelStyle: TextStyle(
+          color: Color(0xFF808080),
+          fontFamily: fontFamily,
+        ),
       ),
       scaffoldBackgroundColor: const Color(0xFF101010),
       shadowColor: const Color(0x3F000000),
