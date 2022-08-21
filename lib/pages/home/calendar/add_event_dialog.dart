@@ -70,7 +70,9 @@ class _AddEventDialogState extends State<AddEventDialog> {
                                 .titleMedium
                                 ?.copyWith(fontWeight: FontWeight.bold),
                           ),
-                          onChanged: (value) => _event.copyWith(color: value),
+                          onChanged: (value) => setState(
+                            () => _event = _event.copyWith(color: value),
+                          ),
                         ),
                       ],
                     ),
@@ -154,7 +156,6 @@ class _AddEventDialogState extends State<AddEventDialog> {
                           onTap: () {
                             if (Form.of(context)!.validate()) {
                               // TODO: adicionar evento
-                              CalendarEvent event = _event;
                               Navigator.pop(context);
                             }
                           },
