@@ -75,8 +75,18 @@ class AppTheme {
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Color(0xFF222222)),
         ),
+        errorBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Color(0xFFF34923)),
+        ),
+        errorStyle: TextStyle(
+          color: Color(0xFFF34923),
+          fontFamily: fontFamily,
+        ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Color(0xFF222222)),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Color(0xFFF34923)),
         ),
         fillColor: Color(0xFF222222),
         filled: true,

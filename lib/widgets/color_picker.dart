@@ -1,11 +1,12 @@
 import 'package:basso_hoogerheide/widgets/default_dialog.dart';
 import 'package:flutter/material.dart';
 
-class ColorPicker extends StatefulWidget {
+class ColorPicker extends StatelessWidget {
   ColorPicker({
     super.key,
     required this.colors,
     required this.dialogTitle,
+    this.initialValue,
     this.onChanged,
   }) : assert(colors.isNotEmpty, "'colors' cannot be empty!");
 
@@ -13,20 +14,9 @@ class ColorPicker extends StatefulWidget {
 
   final Widget dialogTitle;
 
-  final void Function(Color)? onChanged;
+  final Color? initialValue;
 
-  @override
-  State<ColorPicker> createState() => _ColorPickerState();
-}
-
-class _ColorPickerState extends State<ColorPicker> {
-  late Color _selected;
-
-  @override
-  void initState() {
-    super.initState();
-    _selected = widget.colors.first;
-  }
+  final void Function(Color?)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -40,25 +30,21 @@ class _ColorPickerState extends State<ColorPicker> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
-                widget.dialogTitle,
+                dialogTitle,
                 const SizedBox(height: 16),
                 GridView.builder(
-                  gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 5,
                     crossAxisSpacing: 16,
                     mainAxisSpacing: 16,
                     childAspectRatio: 1,
                   ),
                   shrinkWrap: true,
-                  itemCount: widget.colors.length,
+                  itemCount: colors.length,
                   itemBuilder: (context, index) {
-                    final Color color = widget.colors[index];
+                    final Color color = colors[index];
                     return GestureDetector(
-                      onTap: () {
-                        widget.onChanged?.call(color);
-                        Navigator.pop(context, color);
-                      },
+                      onTap: () => Navigator.pop(context, color),
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(100),
@@ -71,16 +57,15 @@ class _ColorPickerState extends State<ColorPicker> {
               ],
             ),
           ),
-        ).then((color) {
-          if (color != null) {
-            setState(() => _selected = color);
-          }
-        });
+        ).then((color) => onChanged?.call(color));
       },
       child: Container(
         decoration: BoxDecoration(
+          border: initialValue == null
+              ? Border.all(color: Theme.of(context).disabledColor)
+              : null,
           borderRadius: BorderRadius.circular(16),
-          color: _selected,
+          color: initialValue,
         ),
         height: 32,
         width: 32,

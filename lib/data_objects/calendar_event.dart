@@ -9,6 +9,13 @@ class CalendarEvent {
     required this.color,
   });
 
+  const CalendarEvent.empty()
+      : startTime = const TimeOfDay(hour: 0, minute: 0),
+        endTime = const TimeOfDay(hour: 23, minute: 59),
+        title = '',
+        description = '',
+        color = Colors.transparent;
+
   final TimeOfDay startTime;
 
   final TimeOfDay endTime;
@@ -18,4 +25,19 @@ class CalendarEvent {
   final String description;
 
   final Color color;
+
+  CalendarEvent copyWith({
+    TimeOfDay? startTime,
+    TimeOfDay? endTime,
+    String? title,
+    String? description,
+    Color? color,
+  }) =>
+      CalendarEvent(
+        startTime: startTime ?? this.startTime,
+        endTime: endTime ?? this.endTime,
+        title: title ?? this.title,
+        description: description ?? this.description,
+        color: color ?? this.color,
+      );
 }
