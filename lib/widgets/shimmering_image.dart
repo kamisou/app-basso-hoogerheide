@@ -4,9 +4,9 @@ import 'package:shimmer/shimmer.dart';
 class ShimmeringImage extends StatelessWidget {
   const ShimmeringImage({
     super.key,
+    required this.errorBuilder,
     this.url,
     this.imageFit,
-    required this.errorBuilder,
   });
 
   final String? url;

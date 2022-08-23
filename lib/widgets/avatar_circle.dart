@@ -6,6 +6,8 @@ class AvatarCircle extends StatelessWidget {
     super.key,
     required this.initials,
     this.avatarUrl,
+    this.backgroundColor,
+    this.style,
     this.radius = 40,
   });
 
@@ -15,13 +17,17 @@ class AvatarCircle extends StatelessWidget {
 
   final double radius;
 
+  final Color? backgroundColor;
+
+  final TextStyle? style;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: radius,
       width: radius,
       child: Material(
-        color: Theme.of(context).colorScheme.surface,
+        color: backgroundColor ?? Theme.of(context).colorScheme.surface,
         clipBehavior: Clip.antiAlias,
         type: MaterialType.circle,
         child: Stack(
@@ -35,9 +41,10 @@ class AvatarCircle extends StatelessWidget {
                 url: avatarUrl,
                 errorBuilder: (context) => Text(
                   initials,
-                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: style ??
+                      Theme.of(context).textTheme.labelLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
                 ),
               ),
             ),
