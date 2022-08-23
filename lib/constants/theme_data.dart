@@ -90,16 +90,16 @@ class AppTheme {
         ),
         fillColor: Color(0xFF222222),
         filled: true,
+        floatingLabelStyle: TextStyle(
+          color: Color(0xFF808080),
+          fontFamily: fontFamily,
+        ),
         hintStyle: TextStyle(
           color: Color(0xFF808080),
           fontFamily: fontFamily,
         ),
         iconColor: Color(0xFF808080),
         labelStyle: TextStyle(
-          color: Color(0xFF808080),
-          fontFamily: fontFamily,
-        ),
-        floatingLabelStyle: TextStyle(
           color: Color(0xFF808080),
           fontFamily: fontFamily,
         ),

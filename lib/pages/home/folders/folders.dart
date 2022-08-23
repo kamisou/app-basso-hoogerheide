@@ -6,7 +6,6 @@ import 'package:basso_hoogerheide/data_objects/folder/folder.dart';
 import 'package:basso_hoogerheide/data_objects/folder/person_folder.dart';
 import 'package:basso_hoogerheide/data_objects/folder/process_info.dart';
 import 'package:basso_hoogerheide/pages/home/folders/folder_card.dart';
-import 'package:basso_hoogerheide/pages/home/folders/new_folder.dart';
 import 'package:basso_hoogerheide/widgets/base_page_body.dart';
 import 'package:basso_hoogerheide/widgets/collection.dart';
 import 'package:basso_hoogerheide/widgets/empty_card.dart';
@@ -149,7 +148,7 @@ class FoldersPage extends HomePageBody {
   @override
   void Function(BuildContext)? get fabAction =>
       (context) => Navigator.pushNamed(context, '/newFolder',
-          arguments: {'new_id': 1501, 'folder_type': NewFolderType.person});
+          arguments: {'new_id': 1501, 'folder_type': 'person'});
 
   @override
   String get title => 'Clientes';

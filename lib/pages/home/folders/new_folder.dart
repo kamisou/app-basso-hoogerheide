@@ -1,3 +1,4 @@
+import 'package:basso_hoogerheide/widgets/large_form.dart';
 import 'package:flutter/material.dart';
 
 class NewFolderPage extends StatelessWidget {
@@ -45,10 +46,151 @@ class NewFolderPage extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 24),
+          LargeForm(
+            sections: [
+              LargeFormSection(
+                title: 'Dados Pessoais',
+                fields: [
+                  const LargeFormTextField(
+                    title: 'Nome completo',
+                    key: 'name',
+                    icon: Icons.person_outlined,
+                    type: TextInputType.name,
+                  ),
+                  if (args['folder_type'] == 'person')
+                    const LargeFormTextField(
+                      title: 'CPF',
+                      key: 'cpf',
+                      icon: Icons.numbers_outlined,
+                      mask: '999.999.999-99',
+                      type: TextInputType.number,
+                    )
+                  else
+                    const LargeFormTextField(
+                      title: 'CNPJ',
+                      key: 'cnpj',
+                      icon: Icons.numbers_outlined,
+                      mask: '99.999.999/9999-99',
+                      type: TextInputType.number,
+                    ),
+                  if (args['folder_type'] == 'person')
+                    const LargeFormTextField(
+                      title: 'RG',
+                      key: 'rg',
+                      icon: Icons.fingerprint_outlined,
+                      mask: '99.999.999-99',
+                      type: TextInputType.number,
+                      required: false,
+                    ),
+                ],
+              ),
+              const LargeFormSection(
+                title: 'Dados de Contato',
+                fields: [
+                  LargeFormTextField(
+                    title: 'E-mail',
+                    key: 'email',
+                    icon: Icons.email_outlined,
+                    type: TextInputType.emailAddress,
+                    required: false,
+                  ),
+                  LargeFormTextField(
+                    title: 'Telefone',
+                    key: 'phone',
+                    icon: Icons.phone_outlined,
+                    type: TextInputType.phone,
+                    required: false,
+                  ),
+                  LargeFormTextField(
+                    title: 'Celular',
+                    key: 'cellphone',
+                    icon: Icons.phone_iphone_outlined,
+                    type: TextInputType.phone,
+                    required: false,
+                  ),
+                ],
+              ),
+              const LargeFormSection(
+                title: 'Endereço',
+                fields: [
+                  LargeFormTextField(
+                    title: 'Endereço',
+                    key: 'address',
+                    icon: Icons.home_outlined,
+                    type: TextInputType.name,
+                  ),
+                  LargeFormTextField(
+                    title: 'Bairro',
+                    key: 'district',
+                    icon: Icons.location_city_outlined,
+                    type: TextInputType.name,
+                  ),
+                  LargeFormTextField(
+                    title: 'Cidade',
+                    key: 'city',
+                    icon: Icons.emoji_transportation,
+                    type: TextInputType.name,
+                  ),
+                  LargeFormDropdownField(
+                    title: 'Estado',
+                    key: 'state',
+                    icon: Icons.map_outlined,
+                    options: [],
+                  ),
+                  LargeFormTextField(
+                    title: 'CEP',
+                    key: 'cep',
+                    icon: Icons.location_on_outlined,
+                    type: TextInputType.number,
+                    required: false,
+                  ),
+                ],
+              ),
+              LargeFormSection(
+                title: 'Detalhes do Processo',
+                fields: [
+                  const LargeFormDropdownField(
+                    title: 'Procurador',
+                    key: 'attorney',
+                    icon: Icons.person_outlined,
+                    options: [],
+                  ),
+                  const LargeFormDropdownField(
+                    title: 'Natureza',
+                    key: 'nature',
+                    icon: Icons.gavel_outlined,
+                    options: [],
+                  ),
+                  const LargeFormTextField(
+                    title: 'Número do processo',
+                    key: 'process_number',
+                    type: TextInputType.number,
+                    icon: Icons.numbers_outlined,
+                    required: false,
+                  ),
+                  LargeFormDateField(
+                    title: 'Data do protocolo',
+                    key: 'protocol_date',
+                    icon: Icons.numbers_outlined,
+                    startTime: DateTime(2022),
+                    endTime: DateTime(2022),
+                    required: false,
+                  ),
+                ],
+              ),
+              const LargeFormSection(
+                title: 'Documentos do Processo',
+                fields: [],
+              ),
+            ],
+            sectionTitleStyle:
+                Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.secondary,
+                      fontWeight: FontWeight.bold,
+                    ),
+          ),
         ],
       ),
     );
   }
 }
-
-enum NewFolderType { person, entity }
