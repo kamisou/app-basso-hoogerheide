@@ -100,12 +100,14 @@ class NewFolderPage extends StatelessWidget {
                     title: 'Telefone',
                     key: 'phone',
                     icon: Icons.phone_outlined,
+                    mask: '(99) 9999-9999',
                     type: TextInputType.phone,
                     required: false,
                   ),
                   LargeFormTextField(
                     title: 'Celular',
                     key: 'cellphone',
+                    mask: ['(99) 9 9999-9999'],
                     icon: Icons.phone_iphone_outlined,
                     type: TextInputType.phone,
                     required: false,
@@ -139,11 +141,12 @@ class NewFolderPage extends StatelessWidget {
                     key: 'state',
                     icon: Icons.map_outlined,
                     // TODO: utilizar dados de estado
-                    options: [],
+                    options: ['PR', 'PA'],
                   ),
                   LargeFormTextField(
                     title: 'CEP',
                     key: 'cep',
+                    mask: '99.999-999',
                     icon: Icons.location_on_outlined,
                     type: TextInputType.number,
                     required: false,

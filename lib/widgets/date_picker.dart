@@ -6,7 +6,6 @@ class DatePicker extends StatefulWidget {
     super.key,
     required this.firstDate,
     required this.lastDate,
-    this.focusNode,
     this.initialDate,
     this.labelText,
     this.onChanged,
@@ -19,8 +18,6 @@ class DatePicker extends StatefulWidget {
   final DateTime firstDate;
 
   final DateTime lastDate;
-
-  final FocusNode? focusNode;
 
   final DateTime? initialDate;
 
@@ -37,15 +34,50 @@ class DatePicker extends StatefulWidget {
 class _DatePickerState extends State<DatePicker> {
   final TextEditingController _controller = TextEditingController();
 
+  final GlobalKey<FormFieldState> _key = GlobalKey<FormFieldState>();
+
+  final FocusNode _focusNode = FocusNode();
+
+  bool _opened = false;
+
   @override
   void initState() {
     super.initState();
     _controller.text = _valueString(context, widget.initialDate) ?? '';
+    _focusNode.addListener(() {
+      if (!_opened) {
+        _focusNode.unfocus();
+        _showDatePicker();
+        _opened = true;
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _focusNode.removeListener(_showDatePicker);
+  }
+
+  void _showDatePicker() {
+    showDatePicker(
+      context: context,
+      firstDate: widget.firstDate,
+      lastDate: widget.lastDate,
+      initialDate: widget.initialDate ?? DateTime.now(),
+    ).then((value) {
+      final FormFieldState? currentState = _key.currentState;
+      widget.onChanged?.call(value);
+      currentState?.didChange(value);
+      _controller.text = _valueString(context, value) ?? '';
+      _opened = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return FormField<DateTime>(
+      key: _key,
       validator: widget.validator,
       builder: (state) {
         return Column(
@@ -53,25 +85,14 @@ class _DatePickerState extends State<DatePicker> {
           mainAxisSize: MainAxisSize.min,
           children: [
             GestureDetector(
-              onTap: () {
-                showDatePicker(
-                  context: context,
-                  firstDate: widget.firstDate,
-                  lastDate: widget.lastDate,
-                  initialDate: widget.initialDate ?? DateTime.now(),
-                ).then((value) {
-                  widget.onChanged?.call(value);
-                  state.didChange(value);
-                  _controller.text = _valueString(context, value) ?? '';
-                });
-              },
+              onTap: _showDatePicker,
               child: TextFormField(
                 controller: _controller,
                 decoration: InputDecoration(
                   prefixIcon: const Icon(Icons.calendar_today_outlined),
                   labelText: widget.labelText,
                 ),
-                enabled: false,
+                focusNode: _focusNode,
               ),
             ),
             if (state.errorText != null)

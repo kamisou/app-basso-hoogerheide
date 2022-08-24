@@ -1,8 +1,8 @@
 import 'package:basso_hoogerheide/widgets/date_picker.dart';
-import 'package:flutter/foundation.dart';
+import 'package:easy_mask/easy_mask.dart';
 import 'package:flutter/material.dart';
 
-class LargeForm extends StatefulWidget {
+class LargeForm extends StatelessWidget {
   const LargeForm({
     super.key,
     required this.sections,
@@ -14,44 +14,17 @@ class LargeForm extends StatefulWidget {
 
   final TextStyle? sectionTitleStyle;
 
-  final void Function(Map<String,dynamic>)? onSaved;
-
-  @override
-  State<LargeForm> createState() => _LargeFormState();
-}
-
-class _LargeFormState extends State<LargeForm> {
-  late List<FocusNode> _focuses;
-
-  @override
-  void initState() {
-    super.initState();
-    _focuses = widget.sections
-        .expand((e) => e.fields.map((_) => FocusNode()))
-        .toList();
-  }
-
-  @override
-  void didUpdateWidget(covariant LargeForm oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (!listEquals(oldWidget.sections, widget.sections)) {
-      _focuses = widget.sections
-          .expand((e) => e.fields.map((_) => FocusNode()))
-          .toList();
-    }
-  }
+  final void Function(Map<String, dynamic>)? onSaved;
 
   @override
   Widget build(BuildContext context) {
-    int i = 0;
     return Form(
-      key: widget.key,
       child: Builder(
         builder: (context) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              ...widget.sections.map(
+              ...sections.map(
                 (section) => Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -60,7 +33,7 @@ class _LargeFormState extends State<LargeForm> {
                       children: [
                         Text(
                           section.title,
-                          style: widget.sectionTitleStyle,
+                          style: sectionTitleStyle,
                         ),
                         const SizedBox(width: 8),
                         const Expanded(
@@ -75,55 +48,7 @@ class _LargeFormState extends State<LargeForm> {
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
                         final LargeFormField field = section.fields[index];
-                        final int focusIndex = ++i;
-                        switch (field.runtimeType) {
-                          case LargeFormDateField:
-                            return DatePicker(
-                              focusNode: _focuses[focusIndex - 1],
-                              firstDate:
-                                  (field as LargeFormDateField).firstDate,
-                              lastDate: field.lastDate,
-                              labelText: _fieldLabel(field),
-                              onChanged: (value) => _focusNext(focusIndex),
-                            );
-                          case LargeFormDropdownField:
-                            return DropdownButtonHideUnderline(
-                              child: DropdownButtonFormField(
-                                decoration: InputDecoration(
-                                  labelText: _fieldLabel(field),
-                                  prefixIcon: field.icon != null
-                                      ? Icon(field.icon)
-                                      : null,
-                                ),
-                                focusNode: _focuses[focusIndex - 1],
-                                iconDisabledColor:
-                                    Theme.of(context).disabledColor,
-                                iconEnabledColor: Theme.of(context)
-                                    .inputDecorationTheme
-                                    .iconColor,
-                                items: (field as LargeFormDropdownField)
-                                    .options
-                                    .map((e) => DropdownMenuItem(
-                                          value: e,
-                                          child: Text(e),
-                                        ))
-                                    .toList(),
-                                onChanged: (value) => _focusNext(focusIndex),
-                              ),
-                            );
-                          case LargeFormTextField:
-                          default:
-                            return TextFormField(
-                              decoration: InputDecoration(
-                                labelText: _fieldLabel(field),
-                                prefixIcon: field.icon != null
-                                    ? Icon(field.icon)
-                                    : null,
-                              ),
-                              focusNode: _focuses[focusIndex - 1],
-                              onEditingComplete: () => _focusNext(focusIndex),
-                            );
-                        }
+                        return _fieldBuilder(context, field);
                       },
                       separatorBuilder: (_, __) => const SizedBox(height: 10),
                     ),
@@ -131,7 +56,11 @@ class _LargeFormState extends State<LargeForm> {
                 ),
               ),
               ElevatedButton(
-                onPressed: () => widget.onSaved?.call({}),
+                onPressed: () {
+                  if (Form.of(context)!.validate()) {
+                    onSaved?.call({});
+                  }
+                },
                 child: const Text('Salvar'),
               ),
             ],
@@ -141,15 +70,60 @@ class _LargeFormState extends State<LargeForm> {
     );
   }
 
-  String _fieldLabel(LargeFormField field) =>
-      "${field.required ? '* ' : ''}${field.title}";
-
-  void _focusNext(int index) {
-    _focuses[index - 1].unfocus();
-    if (index < _focuses.length) {
-      _focuses[index].requestFocus();
+  Widget _fieldBuilder(BuildContext context, LargeFormField field) {
+    switch (field.runtimeType) {
+      case LargeFormDateField:
+        return DatePicker(
+          firstDate: (field as LargeFormDateField).firstDate,
+          lastDate: field.lastDate,
+          labelText: _fieldLabel(field),
+          validator: (value) => _validator(field.required, value),
+        );
+      case LargeFormDropdownField:
+        return DropdownButtonHideUnderline(
+          child: DropdownButtonFormField(
+            decoration: InputDecoration(
+              labelText: _fieldLabel(field),
+              prefixIcon: field.icon != null ? Icon(field.icon) : null,
+            ),
+            iconDisabledColor: Theme.of(context).disabledColor,
+            iconEnabledColor: Theme.of(context).inputDecorationTheme.iconColor,
+            items: (field as LargeFormDropdownField)
+                .options
+                .map((e) => DropdownMenuItem(
+                      value: e,
+                      child: Text(e),
+                    ))
+                .toList(),
+            onChanged: (value) {},
+            validator: (value) => _validator(field.required, value),
+          ),
+        );
+      case LargeFormTextField:
+      default:
+        return TextFormField(
+          decoration: InputDecoration(
+            labelText: _fieldLabel(field),
+            prefixIcon: field.icon != null ? Icon(field.icon) : null,
+          ),
+          inputFormatters: (field as LargeFormTextField).mask != null
+              ? [TextInputMask(mask: field.mask)]
+              : null,
+          validator: (value) => _validator(field.required, value),
+          textInputAction: TextInputAction.next,
+        );
     }
   }
+
+  String? _validator(bool required, Object? value) {
+    if (required && (value == null || (value is String && value.isEmpty))) {
+      return 'Insira um valor';
+    }
+    return null;
+  }
+
+  String _fieldLabel(LargeFormField field) =>
+      "${field.required ? '* ' : ''}${field.title}";
 }
 
 class LargeFormSection {
