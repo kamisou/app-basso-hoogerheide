@@ -19,7 +19,9 @@ class DayWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isToday = date.day == today.day;
+    final bool isToday = date.day == today.day &&
+        date.month == today.month &&
+        date.year == today.year;
     return Column(
       children: [
         Row(

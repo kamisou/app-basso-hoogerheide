@@ -15,7 +15,9 @@ class CalendarPage extends HomePageBody {
       itemBuilder: (_, index) => Padding(
         padding: const EdgeInsets.only(bottom: 32),
         child: DayWidget(
-          date: today.add(Duration(days: index)),
+          date: (index > 0)
+              ? today.add(Duration(days: index))
+              : today.subtract(Duration(days: index)),
           today: today,
         ),
       ),
