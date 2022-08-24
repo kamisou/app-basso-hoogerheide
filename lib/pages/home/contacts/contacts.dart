@@ -24,6 +24,7 @@ class ContactsPage extends HomePageBody {
         const SizedBox(height: 32),
         Expanded(
           child: Collection<Contact>(
+            // TODO: utilizar dados de contato
             collection: const [],
             itemBuilder: (_, item) => ContactTile(contact: item),
             emptyWidget: const EmptyCard(

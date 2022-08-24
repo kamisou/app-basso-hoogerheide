@@ -13,16 +13,8 @@ class AddEventDialog extends StatefulWidget {
 class _AddEventDialogState extends State<AddEventDialog> {
   CalendarEvent _event = const CalendarEvent.empty();
 
-  final List<Color> _colors = const [
-    Colors.red,
-    Colors.green,
-    Colors.blue,
-    Colors.pink,
-    Colors.yellow,
-    Colors.cyan,
-    Colors.white,
-    Colors.black,
-  ];
+  // TODO: utilizar dados de cores para evento
+  final List<Color> _colors = const [Colors.red];
 
   @override
   void initState() {

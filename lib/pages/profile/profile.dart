@@ -1,3 +1,4 @@
+import 'package:basso_hoogerheide/data_objects/app_user.dart';
 import 'package:basso_hoogerheide/pages/profile/profile_option.dart';
 import 'package:basso_hoogerheide/widgets/shimmering_image.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appUser = ModalRoute.of(context)!.settings.arguments as AppUser;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Perfil'),
@@ -32,9 +34,9 @@ class ProfilePage extends StatelessWidget {
                   height: 100,
                   width: 100,
                   child: ShimmeringImage(
-                    url: 'https://picsum.photos/800',
+                    url: appUser.avatarUrl,
                     errorBuilder: (context) => Text(
-                      'JM',
+                      appUser.initials,
                       style:
                           Theme.of(context).textTheme.headlineSmall?.copyWith(
                                 fontWeight: FontWeight.bold,
@@ -71,14 +73,16 @@ class ProfilePage extends StatelessWidget {
           ),
           const SizedBox(height: 32),
           Text(
-            'Flávia Mendes',
+            appUser.name,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
           ),
           Text(
-            'Civil e Trabalhista',
+            appUser.division,
             style: Theme.of(context).textTheme.titleMedium,
             textAlign: TextAlign.center,
           ),

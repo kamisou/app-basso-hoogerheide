@@ -9,7 +9,7 @@ class AnnotationsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final folder = ModalRoute.of(context)?.settings.arguments as Folder;
+    final folder = ModalRoute.of(context)!.settings.arguments as Folder;
     return Scaffold(
       appBar: AppBar(title: Text('${folder.id} - ${folder.name}')),
       body: Padding(

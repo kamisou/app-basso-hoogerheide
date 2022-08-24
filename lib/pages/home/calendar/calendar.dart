@@ -19,6 +19,8 @@ class CalendarPage extends HomePageBody {
               ? today.add(Duration(days: index))
               : today.subtract(Duration(days: index)),
           today: today,
+          // TODO: utilizar dados de eventos do calendário
+          events: [],
         ),
       ),
     );

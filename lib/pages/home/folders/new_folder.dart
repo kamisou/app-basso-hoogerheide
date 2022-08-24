@@ -138,7 +138,8 @@ class NewFolderPage extends StatelessWidget {
                     title: 'Estado',
                     key: 'state',
                     icon: Icons.map_outlined,
-                    options: ['PR', 'pA'],
+                    // TODO: utilizar dados de estado
+                    options: [],
                   ),
                   LargeFormTextField(
                     title: 'CEP',
@@ -157,12 +158,14 @@ class NewFolderPage extends StatelessWidget {
                     title: 'Procurador',
                     key: 'attorney',
                     icon: Icons.person_outlined,
+                    // TODO: utilizar dados de procuradores
                     options: [],
                   ),
                   const LargeFormDropdownField(
                     title: 'Natureza',
                     key: 'nature',
                     icon: Icons.file_copy_outlined,
+                    // TODO: utilizar dados de natureza
                     options: [],
                   ),
                   const LargeFormTextField(
@@ -184,12 +187,14 @@ class NewFolderPage extends StatelessWidget {
                     title: 'Comarca',
                     key: 'district',
                     icon: Icons.map_outlined,
+                    // TODO: utilizar dados de comarca
                     options: [],
                   ),
                   const LargeFormDropdownField(
                     title: 'Vara',
                     key: 'division',
                     icon: Icons.gavel_outlined,
+                    // TODO: utilizar dados de vara
                     options: [],
                   ),
                 ],

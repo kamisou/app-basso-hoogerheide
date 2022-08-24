@@ -1,3 +1,4 @@
+import 'package:basso_hoogerheide/data_objects/app_user.dart';
 import 'package:basso_hoogerheide/pages/home/app_bar.dart';
 import 'package:basso_hoogerheide/pages/home/calendar/calendar.dart';
 import 'package:basso_hoogerheide/pages/home/contacts/contacts.dart';
@@ -55,6 +56,11 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: [
               HomeAppBar(
+                appUser: const AppUser(
+                  division: 'Administrador',
+                  email: 'kamisou@outlook.com',
+                  name: 'João Marcos Kaminoski de Souza',
+                ),
                 controller: _pageController,
                 pageTitles: _pageBodies.map((e) => e.title).toList(),
               ),

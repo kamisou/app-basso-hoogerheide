@@ -1,3 +1,4 @@
+import 'package:basso_hoogerheide/data_objects/app_user.dart';
 import 'package:basso_hoogerheide/widgets/avatar_circle.dart';
 import 'package:flutter/material.dart';
 
@@ -6,11 +7,14 @@ class HomeAppBar extends StatefulWidget {
     super.key,
     required this.controller,
     required this.pageTitles,
+    required this.appUser,
   });
 
   final PageController controller;
 
   final List<String> pageTitles;
+
+  final AppUser appUser;
 
   @override
   State<HomeAppBar> createState() => _HomeAppBarState();
@@ -53,10 +57,14 @@ class _HomeAppBarState extends State<HomeAppBar> {
       child: Row(
         children: [
           GestureDetector(
-            onTap: () => Navigator.pushNamed(context, '/profile'),
-            child: const AvatarCircle(
-              avatarUrl: '',
-              initials: 'JM',
+            onTap: () => Navigator.pushNamed(
+              context,
+              '/profile',
+              arguments: widget.appUser,
+            ),
+            child: AvatarCircle(
+              avatarUrl: widget.appUser.avatarUrl,
+              initials: widget.appUser.initials,
             ),
           ),
           const SizedBox(width: 50),
