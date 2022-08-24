@@ -50,6 +50,7 @@ class NewFolderPage extends StatelessWidget {
             sections: [
               LargeFormSection(
                 title: 'Dados Pessoais',
+                key: 'personal_data',
                 fields: [
                   const LargeFormTextField(
                     title: 'Nome completo',
@@ -86,6 +87,7 @@ class NewFolderPage extends StatelessWidget {
               ),
               const LargeFormSection(
                 title: 'Dados de Contato',
+                key: 'contact_info',
                 fields: [
                   LargeFormTextField(
                     title: 'E-mail',
@@ -112,6 +114,7 @@ class NewFolderPage extends StatelessWidget {
               ),
               const LargeFormSection(
                 title: 'Endereço',
+                key: 'address_info',
                 fields: [
                   LargeFormTextField(
                     title: 'Endereço',
@@ -135,7 +138,7 @@ class NewFolderPage extends StatelessWidget {
                     title: 'Estado',
                     key: 'state',
                     icon: Icons.map_outlined,
-                    options: [],
+                    options: ['PR', 'pA'],
                   ),
                   LargeFormTextField(
                     title: 'CEP',
@@ -148,6 +151,7 @@ class NewFolderPage extends StatelessWidget {
               ),
               LargeFormSection(
                 title: 'Detalhes do Processo',
+                key: 'process_info',
                 fields: [
                   const LargeFormDropdownField(
                     title: 'Procurador',
@@ -158,12 +162,12 @@ class NewFolderPage extends StatelessWidget {
                   const LargeFormDropdownField(
                     title: 'Natureza',
                     key: 'nature',
-                    icon: Icons.gavel_outlined,
+                    icon: Icons.file_copy_outlined,
                     options: [],
                   ),
                   const LargeFormTextField(
                     title: 'Número do processo',
-                    key: 'process_number',
+                    key: 'number',
                     type: TextInputType.number,
                     icon: Icons.numbers_outlined,
                     required: false,
@@ -172,14 +176,27 @@ class NewFolderPage extends StatelessWidget {
                     title: 'Data do protocolo',
                     key: 'protocol_date',
                     icon: Icons.numbers_outlined,
-                    startTime: DateTime(2022),
-                    endTime: DateTime(2022),
+                    firstDate: DateTime(2022),
+                    lastDate: DateTime(2023),
                     required: false,
+                  ),
+                  const LargeFormDropdownField(
+                    title: 'Comarca',
+                    key: 'district',
+                    icon: Icons.map_outlined,
+                    options: [],
+                  ),
+                  const LargeFormDropdownField(
+                    title: 'Vara',
+                    key: 'division',
+                    icon: Icons.gavel_outlined,
+                    options: [],
                   ),
                 ],
               ),
               const LargeFormSection(
                 title: 'Documentos do Processo',
+                key: 'documents',
                 fields: [],
               ),
             ],
@@ -188,6 +205,8 @@ class NewFolderPage extends StatelessWidget {
                       color: Theme.of(context).colorScheme.secondary,
                       fontWeight: FontWeight.bold,
                     ),
+            // TODO: salvar nova pasta
+            onSaved: (value) {},
           ),
         ],
       ),

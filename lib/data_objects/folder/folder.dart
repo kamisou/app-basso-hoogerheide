@@ -21,8 +21,6 @@ abstract class Folder {
 
   final List<Annotation> annotations;
 
-  final DateTime timestamp;
-
   const Folder({
     required this.id,
     required this.name,
@@ -32,6 +30,5 @@ abstract class Folder {
     required this.processInfo,
     required this.files,
     required this.annotations,
-    required this.timestamp,
   });
 }

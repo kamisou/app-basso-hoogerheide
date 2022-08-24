@@ -36,6 +36,12 @@ class AppTheme {
         onSurface: Color(0xFFF0F0F0),
         surfaceTint: Color(0x00000000),
       ),
+      dialogTheme: DialogTheme(
+        backgroundColor: const Color(0xFF1A1A1A),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(4),
+        ),
+      ),
       disabledColor: const Color(0xFF3F3F3F),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(

@@ -26,7 +26,6 @@ class CompanyFolder extends Folder {
           processInfo: processInfo,
           files: files,
           annotations: annotations,
-          timestamp: timestamp,
         );
 
   final String cnpj;

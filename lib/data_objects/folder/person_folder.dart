@@ -27,7 +27,6 @@ class PersonFolder extends Folder {
           processInfo: processInfo,
           files: files,
           annotations: annotations,
-          timestamp: timestamp,
         );
 
   final String cpf;

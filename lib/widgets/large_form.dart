@@ -1,3 +1,4 @@
+import 'package:basso_hoogerheide/widgets/date_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -6,11 +7,14 @@ class LargeForm extends StatefulWidget {
     super.key,
     required this.sections,
     this.sectionTitleStyle,
+    this.onSaved,
   });
 
   final List<LargeFormSection> sections;
 
   final TextStyle? sectionTitleStyle;
+
+  final void Function(Map<String,dynamic>)? onSaved;
 
   @override
   State<LargeForm> createState() => _LargeFormState();
@@ -45,102 +49,117 @@ class _LargeFormState extends State<LargeForm> {
       child: Builder(
         builder: (context) {
           return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: widget.sections
-                .map(
-                  (e) => _buildSection(context, e, i),
-                )
-                .toList(),
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              ...widget.sections.map(
+                (section) => Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          section.title,
+                          style: widget.sectionTitleStyle,
+                        ),
+                        const SizedBox(width: 8),
+                        const Expanded(
+                          child: Divider(thickness: 2, height: 20),
+                        ),
+                      ],
+                    ),
+                    ListView.separated(
+                      itemCount: section.fields.length,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        final LargeFormField field = section.fields[index];
+                        final int focusIndex = ++i;
+                        switch (field.runtimeType) {
+                          case LargeFormDateField:
+                            return DatePicker(
+                              focusNode: _focuses[focusIndex - 1],
+                              firstDate:
+                                  (field as LargeFormDateField).firstDate,
+                              lastDate: field.lastDate,
+                              labelText: _fieldLabel(field),
+                              onChanged: (value) => _focusNext(focusIndex),
+                            );
+                          case LargeFormDropdownField:
+                            return DropdownButtonHideUnderline(
+                              child: DropdownButtonFormField(
+                                decoration: InputDecoration(
+                                  labelText: _fieldLabel(field),
+                                  prefixIcon: field.icon != null
+                                      ? Icon(field.icon)
+                                      : null,
+                                ),
+                                focusNode: _focuses[focusIndex - 1],
+                                iconDisabledColor:
+                                    Theme.of(context).disabledColor,
+                                iconEnabledColor: Theme.of(context)
+                                    .inputDecorationTheme
+                                    .iconColor,
+                                items: (field as LargeFormDropdownField)
+                                    .options
+                                    .map((e) => DropdownMenuItem(
+                                          value: e,
+                                          child: Text(e),
+                                        ))
+                                    .toList(),
+                                onChanged: (value) => _focusNext(focusIndex),
+                              ),
+                            );
+                          case LargeFormTextField:
+                          default:
+                            return TextFormField(
+                              decoration: InputDecoration(
+                                labelText: _fieldLabel(field),
+                                prefixIcon: field.icon != null
+                                    ? Icon(field.icon)
+                                    : null,
+                              ),
+                              focusNode: _focuses[focusIndex - 1],
+                              onEditingComplete: () => _focusNext(focusIndex),
+                            );
+                        }
+                      },
+                      separatorBuilder: (_, __) => const SizedBox(height: 10),
+                    ),
+                  ],
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () => widget.onSaved?.call({}),
+                child: const Text('Salvar'),
+              ),
+            ],
           );
         },
       ),
     );
   }
 
-  Widget _buildSection(
-    BuildContext context,
-    LargeFormSection section,
-    int focusIndex,
-  ) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Text(
-              section.title,
-              style: widget.sectionTitleStyle,
-            ),
-            const SizedBox(width: 8),
-            const Expanded(
-              child: Divider(thickness: 2, height: 20),
-            ),
-          ],
-        ),
-        ListView.separated(
-          itemCount: section.fields.length,
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            final LargeFormField field = section.fields[index];
-            ++focusIndex;
+  String _fieldLabel(LargeFormField field) =>
+      "${field.required ? '* ' : ''}${field.title}";
 
-            switch (field.runtimeType) {
-              case LargeFormDateField:
-                return const Text('datepicker');
-              case LargeFormDropdownField:
-                return DropdownButtonHideUnderline(
-                  child: DropdownButtonFormField(
-                    decoration: InputDecoration(
-                      labelText: "${field.required ? '*' : ''} ${field.title}",
-                      prefixIcon: field.icon != null ? Icon(field.icon) : null,
-                    ),
-                    focusNode: _focuses[focusIndex - 1],
-                    iconDisabledColor: Theme.of(context).disabledColor,
-                    iconEnabledColor:
-                        Theme.of(context).inputDecorationTheme.iconColor,
-                    items: (field as LargeFormDropdownField)
-                        .options
-                        .map((e) => DropdownMenuItem(
-                              value: e,
-                              child: Text(e),
-                            ))
-                        .toList(),
-                    onChanged: (value) {
-                      if (focusIndex < _focuses.length) {
-                        _focuses[focusIndex].requestFocus();
-                      }
-                    },
-                  ),
-                );
-              case LargeFormTextField:
-              default:
-                return TextFormField(
-                  decoration: InputDecoration(
-                    labelText: "${field.required ? '*' : ''} ${field.title}",
-                    prefixIcon: field.icon != null ? Icon(field.icon) : null,
-                  ),
-                  focusNode: _focuses[focusIndex - 1],
-                  onEditingComplete: focusIndex < _focuses.length
-                      ? _focuses[focusIndex].requestFocus
-                      : null,
-                );
-            }
-          },
-          separatorBuilder: (_, __) => const SizedBox(height: 10),
-        ),
-      ],
-    );
+  void _focusNext(int index) {
+    _focuses[index - 1].unfocus();
+    if (index < _focuses.length) {
+      _focuses[index].requestFocus();
+    }
   }
 }
 
 class LargeFormSection {
   const LargeFormSection({
+    required this.key,
     required this.title,
     required this.fields,
   });
+
+  final String key;
 
   final String title;
 
@@ -195,13 +214,13 @@ class LargeFormDateField extends LargeFormField {
   const LargeFormDateField({
     required super.title,
     required super.key,
-    required this.startTime,
-    required this.endTime,
+    required this.firstDate,
+    required this.lastDate,
     super.icon,
     super.required,
   });
 
-  final DateTime startTime;
+  final DateTime firstDate;
 
-  final DateTime endTime;
+  final DateTime lastDate;
 }

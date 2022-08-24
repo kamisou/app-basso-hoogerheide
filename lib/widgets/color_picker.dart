@@ -1,7 +1,6 @@
-import 'package:basso_hoogerheide/widgets/default_dialog.dart';
 import 'package:flutter/material.dart';
 
-class ColorPicker extends StatelessWidget {
+class ColorPicker extends StatefulWidget {
   ColorPicker({
     super.key,
     required this.colors,
@@ -19,53 +18,75 @@ class ColorPicker extends StatelessWidget {
   final void Function(Color?)? onChanged;
 
   @override
+  State<ColorPicker> createState() => _ColorPickerState();
+}
+
+class _ColorPickerState extends State<ColorPicker> {
+  late Color? _color;
+
+  @override
+  void initState() {
+    super.initState();
+    _color = widget.initialValue;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         showDialog(
           context: context,
-          builder: (context) => DefaultDialog(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                dialogTitle,
-                const SizedBox(height: 16),
-                GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 5,
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 16,
-                    childAspectRatio: 1,
-                  ),
-                  shrinkWrap: true,
-                  itemCount: colors.length,
-                  itemBuilder: (context, index) {
-                    final Color color = colors[index];
-                    return GestureDetector(
-                      onTap: () => Navigator.pop(context, color),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          color: color,
+          builder: (context) => Dialog(
+            insetPadding: const EdgeInsets.all(16),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  widget.dialogTitle,
+                  const SizedBox(height: 16),
+                  GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 5,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                      childAspectRatio: 1,
+                    ),
+                    shrinkWrap: true,
+                    itemCount: widget.colors.length,
+                    itemBuilder: (context, index) {
+                      final Color color = widget.colors[index];
+                      return GestureDetector(
+                        onTap: () => Navigator.pop(context, color),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            color: color,
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                ),
-              ],
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
-        ).then((color) => onChanged?.call(color));
+        ).then((color) {
+          if (color != null) {
+            widget.onChanged?.call(color);
+            setState(() => _color = color);
+          }
+        });
       },
       child: Container(
         decoration: BoxDecoration(
-          border: initialValue == null
+          border: _color == null
               ? Border.all(color: Theme.of(context).disabledColor)
               : null,
           borderRadius: BorderRadius.circular(16),
-          color: initialValue,
+          color: _color,
         ),
         height: 32,
         width: 32,
