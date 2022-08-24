@@ -1,6 +1,8 @@
 import 'package:basso_hoogerheide/widgets/date_picker.dart';
+import 'package:basso_hoogerheide/widgets/searchbar.dart';
 import 'package:easy_mask/easy_mask.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class LargeForm extends StatelessWidget {
   const LargeForm({
@@ -80,24 +82,13 @@ class LargeForm extends StatelessWidget {
           validator: (value) => _validator(field.required, value),
         );
       case LargeFormDropdownField:
-        return DropdownButtonHideUnderline(
-          child: DropdownButtonFormField(
-            decoration: InputDecoration(
-              labelText: _fieldLabel(field),
-              prefixIcon: field.icon != null ? Icon(field.icon) : null,
-            ),
-            iconDisabledColor: Theme.of(context).disabledColor,
-            iconEnabledColor: Theme.of(context).inputDecorationTheme.iconColor,
-            items: (field as LargeFormDropdownField)
-                .options
-                .map((e) => DropdownMenuItem(
-                      value: e,
-                      child: Text(e),
-                    ))
-                .toList(),
-            onChanged: (value) {},
-            validator: (value) => _validator(field.required, value),
-          ),
+        return SearchBar(
+          options: (field as LargeFormDropdownField).options,
+          icon: field.icon,
+          label: _fieldLabel(field),
+          onChanged: (value) {},
+          validator: (value) => _validator(field.required, value),
+          textInputAction: TextInputAction.next,
         );
       case LargeFormTextField:
       default:
