@@ -81,9 +81,9 @@ class LargeForm extends StatelessWidget {
           labelText: _fieldLabel(field),
           validator: (value) => _validator(field.required, value),
         );
-      case LargeFormDropdownField:
+      case LargeFormOptionsField:
         return SearchBar(
-          options: (field as LargeFormDropdownField).options,
+          options: (field as LargeFormOptionsField).options,
           icon: field.icon,
           label: _fieldLabel(field),
           onChanged: (value) {},
@@ -163,8 +163,8 @@ class LargeFormTextField extends LargeFormField {
   final TextInputType type;
 }
 
-class LargeFormDropdownField extends LargeFormField {
-  const LargeFormDropdownField({
+class LargeFormOptionsField extends LargeFormField {
+  const LargeFormOptionsField({
     required super.title,
     required super.key,
     required this.options,

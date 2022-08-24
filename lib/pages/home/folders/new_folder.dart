@@ -136,7 +136,7 @@ class NewFolderPage extends StatelessWidget {
                     icon: Icons.emoji_transportation,
                     type: TextInputType.name,
                   ),
-                  LargeFormDropdownField(
+                  LargeFormOptionsField(
                     title: 'Estado',
                     key: 'state',
                     icon: Icons.map_outlined,
@@ -157,14 +157,14 @@ class NewFolderPage extends StatelessWidget {
                 title: 'Detalhes do Processo',
                 key: 'process_info',
                 fields: [
-                  const LargeFormDropdownField(
+                  const LargeFormOptionsField(
                     title: 'Procurador',
                     key: 'attorney',
                     icon: Icons.person_outlined,
                     // TODO: utilizar dados de procuradores
                     options: [],
                   ),
-                  const LargeFormDropdownField(
+                  const LargeFormOptionsField(
                     title: 'Natureza',
                     key: 'nature',
                     icon: Icons.file_copy_outlined,
@@ -186,14 +186,14 @@ class NewFolderPage extends StatelessWidget {
                     lastDate: DateTime(2023),
                     required: false,
                   ),
-                  const LargeFormDropdownField(
+                  const LargeFormOptionsField(
                     title: 'Comarca',
                     key: 'district',
                     icon: Icons.map_outlined,
                     // TODO: utilizar dados de comarca
                     options: [],
                   ),
-                  const LargeFormDropdownField(
+                  const LargeFormOptionsField(
                     title: 'Vara',
                     key: 'division',
                     icon: Icons.gavel_outlined,

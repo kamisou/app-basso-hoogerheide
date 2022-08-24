@@ -70,44 +70,51 @@ class AppTheme {
           borderRadius: BorderRadius.circular(32),
         ),
       ),
-      inputDecorationTheme: const InputDecorationTheme(
-        contentPadding: EdgeInsets.symmetric(
+      inputDecorationTheme: InputDecorationTheme(
+        contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 10,
         ),
-        disabledBorder: OutlineInputBorder(
+        disabledBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: Color(0xFF222222)),
         ),
-        enabledBorder: OutlineInputBorder(
+        enabledBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: Color(0xFF222222)),
         ),
-        errorBorder: OutlineInputBorder(
+        errorBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: Color(0xFFF34923)),
         ),
-        errorStyle: TextStyle(
+        errorStyle: const TextStyle(
           color: Color(0xFFF34923),
           fontFamily: fontFamily,
         ),
-        focusedBorder: OutlineInputBorder(
+        focusedBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: Color(0xFF222222)),
         ),
-        focusedErrorBorder: OutlineInputBorder(
+        focusedErrorBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: Color(0xFFF34923)),
         ),
-        fillColor: Color(0xFF222222),
+        fillColor: const Color(0xFF222222),
         filled: true,
-        floatingLabelStyle: TextStyle(
+        floatingLabelStyle: const TextStyle(
           color: Color(0xFF808080),
           fontFamily: fontFamily,
         ),
-        hintStyle: TextStyle(
+        hintStyle: const TextStyle(
           color: Color(0xFF808080),
           fontFamily: fontFamily,
         ),
-        iconColor: Color(0xFF808080),
-        labelStyle: TextStyle(
-          color: Color(0xFF808080),
-          fontFamily: fontFamily,
+        iconColor: const Color(0xFF808080),
+        labelStyle: MaterialStateTextStyle.resolveWith(
+          (states) => states.contains(MaterialState.disabled)
+              ? const TextStyle(
+                  color: Color(0xFF3F3F3F),
+                  fontFamily: fontFamily,
+                )
+              : const TextStyle(
+                  color: Color(0xFF808080),
+                  fontFamily: fontFamily,
+                ),
         ),
       ),
       scaffoldBackgroundColor: const Color(0xFF101010),

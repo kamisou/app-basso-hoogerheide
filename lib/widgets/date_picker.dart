@@ -63,6 +63,7 @@ class _DatePickerState extends State<DatePicker> {
     showDatePicker(
       context: context,
       firstDate: widget.firstDate,
+      helpText: widget.labelText,
       lastDate: widget.lastDate,
       initialDate: widget.initialDate ?? DateTime.now(),
     ).then((value) {

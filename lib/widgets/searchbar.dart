@@ -143,7 +143,7 @@ class _SearchBarState<T> extends State<SearchBar<T>> {
                                   ))
                               .toList(),
                         )
-                      : widget,
+                      : const SizedBox.shrink(),
                 ),
               ),
             ),
@@ -184,6 +184,7 @@ class _SearchBarState<T> extends State<SearchBar<T>> {
                   labelText: widget.label,
                   prefixIcon: widget.icon != null ? Icon(widget.icon) : null,
                 ),
+                enabled: widget.options.isNotEmpty,
                 focusNode: _focusNode,
                 validator: widget.validator != null
                     ? (_) => widget.validator!.call(_selected)
