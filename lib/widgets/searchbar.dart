@@ -6,6 +6,7 @@ class SearchBar<T> extends StatefulWidget {
   const SearchBar({
     super.key,
     required this.options,
+    this.initialValue,
     this.label,
     this.onChanged,
     this.icon,
@@ -17,6 +18,8 @@ class SearchBar<T> extends StatefulWidget {
   final IconData? icon;
 
   final int maxChoices;
+
+  final T? initialValue;
 
   final List<T> options;
 
@@ -54,6 +57,10 @@ class _SearchBarState<T> extends State<SearchBar<T>> {
   @override
   void initState() {
     super.initState();
+    _selected = widget.initialValue;
+    if (widget.initialValue != null) {
+      _textEditingController.text = widget.initialValue.toString();
+    }
     _focusNode.addListener(_focusNodeListener);
     _textEditingController.addListener(_textEditingControllerListener);
     _overlayState = Overlay.of(context)!;

@@ -15,8 +15,7 @@ class PersonFolder extends Folder {
     required AddressInfo addressInfo,
     required ProcessInfo processInfo,
     required List<DownloadableFile> files,
-    required List<Annotation> annotations,
-    required DateTime timestamp,
+    List<Annotation>? annotations,
     this.rg,
   }) : super(
           id: id,
@@ -26,7 +25,7 @@ class PersonFolder extends Folder {
           addressInfo: addressInfo,
           processInfo: processInfo,
           files: files,
-          annotations: annotations,
+          annotations: annotations ?? const [],
         );
 
   final String cpf;

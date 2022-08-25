@@ -141,7 +141,7 @@ class NewFolderPage extends StatelessWidget {
                     key: 'state',
                     icon: Icons.map_outlined,
                     // TODO: utilizar dados de estado
-                    options: ['PR', 'PA'],
+                    options: [],
                   ),
                   LargeFormTextField(
                     title: 'CEP',

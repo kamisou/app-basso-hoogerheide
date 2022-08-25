@@ -15,8 +15,7 @@ class CompanyFolder extends Folder {
     required AddressInfo addressInfo,
     required ProcessInfo processInfo,
     required List<DownloadableFile> files,
-    required List<Annotation> annotations,
-    required DateTime timestamp,
+    List<Annotation>? annotations,
   }) : super(
           id: id,
           name: name,
@@ -25,7 +24,7 @@ class CompanyFolder extends Folder {
           addressInfo: addressInfo,
           processInfo: processInfo,
           files: files,
-          annotations: annotations,
+          annotations: annotations ?? const [],
         );
 
   final String cnpj;

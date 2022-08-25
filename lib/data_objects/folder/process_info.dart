@@ -1,4 +1,5 @@
 import 'package:basso_hoogerheide/data_objects/app_user.dart';
+import 'package:flutter/material.dart';
 
 class ProcessInfo {
   const ProcessInfo({
@@ -13,7 +14,7 @@ class ProcessInfo {
 
   final String nature;
 
-  final int color;
+  final Color color;
 
   final AppUser attorney;
 
@@ -24,6 +25,4 @@ class ProcessInfo {
   final String? district;
 
   final String? division;
-
-  // TODO: status? (localização no site, pode ser que vincule com as notas)
 }

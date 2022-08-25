@@ -29,6 +29,6 @@ abstract class Folder {
     required this.addressInfo,
     required this.processInfo,
     required this.files,
-    required this.annotations,
+    this.annotations = const [],
   });
 }

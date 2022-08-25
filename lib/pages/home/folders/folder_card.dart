@@ -38,7 +38,7 @@ class _FolderCardState extends State<FolderCard> {
                     height: double.infinity,
                     width: 4,
                     child: ColoredBox(
-                      color: Color(widget.folder.processInfo.color),
+                      color: widget.folder.processInfo.color,
                     ),
                   ),
                   Expanded(
@@ -140,23 +140,24 @@ class _FolderCardState extends State<FolderCard> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(4),
-            color:
-                Theme.of(context).extension<SuccessThemeExtension>()?.success,
+        if (widget.folder.writtenOff)
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(4),
+              color:
+                  Theme.of(context).extension<SuccessThemeExtension>()?.success,
+            ),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 7,
+              vertical: 1,
+            ),
+            child: Text(
+              'Baixado',
+              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
           ),
-          padding: const EdgeInsets.symmetric(
-            horizontal: 7,
-            vertical: 1,
-          ),
-          child: Text(
-            'Baixado',
-            style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-          ),
-        ),
         _cardSection(context, Icons.home_outlined, 'Endereço'),
         Text(
           '${address.street} - ${address.district}',

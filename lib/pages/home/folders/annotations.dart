@@ -1,5 +1,6 @@
 import 'package:basso_hoogerheide/data_objects/folder/annotation.dart';
 import 'package:basso_hoogerheide/data_objects/folder/folder.dart';
+import 'package:basso_hoogerheide/pages/home/folders/add_annotation_dialog.dart';
 import 'package:basso_hoogerheide/widgets/avatar_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -14,28 +15,37 @@ class AnnotationsPage extends StatelessWidget {
       appBar: AppBar(title: Text('${folder.id} - ${folder.name}')),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32),
-        child: SingleChildScrollView(
-          child: IntrinsicHeight(
-            child: Stack(
-              alignment: Alignment.topLeft,
-              children: [
-                Container(
-                  color: Theme.of(context).disabledColor,
-                  margin: const EdgeInsets.only(left: 5),
-                  width: 2,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: Column(
-                    children: folder.annotations
-                        .map((e) => _cardBuilder(context, e))
-                        .toList(),
+        child: folder.annotations.isNotEmpty
+            ? SingleChildScrollView(
+                child: IntrinsicHeight(
+                  child: Stack(
+                    alignment: Alignment.topLeft,
+                    children: [
+                      Container(
+                        color: Theme.of(context).disabledColor,
+                        margin: const EdgeInsets.only(left: 5),
+                        width: 2,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        child: Column(
+                          children: folder.annotations
+                              .map((e) => _cardBuilder(context, e))
+                              .toList(),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ),
+              )
+            : const SizedBox.shrink(),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => showDialog(
+          context: context,
+          builder: (context) => const AddAnnotationDialog(),
         ),
+        child: const Icon(Icons.add),
       ),
     );
   }
