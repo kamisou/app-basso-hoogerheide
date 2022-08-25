@@ -1,9 +1,10 @@
 import 'package:basso_hoogerheide/widgets/date_picker.dart';
+import 'package:basso_hoogerheide/widgets/file_picker_field.dart';
 import 'package:basso_hoogerheide/widgets/searchbar.dart';
 import 'package:easy_mask/easy_mask.dart';
 import 'package:flutter/material.dart';
 
-class LargeForm extends StatelessWidget {
+class LargeForm extends StatefulWidget {
   const LargeForm({
     super.key,
     required this.sections,
@@ -18,6 +19,26 @@ class LargeForm extends StatelessWidget {
   final void Function(Map<String, dynamic>)? onSaved;
 
   @override
+  State<LargeForm> createState() => _LargeFormState();
+}
+
+class _LargeFormState extends State<LargeForm> {
+  Map<String, Map<String, dynamic>> _data = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _data = Map.fromEntries(
+      widget.sections.map(
+        (e) => MapEntry(
+          e.key,
+          {for (final field in e.fields) field.key: null},
+        ),
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Form(
       child: Builder(
@@ -25,7 +46,7 @@ class LargeForm extends StatelessWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              ...sections.map(
+              ...widget.sections.map(
                 (section) => Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -34,7 +55,7 @@ class LargeForm extends StatelessWidget {
                       children: [
                         Text(
                           section.title,
-                          style: sectionTitleStyle,
+                          style: widget.sectionTitleStyle,
                         ),
                         const SizedBox(width: 8),
                         const Expanded(
@@ -49,7 +70,7 @@ class LargeForm extends StatelessWidget {
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
                         final LargeFormField field = section.fields[index];
-                        return _fieldBuilder(context, field);
+                        return _fieldBuilder(context, section, field);
                       },
                       separatorBuilder: (_, __) => const SizedBox(height: 10),
                     ),
@@ -59,7 +80,7 @@ class LargeForm extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   if (Form.of(context)!.validate()) {
-                    onSaved?.call({});
+                    widget.onSaved?.call(_data);
                   }
                 },
                 child: const Text('Salvar'),
@@ -71,13 +92,16 @@ class LargeForm extends StatelessWidget {
     );
   }
 
-  Widget _fieldBuilder(BuildContext context, LargeFormField field) {
+  Widget _fieldBuilder(
+      BuildContext context, LargeFormSection section, LargeFormField field) {
     switch (field.runtimeType) {
       case LargeFormDateField:
         return DatePicker(
           firstDate: (field as LargeFormDateField).firstDate,
           lastDate: field.lastDate,
           labelText: _fieldLabel(field),
+          onChanged: (value) =>
+              _data[section.key]![field.key] = value?.toIso8601String(),
           validator: (value) => _validator(field.required, value),
         );
       case LargeFormOptionsField:
@@ -85,9 +109,23 @@ class LargeForm extends StatelessWidget {
           options: (field as LargeFormOptionsField).options,
           icon: field.icon,
           label: _fieldLabel(field),
-          onChanged: (value) {},
+          onChanged: (value) =>
+              _data[section.key]![field.key] = value?.toString(),
           validator: (value) => _validator(field.required, value),
           textInputAction: TextInputAction.next,
+        );
+      case LargeFormDocumentField:
+        return FilePickerField(
+          hintText: 'Anexar arquivos',
+          icon: Icons.attach_file_outlined,
+          allowMultiple: true,
+          onDocumentAdded: (files) =>
+              _data[section.key]![field.key] = files.map(
+            (e) => {
+              'title': e.path.split('/').last,
+              'path': e.path,
+            },
+          ),
         );
       case LargeFormTextField:
       default:
@@ -99,6 +137,8 @@ class LargeForm extends StatelessWidget {
           inputFormatters: (field as LargeFormTextField).mask != null
               ? [TextInputMask(mask: field.mask)]
               : null,
+          onChanged: (value) =>
+              _data[section.key]![field.key] = value.isEmpty ? null : value,
           validator: (value) => _validator(field.required, value),
           textInputAction: TextInputAction.next,
         );
@@ -187,4 +227,15 @@ class LargeFormDateField extends LargeFormField {
   final DateTime firstDate;
 
   final DateTime lastDate;
+}
+
+class LargeFormDocumentField extends LargeFormField {
+  const LargeFormDocumentField({
+    required super.title,
+    required super.key,
+    super.required,
+    this.multiple = false,
+  });
+
+  final bool multiple;
 }

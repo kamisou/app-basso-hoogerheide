@@ -141,7 +141,7 @@ class NewFolderPage extends StatelessWidget {
                     key: 'state',
                     icon: Icons.map_outlined,
                     // TODO: utilizar dados de estado
-                    options: [],
+                    options: ['PR'],
                   ),
                   LargeFormTextField(
                     title: 'CEP',
@@ -162,14 +162,14 @@ class NewFolderPage extends StatelessWidget {
                     key: 'attorney',
                     icon: Icons.person_outlined,
                     // TODO: utilizar dados de procuradores
-                    options: [],
+                    options: ['João Marcos Kaminoski de Souza'],
                   ),
                   const LargeFormOptionsField(
                     title: 'Natureza',
                     key: 'nature',
                     icon: Icons.file_copy_outlined,
                     // TODO: utilizar dados de natureza
-                    options: [],
+                    options: ['Trabalhista'],
                   ),
                   const LargeFormTextField(
                     title: 'Número do processo',
@@ -191,21 +191,26 @@ class NewFolderPage extends StatelessWidget {
                     key: 'district',
                     icon: Icons.map_outlined,
                     // TODO: utilizar dados de comarca
-                    options: [],
+                    options: ['Paraná'],
                   ),
                   const LargeFormOptionsField(
                     title: 'Vara',
                     key: 'division',
                     icon: Icons.gavel_outlined,
                     // TODO: utilizar dados de vara
-                    options: [],
+                    options: ['1a Vara'],
                   ),
                 ],
               ),
               const LargeFormSection(
                 title: 'Documentos do Processo',
                 key: 'documents',
-                fields: [],
+                fields: [
+                  LargeFormDocumentField(
+                    title: 'Anexos',
+                    key: 'attachments',
+                  ),
+                ],
               ),
             ],
             sectionTitleStyle:
@@ -214,7 +219,7 @@ class NewFolderPage extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
             // TODO: salvar nova pasta
-            onSaved: (value) {},
+            onSaved: (value) => print(value),
           ),
         ],
       ),

@@ -22,22 +22,25 @@ class ModelsPage extends HomePageBody {
       itemBuilder: (_, item) => ModelCard(
         modelCategory: item,
         onTapUpload: () {
-          _pickFile().then((platformFile) {
-            if (platformFile == null) return;
+          // TODO: segregar lógica de exibição da lógica de aplicação
+          _pickFile().then((file) {
+            if (file == null) return;
 
-            final uploadStream = _uploadFile(platformFile);
+            final String fileTitle = file.path.split('/').last;
+            final Stream<double> uploadStream =
+                MockUploader().upload(file).asBroadcastStream();
 
             final ScaffoldFeatureController scaffoldController =
-                _showLoadingSnackbar(context, platformFile.name, uploadStream);
+                _showLoadingSnackbar(context, fileTitle, uploadStream);
 
             uploadStream.last.then(
               (_) {
                 scaffoldController.close();
-                _showSuccessSnackbar(context, platformFile.name);
+                _showSuccessSnackbar(context, fileTitle);
               },
               onError: (error) {
                 scaffoldController.close();
-                _showErrorSnackbar(context, platformFile.name);
+                _showErrorSnackbar(context, fileTitle);
               },
             );
           });
@@ -56,18 +59,13 @@ class ModelsPage extends HomePageBody {
   @override
   String get title => 'Modelos';
 
-  Future<PlatformFile?> _pickFile() async {
+  Future<File?> _pickFile() async {
     final FilePickerResult? result = await FilePicker.platform.pickFiles(
       dialogTitle: 'Selecione um arquivo:',
       withReadStream: true,
     );
     if (result == null) return null;
-    return result.files.first;
-  }
-
-  Stream<double> _uploadFile(PlatformFile platformFile) {
-    final File file = File(platformFile.path!);
-    return MockUploader().upload(file).asBroadcastStream();
+    return File(result.files.first.path!);
   }
 
   ScaffoldFeatureController _showLoadingSnackbar(
