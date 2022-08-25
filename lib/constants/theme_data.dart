@@ -117,8 +117,20 @@ class AppTheme {
                 ),
         ),
       ),
+      progressIndicatorTheme: const ProgressIndicatorThemeData(
+        color: Color(0xFFA81818),
+        linearTrackColor: Color(0xFF3F3F3F),
+      ),
       scaffoldBackgroundColor: const Color(0xFF101010),
       shadowColor: const Color(0x3F000000),
+      snackBarTheme: SnackBarThemeData(
+        actionTextColor: const Color(0xFFF34923),
+        backgroundColor: const Color(0xFF1A1A1A),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(4),
+        ),
+      ),
       splashColor: const Color(0x08FFFFFF),
       textTheme: const TextTheme(
         headlineSmall: TextStyle(

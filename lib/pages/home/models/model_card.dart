@@ -8,9 +8,12 @@ class ModelCard extends StatefulWidget {
   const ModelCard({
     super.key,
     required this.modelCategory,
+    this.onTapUpload,
   });
 
   final ModelCategory modelCategory;
+
+  final VoidCallback? onTapUpload;
 
   @override
   State<ModelCard> createState() => _ModelCardState();
@@ -70,19 +73,20 @@ class _ModelCardState extends State<ModelCard> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             GestureDetector(
-                              // TODO: fazer upload de novo modelo
-                              onTap: () {},
+                              onTap: widget.onTapUpload,
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Icon(
                                     Icons.upload_outlined,
-                                    color: Theme.of(context).colorScheme.primary,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
                                   ),
                                   const SizedBox(width: 10),
                                   Text(
                                     'Novo Modelo',
-                                    style: Theme.of(context).textTheme.labelLarge,
+                                    style:
+                                        Theme.of(context).textTheme.labelLarge,
                                   ),
                                 ],
                               ),
