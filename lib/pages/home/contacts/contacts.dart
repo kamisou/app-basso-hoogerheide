@@ -1,4 +1,5 @@
 import 'package:basso_hoogerheide/data_objects/contact.dart';
+import 'package:basso_hoogerheide/pages/home/contacts/add_contact_dialog.dart';
 import 'package:basso_hoogerheide/pages/home/contacts/contact_tile.dart';
 import 'package:basso_hoogerheide/widgets/base_page_body.dart';
 import 'package:basso_hoogerheide/widgets/collection.dart';
@@ -38,8 +39,10 @@ class ContactsPage extends HomePageBody {
   }
 
   @override
-  // TODO: adicionar contato
-  void Function(BuildContext)? get fabAction => (context) {};
+  void Function(BuildContext)? get fabAction => (context) => showDialog(
+        context: context,
+        builder: (context) => const AddContactDialog(),
+      );
 
   @override
   String get title => 'Contatos';

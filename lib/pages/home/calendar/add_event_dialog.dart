@@ -63,9 +63,8 @@ class _AddEventDialogState extends State<AddEventDialog> {
                                   .titleMedium
                                   ?.copyWith(fontWeight: FontWeight.bold),
                             ),
-                            onChanged: (value) => setState(
-                              () => _event = _event.copyWith(color: value),
-                            ),
+                            onChanged: (value) =>
+                                _event = _event.copyWith(color: value),
                           ),
                         ],
                       ),
@@ -73,15 +72,14 @@ class _AddEventDialogState extends State<AddEventDialog> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'Título:',
+                    '* Título:',
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 4, bottom: 24),
                     child: TextFormField(
-                      onChanged: (value) => setState(
-                        () => _event = _event.copyWith(title: value),
-                      ),
+                      onChanged: (value) =>
+                          _event = _event.copyWith(title: value),
                       validator: (value) =>
                           value!.isEmpty ? 'Adicione um título' : null,
                     ),
@@ -91,9 +89,8 @@ class _AddEventDialogState extends State<AddEventDialog> {
                       Expanded(
                         child: TimePicker(
                           labelText: 'Início:',
-                          onChanged: (value) => setState(
-                            () => _event = _event.copyWith(startTime: value),
-                          ),
+                          onChanged: (value) =>
+                              _event = _event.copyWith(startTime: value),
                         ),
                       ),
                       Container(
@@ -109,9 +106,8 @@ class _AddEventDialogState extends State<AddEventDialog> {
                         child: TimePicker(
                           labelText: 'Fim:',
                           initialTime: _event.startTime,
-                          onChanged: (value) => setState(
-                            () => _event = _event.copyWith(endTime: value),
-                          ),
+                          onChanged: (value) =>
+                              _event = _event.copyWith(endTime: value),
                         ),
                       ),
                     ],
@@ -129,9 +125,8 @@ class _AddEventDialogState extends State<AddEventDialog> {
                         padding: const EdgeInsets.only(top: 4, bottom: 24),
                         child: TextFormField(
                           maxLines: 4,
-                          onChanged: (value) => setState(
-                            () => _event = _event.copyWith(description: value),
-                          ),
+                          onChanged: (value) =>
+                              _event = _event.copyWith(description: value),
                         ),
                       ),
                       Row(

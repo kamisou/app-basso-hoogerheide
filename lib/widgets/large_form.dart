@@ -119,13 +119,12 @@ class _LargeFormState extends State<LargeForm> {
           hintText: 'Anexar arquivos',
           icon: Icons.attach_file_outlined,
           allowMultiple: true,
-          onDocumentAdded: (files) =>
-              _data[section.key]![field.key] = files.map(
-            (e) => {
-              'title': e.path.split('/').last,
-              'path': e.path,
-            },
-          ),
+          onDocumentAdded: (files) => _data[section.key]![field.key] = files
+              .map((e) => {
+                    'title': e.path.split('/').last,
+                    'path': e.path,
+                  })
+              .toList(),
         );
       case LargeFormTextField:
       default:

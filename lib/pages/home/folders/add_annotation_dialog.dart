@@ -41,7 +41,7 @@ class _AddAnnotationDialogState extends State<AddAnnotationDialog> {
                   children: [
                     Text('Assunto:',
                         style: Theme.of(context).textTheme.labelLarge),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 4),
                     SearchBar<String>(
                       // TODO: utilizar dados de anotações
                       options: const ['A', 'B', 'C'],

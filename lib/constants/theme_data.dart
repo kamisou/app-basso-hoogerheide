@@ -122,6 +122,13 @@ class AppTheme {
         linearTrackColor: Color(0xFF3F3F3F),
       ),
       scaffoldBackgroundColor: const Color(0xFF101010),
+      scrollbarTheme: ScrollbarThemeData(
+        thumbColor: MaterialStateProperty.all(
+          const Color(0xFF3F3F3F),
+        ),
+        radius: const Radius.circular(8),
+        thickness: MaterialStateProperty.all(6),
+      ),
       shadowColor: const Color(0x3F000000),
       snackBarTheme: SnackBarThemeData(
         actionTextColor: const Color(0xFFF34923),

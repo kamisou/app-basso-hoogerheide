@@ -20,55 +20,59 @@ class ProfilePage extends StatelessWidget {
         ),
         children: [
           Center(
-            child: Stack(
-              alignment: Alignment.topRight,
-              clipBehavior: Clip.none,
-              children: [
-                Container(
-                  alignment: Alignment.center,
-                  clipBehavior: Clip.antiAlias,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
-                    color: Theme.of(context).colorScheme.surface,
-                  ),
-                  height: 100,
-                  width: 100,
-                  child: ShimmeringImage(
-                    url: appUser.avatarUrl,
-                    errorBuilder: (context) => Text(
-                      appUser.initials,
-                      style:
-                          Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: -4,
-                  right: -4,
-                  child: Container(
+            child: GestureDetector(
+              // TODO: mudar imagem de perfil
+              onTap: () {},
+              child: Stack(
+                alignment: Alignment.topRight,
+                clipBehavior: Clip.none,
+                children: [
+                  Container(
+                    alignment: Alignment.center,
+                    clipBehavior: Clip.antiAlias,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: const [
-                        BoxShadow(
-                          blurRadius: 8,
-                          spreadRadius: -4,
-                          offset: Offset(-2, 2),
-                        ),
-                      ],
+                      borderRadius: BorderRadius.circular(50),
                       color: Theme.of(context).colorScheme.surface,
                     ),
-                    width: 32,
-                    height: 32,
-                    child: Icon(
-                      Icons.edit_outlined,
-                      color: Theme.of(context).colorScheme.primary,
-                      size: 16,
+                    height: 100,
+                    width: 100,
+                    child: ShimmeringImage(
+                      url: appUser.avatarUrl,
+                      errorBuilder: (context) => Text(
+                        appUser.initials,
+                        style:
+                            Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                  Positioned(
+                    top: -4,
+                    right: -4,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: const [
+                          BoxShadow(
+                            blurRadius: 8,
+                            spreadRadius: -4,
+                            offset: Offset(-2, 2),
+                          ),
+                        ],
+                        color: Theme.of(context).colorScheme.surface,
+                      ),
+                      width: 32,
+                      height: 32,
+                      child: Icon(
+                        Icons.edit_outlined,
+                        color: Theme.of(context).colorScheme.primary,
+                        size: 16,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 32),

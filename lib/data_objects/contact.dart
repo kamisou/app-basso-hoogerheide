@@ -9,6 +9,15 @@ class Contact {
     this.address,
   });
 
+  const Contact.empty()
+      : name = '',
+        avatarUrl = null,
+        telephone = null,
+        celullar = null,
+        email = null,
+        fax = null,
+        address = null;
+
   final String name;
 
   final String? avatarUrl;
@@ -27,4 +36,23 @@ class Contact {
     final List<String> names = name.split(' ');
     return '${names.first[0]}${names.length > 1 ? names[1][0] : ""}';
   }
+
+  Contact copyWith({
+    String? name,
+    String? avatarUrl,
+    String? telephone,
+    String? celullar,
+    String? email,
+    String? fax,
+    String? address,
+  }) =>
+      Contact(
+        name: name ?? this.name,
+        avatarUrl: avatarUrl ?? this.avatarUrl,
+        telephone: telephone ?? this.telephone,
+        celullar: celullar ?? this.celullar,
+        email: email ?? this.email,
+        fax: fax ?? this.fax,
+        address: address ?? this.address,
+      );
 }
