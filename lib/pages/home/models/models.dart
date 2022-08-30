@@ -15,9 +15,7 @@ class ModelsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Collection<ModelCategory>(
       // TODO: utilizar dados de modelos
-      collection: const [
-        ModelCategory(title: 'Categoria A'),
-      ],
+      collection: const [],
       itemBuilder: (_, item) => ModelCard(
         modelCategory: item,
         onTapUpload: () {
@@ -51,12 +49,6 @@ class ModelsPage extends StatelessWidget {
       ),
     );
   }
-
-  @override
-  void Function(BuildContext)? get fabAction => null;
-
-  @override
-  String get title => 'Modelos';
 
   Future<File?> _pickFile() async {
     final FilePickerResult? result = await FilePicker.platform.pickFiles(

@@ -12,47 +12,46 @@ class FoldersPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: SearchBar(
-            hintText: 'N° da pasta, cliente, procurador, CPF...',
-            // TODO: atualizar lista de pastas
-            onChanged: (value) {},
-          ),
-        ),
-        const SizedBox(height: 32),
-        Expanded(
-          child: Collection<Folder>(
-            // TODO: utilizar dados de pasta
-            collection: const [],
-            itemBuilder: (_, item) => FolderCard(folder: item),
-            emptyWidget: const EmptyCard(
-              icon: Icons.folder_off_outlined,
-              message: 'Nenhuma pasta encontrada',
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.person_add),
+        onPressed: () => DefaultAssetBundle.of(context)
+            .loadString('assets/new_folder_form_data.json')
+            .then((value) => Navigator.pushNamed(
+                  context,
+                  '/newFolder',
+                  arguments: {
+                    // TODO: utilizar id de nova pasta
+                    'new_id': 1501,
+                    'folder_type': 'person',
+                    'new_folder_form_data': json.decode(value),
+                  },
+                )),
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: SearchBar(
+              hintText: 'N° da pasta, cliente, procurador, CPF...',
+              // TODO: atualizar lista de pastas
+              onChanged: (value) {},
             ),
           ),
-        ),
-      ],
+          const SizedBox(height: 32),
+          Expanded(
+            child: Collection<Folder>(
+              // TODO: utilizar dados de pasta
+              collection: const [],
+              itemBuilder: (_, item) => FolderCard(folder: item),
+              emptyWidget: const EmptyCard(
+                icon: Icons.folder_off_outlined,
+                message: 'Nenhuma pasta encontrada',
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
-
-  @override
-  void Function(BuildContext)? get fabAction =>
-      (context) => DefaultAssetBundle.of(context)
-          .loadString('assets/new_folder_form_data.json')
-          .then((value) => Navigator.pushNamed(
-                context,
-                '/newFolder',
-                arguments: {
-                  // TODO: utilizar id de nova pasta
-                  'new_id': 1501,
-                  'folder_type': 'person',
-                  'new_folder_form_data': json.decode(value),
-                },
-              ));
-
-  @override
-  String get title => 'Clientes';
 }
