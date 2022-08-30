@@ -1,15 +1,25 @@
-import 'dart:io';
-
-import 'package:basso_hoogerheide/data_objects/model_category.dart';
-import 'package:basso_hoogerheide/interface/uploader.dart';
+import 'package:basso_hoogerheide/controllers/models.dart';
+import 'package:basso_hoogerheide/data_objects/input/model_category.dart';
 import 'package:basso_hoogerheide/pages/home/models/model_card.dart';
 import 'package:basso_hoogerheide/widgets/collection.dart';
 import 'package:basso_hoogerheide/widgets/empty_card.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+
+class PickedModelData {
+  const PickedModelData({
+    required this.title,
+    required this.stream,
+  });
+
+  final String title;
+
+  final Stream<double> stream;
+}
 
 class ModelsPage extends StatelessWidget {
   const ModelsPage({super.key});
+
+  final ModelsController _controller = const ModelsController();
 
   @override
   Widget build(BuildContext context) {
@@ -18,30 +28,10 @@ class ModelsPage extends StatelessWidget {
       collection: const [],
       itemBuilder: (_, item) => ModelCard(
         modelCategory: item,
-        onTapUpload: () {
-          // TODO: segregar lógica de exibição da lógica de aplicação
-          _pickFile().then((file) {
-            if (file == null) return;
-
-            final String fileTitle = file.path.split('/').last;
-            final Stream<double> uploadStream =
-                MockUploader().upload(file).asBroadcastStream();
-
-            final ScaffoldFeatureController scaffoldController =
-                _showLoadingSnackbar(context, fileTitle, uploadStream);
-
-            uploadStream.last.then(
-              (_) {
-                scaffoldController.close();
-                _showSuccessSnackbar(context, fileTitle);
-              },
-              onError: (error) {
-                scaffoldController.close();
-                _showErrorSnackbar(context, fileTitle);
-              },
-            );
-          });
-        },
+        onTapUpload: () => _controller
+            .pickModelFile()
+            .then(_controller.uploadModelFile)
+            .then((upload) => _displaySnackbar(context, upload)),
       ),
       emptyWidget: const EmptyCard(
         icon: Icons.file_download_off_outlined,
@@ -50,13 +40,22 @@ class ModelsPage extends StatelessWidget {
     );
   }
 
-  Future<File?> _pickFile() async {
-    final FilePickerResult? result = await FilePicker.platform.pickFiles(
-      dialogTitle: 'Selecione um arquivo:',
-      withReadStream: true,
+  void _displaySnackbar(BuildContext context, PickedModelData? upload) {
+    if (upload == null) return;
+
+    final ScaffoldFeatureController scaffoldController =
+        _showLoadingSnackbar(context, upload.title, upload.stream);
+
+    upload.stream.last.then(
+      (_) {
+        scaffoldController.close();
+        _showSuccessSnackbar(context, upload.title);
+      },
+      onError: (_) {
+        scaffoldController.close();
+        _showErrorSnackbar(context, upload.title);
+      },
     );
-    if (result == null) return null;
-    return File(result.files.first.path!);
   }
 
   ScaffoldFeatureController _showLoadingSnackbar(

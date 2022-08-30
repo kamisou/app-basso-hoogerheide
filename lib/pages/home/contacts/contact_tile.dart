@@ -1,4 +1,4 @@
-import 'package:basso_hoogerheide/data_objects/contact.dart';
+import 'package:basso_hoogerheide/data_objects/input/contact.dart';
 import 'package:basso_hoogerheide/widgets/avatar_circle.dart';
 import 'package:basso_hoogerheide/widgets/key_value_text.dart';
 import 'package:flutter/material.dart';
@@ -37,11 +37,11 @@ class ContactTile extends StatelessWidget {
                       ),
                     ),
                   const SizedBox(width: 8),
-                  if (contact.celullar != null)
+                  if (contact.cellular != null)
                     Flexible(
                       child: KeyValueText(
                         keyString: 'Cel',
-                        valueString: contact.celullar!,
+                        valueString: contact.cellular!,
                         style: detailStyle,
                       ),
                     ),

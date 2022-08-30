@@ -1,5 +1,6 @@
-import 'package:basso_hoogerheide/data_objects/downloadable_file.dart';
-import 'package:basso_hoogerheide/data_objects/model_category.dart';
+import 'package:basso_hoogerheide/controllers/models.dart';
+import 'package:basso_hoogerheide/data_objects/input/downloadable_file.dart';
+import 'package:basso_hoogerheide/data_objects/input/model_category.dart';
 import 'package:basso_hoogerheide/widgets/shimmering_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -20,6 +21,8 @@ class ModelCard extends StatefulWidget {
 }
 
 class _ModelCardState extends State<ModelCard> {
+  final ModelsController _controller = const ModelsController();
+
   bool _expanded = false;
 
   @override
@@ -139,8 +142,7 @@ class _ModelCardState extends State<ModelCard> {
         ),
         const SizedBox(width: 8),
         GestureDetector(
-          // TODO: deletar documento dos modelos
-          onTap: () {},
+          onTap: () => _controller.deleteModel(file),
           child: Icon(
             Icons.delete_outlined,
             color: Theme.of(context).colorScheme.error,

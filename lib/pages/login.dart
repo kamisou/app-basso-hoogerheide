@@ -1,7 +1,10 @@
+import 'package:basso_hoogerheide/controllers/login.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
+
+  final LoginController _controller = const LoginController();
 
   @override
   Widget build(BuildContext context) {
@@ -62,18 +65,17 @@ class LoginPage extends StatelessWidget {
           ),
           keyboardType: TextInputType.visiblePassword,
           obscureText: true,
-          onEditingComplete: () => _signIn(context),
+          onEditingComplete: () => _signInAndNavigate(context),
         ),
         const SizedBox(height: 20),
         ElevatedButton(
-          onPressed: () => _signIn(context),
+          onPressed: () => _signInAndNavigate(context),
           child: const Text('Login'),
         ),
         const SizedBox(height: 18),
         Center(
           child: GestureDetector(
-            // TODO: recuperar senha
-            onTap: () {},
+            onTap: _controller.recoverPassword,
             child: Text(
               'Esqueceu sua senha?',
               style: Theme.of(context).textTheme.labelLarge,
@@ -84,7 +86,7 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  // TODO: ir para home
-  void _signIn(BuildContext context) =>
-      Navigator.pushReplacementNamed(context, '/home');
+  void _signInAndNavigate(BuildContext context) => _controller
+      .signIn()
+      .then((_) => Navigator.pushReplacementNamed(context, '/home'));
 }

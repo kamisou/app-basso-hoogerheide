@@ -1,10 +1,11 @@
 import 'package:basso_hoogerheide/constants/theme_data.dart';
-import 'package:basso_hoogerheide/data_objects/folder/address_info.dart';
-import 'package:basso_hoogerheide/data_objects/folder/company_folder.dart';
-import 'package:basso_hoogerheide/data_objects/folder/contact_info.dart';
-import 'package:basso_hoogerheide/data_objects/folder/folder.dart';
-import 'package:basso_hoogerheide/data_objects/folder/person_folder.dart';
-import 'package:basso_hoogerheide/data_objects/folder/process_info.dart';
+import 'package:basso_hoogerheide/controllers/folders.dart';
+import 'package:basso_hoogerheide/data_objects/input/folder/address_info.dart';
+import 'package:basso_hoogerheide/data_objects/input/folder/company_folder.dart';
+import 'package:basso_hoogerheide/data_objects/input/folder/contact_info.dart';
+import 'package:basso_hoogerheide/data_objects/input/folder/folder.dart';
+import 'package:basso_hoogerheide/data_objects/input/folder/person_folder.dart';
+import 'package:basso_hoogerheide/data_objects/input/folder/process_info.dart';
 import 'package:basso_hoogerheide/widgets/key_value_text.dart';
 import 'package:flutter/material.dart';
 
@@ -21,6 +22,8 @@ class FolderCard extends StatefulWidget {
 }
 
 class _FolderCardState extends State<FolderCard> {
+  final FoldersController _controller = const FoldersController();
+
   bool _expanded = false;
 
   @override
@@ -224,8 +227,7 @@ class _FolderCardState extends State<FolderCard> {
                 ),
                 const SizedBox(width: 16),
                 GestureDetector(
-                  // TODO: deletar arquivo da pasta
-                  onTap: () {},
+                  onTap: () => _controller.deleteFolderFile(e),
                   child: Icon(
                     Icons.delete_outlined,
                     color: Theme.of(context).colorScheme.error,

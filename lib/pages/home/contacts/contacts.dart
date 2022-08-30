@@ -1,4 +1,6 @@
-import 'package:basso_hoogerheide/data_objects/contact.dart';
+import 'package:basso_hoogerheide/controllers/contacts.dart';
+import 'package:basso_hoogerheide/data_objects/input/contact.dart';
+import 'package:basso_hoogerheide/data_objects/output/contact.dart';
 import 'package:basso_hoogerheide/pages/home/contacts/add_contact_dialog.dart';
 import 'package:basso_hoogerheide/pages/home/contacts/contact_tile.dart';
 import 'package:basso_hoogerheide/widgets/collection.dart';
@@ -9,20 +11,17 @@ import 'package:flutter/material.dart';
 class ContactsPage extends StatelessWidget {
   const ContactsPage({super.key});
 
+  final ContactsController controller = const ContactsController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.person_add),
-        onPressed: () async {
-          final Contact? contact = await showDialog(
-            context: context,
-            builder: (context) => const AddContactDialog(),
-          );
-          if (contact != null) {
-            // TODO: adicionar contato
-          }
-        },
+        onPressed: () => showDialog<ContactOutput>(
+          context: context,
+          builder: (context) => const AddContactDialog(),
+        ).then(controller.addContact),
       ),
       body: Column(
         children: [

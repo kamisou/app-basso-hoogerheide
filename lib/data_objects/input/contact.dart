@@ -2,7 +2,7 @@ class Contact {
   const Contact({
     required this.name,
     this.telephone,
-    this.celullar,
+    this.cellular,
     this.email,
     this.fax,
     this.address,
@@ -12,7 +12,7 @@ class Contact {
 
   final String? telephone;
 
-  final String? celullar;
+  final String? cellular;
 
   final String? email;
 

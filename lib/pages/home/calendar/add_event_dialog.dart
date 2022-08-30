@@ -1,4 +1,5 @@
-import 'package:basso_hoogerheide/data_objects/calendar_event.dart';
+import 'package:basso_hoogerheide/controllers/calendar.dart';
+import 'package:basso_hoogerheide/data_objects/output/calendar_event.dart';
 import 'package:basso_hoogerheide/widgets/color_picker.dart';
 import 'package:basso_hoogerheide/widgets/time_picker.dart';
 import 'package:flutter/material.dart';
@@ -11,15 +12,9 @@ class AddEventDialog extends StatefulWidget {
 }
 
 class _AddEventDialogState extends State<AddEventDialog> {
-  final TextEditingController _title = TextEditingController();
+  CalendarEventOutput _eventOutput = const CalendarEventOutput.empty();
 
-  final TextEditingController _description = TextEditingController();
-
-  Color? _color;
-
-  TimeOfDay? _start;
-
-  TimeOfDay? _end;
+  final CalendarController _controller = const CalendarController();
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +56,8 @@ class _AddEventDialogState extends State<AddEventDialog> {
                                   .titleMedium
                                   ?.copyWith(fontWeight: FontWeight.bold),
                             ),
-                            onChanged: (value) => _color = value,
+                            onChanged: (color) =>
+                                _eventOutput.copyWith(color: color),
                           ),
                         ],
                       ),
@@ -75,9 +71,9 @@ class _AddEventDialogState extends State<AddEventDialog> {
                   Padding(
                     padding: const EdgeInsets.only(top: 4, bottom: 24),
                     child: TextFormField(
-                      controller: _title,
-                      validator: (value) =>
-                          value!.isEmpty ? 'Adicione um título' : null,
+                      onChanged: (title) =>
+                          _eventOutput = _eventOutput.copyWith(title: title),
+                      validator: _controller.validateEventTitle,
                     ),
                   ),
                   Row(
@@ -85,7 +81,10 @@ class _AddEventDialogState extends State<AddEventDialog> {
                       Expanded(
                         child: TimePicker(
                           labelText: 'Início:',
-                          onChanged: (value) => setState(() => _start = value),
+                          onChanged: (startTime) => setState(
+                            () => _eventOutput =
+                                _eventOutput.copyWith(startTime: startTime),
+                          ),
                         ),
                       ),
                       Container(
@@ -100,9 +99,10 @@ class _AddEventDialogState extends State<AddEventDialog> {
                       Expanded(
                         child: TimePicker(
                           labelText: 'Fim:',
-                          initialTime: _start,
-                          enabled: _start != null,
-                          onChanged: (value) => _end = value,
+                          initialTime: _eventOutput.startTime,
+                          enabled: _eventOutput.startTime != null,
+                          onChanged: (endTime) => _eventOutput =
+                              _eventOutput.copyWith(endTime: endTime),
                         ),
                       ),
                     ],
@@ -119,8 +119,9 @@ class _AddEventDialogState extends State<AddEventDialog> {
                       Padding(
                         padding: const EdgeInsets.only(top: 4, bottom: 24),
                         child: TextFormField(
-                          controller: _description,
                           maxLines: 4,
+                          onChanged: (description) => _eventOutput =
+                              _eventOutput.copyWith(description: description),
                         ),
                       ),
                       Row(
@@ -137,16 +138,7 @@ class _AddEventDialogState extends State<AddEventDialog> {
                           GestureDetector(
                             onTap: () {
                               if (Form.of(context)!.validate()) {
-                                Navigator.pop(
-                                  context,
-                                  CalendarEvent(
-                                    startTime: _start,
-                                    endTime: _end,
-                                    title: _title.text,
-                                    description: _description.text,
-                                    color: _color!,
-                                  ),
-                                );
+                                Navigator.pop(context, _eventOutput);
                               }
                             },
                             child: Text(

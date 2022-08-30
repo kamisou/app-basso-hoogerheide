@@ -1,4 +1,6 @@
-import 'package:basso_hoogerheide/data_objects/app_user.dart';
+import 'package:basso_hoogerheide/controllers/login.dart';
+import 'package:basso_hoogerheide/data_objects/input/app_user.dart';
+import 'package:basso_hoogerheide/extensions.dart';
 import 'package:basso_hoogerheide/widgets/avatar_circle.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +25,9 @@ class HomeAppBar extends StatefulWidget {
 class _HomeAppBarState extends State<HomeAppBar> {
   static const double _tabWidth = 100;
 
-  final ScrollController _controller = ScrollController();
+  final ScrollController _scrollController = ScrollController();
+
+  final LoginController _loginController = const LoginController();
 
   int _pageIndex = 0;
 
@@ -37,13 +41,13 @@ class _HomeAppBarState extends State<HomeAppBar> {
   void dispose() {
     super.dispose();
     widget.controller.removeListener(_controllerListener);
-    _controller.dispose();
+    _scrollController.dispose();
   }
 
   void _controllerListener() {
     final double page = widget.controller.page!;
     final int pageIndex = page.round();
-    _controller.position.jumpTo(page * 100);
+    _scrollController.position.jumpTo(page * 100);
     if (_pageIndex != pageIndex) {
       setState(() => _pageIndex = pageIndex);
     }
@@ -78,7 +82,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
                 begin: Alignment(-.5, 0),
               ).createShader(bounds),
               child: ListView(
-                controller: _controller,
+                controller: _scrollController,
                 physics: const NeverScrollableScrollPhysics(),
                 scrollDirection: Axis.horizontal,
                 children: [
@@ -106,8 +110,11 @@ class _HomeAppBarState extends State<HomeAppBar> {
           ),
           const SizedBox(width: 32),
           GestureDetector(
-            // TODO: sair do app
-            onTap: () => Navigator.pushReplacementNamed(context, '/login'),
+            onTap: () => NavigatorExtension.pushReplacementNamedAndNotify(
+              context,
+              '/login',
+              _loginController.signOut,
+            ),
             child: const Icon(Icons.exit_to_app),
           ),
         ],

@@ -1,8 +1,11 @@
+import 'package:basso_hoogerheide/controllers/folders.dart';
 import 'package:basso_hoogerheide/widgets/large_form.dart';
 import 'package:flutter/material.dart';
 
 class NewFolderPage extends StatelessWidget {
   const NewFolderPage({super.key});
+
+  final FoldersController _controller = const FoldersController();
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +68,7 @@ class NewFolderPage extends StatelessWidget {
                   return true;
               }
             },
-            // TODO: salvar nova pasta
-            onSaved: print,
+            onSaved: _controller.addFolder,
           ),
         ],
       ),

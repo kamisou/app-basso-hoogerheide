@@ -1,10 +1,17 @@
-import 'package:basso_hoogerheide/data_objects/app_user.dart';
+import 'package:basso_hoogerheide/controllers/login.dart';
+import 'package:basso_hoogerheide/controllers/profile.dart';
+import 'package:basso_hoogerheide/data_objects/input/app_user.dart';
+import 'package:basso_hoogerheide/extensions.dart';
 import 'package:basso_hoogerheide/pages/profile/profile_option.dart';
 import 'package:basso_hoogerheide/widgets/shimmering_image.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
+
+  final ProfileController _profileController = const ProfileController();
+
+  final LoginController _loginController = const LoginController();
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +28,7 @@ class ProfilePage extends StatelessWidget {
         children: [
           Center(
             child: GestureDetector(
-              // TODO: mudar imagem de perfil
-              onTap: () {},
+              onTap: _profileController.changePicture,
               child: Stack(
                 alignment: Alignment.topRight,
                 clipBehavior: Clip.none,
@@ -133,8 +139,7 @@ class ProfilePage extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   GestureDetector(
-                    // TODO: mudar senha
-                    onTap: () {},
+                    onTap: _profileController.changePassword,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4),
                       child: Text(
@@ -159,8 +164,11 @@ class ProfilePage extends StatelessWidget {
           const SizedBox(height: 40),
           Center(
             child: GestureDetector(
-              // TODO: sair do aplicativo
-              onTap: () {},
+              onTap: () => NavigatorExtension.pushReplacementNamedAndNotify(
+                context,
+                '/login',
+                _loginController.signOut,
+              ),
               child: Text(
                 'Sair',
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(

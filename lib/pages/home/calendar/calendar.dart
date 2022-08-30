@@ -1,4 +1,5 @@
-import 'package:basso_hoogerheide/data_objects/calendar_event.dart';
+import 'package:basso_hoogerheide/controllers/calendar.dart';
+import 'package:basso_hoogerheide/data_objects/output/calendar_event.dart';
 import 'package:basso_hoogerheide/pages/home/calendar/add_event_dialog.dart';
 import 'package:basso_hoogerheide/pages/home/calendar/day.dart';
 import 'package:flutter/material.dart';
@@ -7,21 +8,18 @@ import 'package:infinite_listview/infinite_listview.dart';
 class CalendarPage extends StatelessWidget {
   const CalendarPage({super.key});
 
+  final CalendarController controller = const CalendarController();
+
   @override
   Widget build(BuildContext context) {
     final DateTime today = DateTime.now();
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.edit_calendar),
-        onPressed: () async {
-          final CalendarEvent? event = await showDialog(
-            context: context,
-            builder: (_) => const AddEventDialog(),
-          );
-          if (event != null) {
-            // TODO: adicionar evento
-          }
-        },
+        onPressed: () => showDialog<CalendarEventOutput>(
+          context: context,
+          builder: (_) => const AddEventDialog(),
+        ).then(controller.addEvent),
       ),
       body: InfiniteListView.builder(
         padding: const EdgeInsets.symmetric(horizontal: 20),

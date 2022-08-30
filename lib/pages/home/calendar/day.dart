@@ -1,4 +1,4 @@
-import 'package:basso_hoogerheide/data_objects/calendar_event.dart';
+import 'package:basso_hoogerheide/data_objects/input/calendar_event.dart';
 import 'package:basso_hoogerheide/pages/home/calendar/event_card.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -29,7 +29,7 @@ class DayWidget extends StatelessWidget {
             Column(
               children: [
                 Text(
-                  DateFormat.E().format(date),
+                  DateFormat('E').format(date),
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 Container(

@@ -1,8 +1,8 @@
-import 'package:basso_hoogerheide/data_objects/downloadable_file.dart';
-import 'package:basso_hoogerheide/data_objects/folder/address_info.dart';
-import 'package:basso_hoogerheide/data_objects/folder/annotation.dart';
-import 'package:basso_hoogerheide/data_objects/folder/contact_info.dart';
-import 'package:basso_hoogerheide/data_objects/folder/process_info.dart';
+import 'package:basso_hoogerheide/data_objects/input/downloadable_file.dart';
+import 'package:basso_hoogerheide/data_objects/input/folder/address_info.dart';
+import 'package:basso_hoogerheide/data_objects/input/folder/annotation.dart';
+import 'package:basso_hoogerheide/data_objects/input/folder/contact_info.dart';
+import 'package:basso_hoogerheide/data_objects/input/folder/process_info.dart';
 
 abstract class Folder {
   final int id;

@@ -1,4 +1,4 @@
-import 'package:basso_hoogerheide/data_objects/contact.dart';
+import 'package:basso_hoogerheide/data_objects/output/contact.dart';
 import 'package:easy_mask/easy_mask.dart';
 import 'package:flutter/material.dart';
 
@@ -10,17 +10,7 @@ class AddContactDialog extends StatefulWidget {
 }
 
 class _AddContactDialogState extends State<AddContactDialog> {
-  final TextEditingController _name = TextEditingController();
-
-  final TextEditingController _telephone = TextEditingController();
-
-  final TextEditingController _cellular = TextEditingController();
-
-  final TextEditingController _email = TextEditingController();
-
-  final TextEditingController _fax = TextEditingController();
-
-  final TextEditingController _address = TextEditingController();
+  ContactOutput _contactOutput = const ContactOutput.empty();
 
   @override
   Widget build(BuildContext context) {
@@ -56,8 +46,9 @@ class _AddContactDialogState extends State<AddContactDialog> {
               Padding(
                 padding: const EdgeInsets.only(top: 4, bottom: 16),
                 child: TextFormField(
-                  controller: _name,
                   textInputAction: TextInputAction.next,
+                  onChanged: (name) =>
+                      _contactOutput = _contactOutput.copyWith(name: name),
                 ),
               ),
               Text(
@@ -67,9 +58,10 @@ class _AddContactDialogState extends State<AddContactDialog> {
               Padding(
                 padding: const EdgeInsets.only(top: 4, bottom: 16),
                 child: TextFormField(
-                  controller: _telephone,
                   inputFormatters: [TextInputMask(mask: '(99) 9999-9999')],
                   textInputAction: TextInputAction.next,
+                  onChanged: (telephone) => _contactOutput =
+                      _contactOutput.copyWith(telephone: telephone),
                 ),
               ),
               Text(
@@ -79,11 +71,14 @@ class _AddContactDialogState extends State<AddContactDialog> {
               Padding(
                 padding: const EdgeInsets.only(top: 4, bottom: 16),
                 child: TextFormField(
-                  controller: _cellular,
                   inputFormatters: [
-                    TextInputMask(mask: ['(99) 9999-9999', '(99) 9 9999-9999']),
+                    TextInputMask(
+                      mask: ['(99) 9999-9999', '(99) 9 9999-9999'],
+                    ),
                   ],
                   textInputAction: TextInputAction.next,
+                  onChanged: (cellular) =>
+                      _contactOutput.copyWith(cellular: cellular),
                 ),
               ),
               Text(
@@ -93,8 +88,8 @@ class _AddContactDialogState extends State<AddContactDialog> {
               Padding(
                 padding: const EdgeInsets.only(top: 4, bottom: 16),
                 child: TextFormField(
-                  controller: _email,
                   textInputAction: TextInputAction.next,
+                  onChanged: (email) => _contactOutput.copyWith(email: email),
                 ),
               ),
               Text(
@@ -104,8 +99,8 @@ class _AddContactDialogState extends State<AddContactDialog> {
               Padding(
                 padding: const EdgeInsets.only(top: 4, bottom: 16),
                 child: TextFormField(
-                  controller: _fax,
                   textInputAction: TextInputAction.next,
+                  onChanged: (fax) => _contactOutput.copyWith(fax: fax),
                 ),
               ),
               Text(
@@ -115,8 +110,9 @@ class _AddContactDialogState extends State<AddContactDialog> {
               Padding(
                 padding: const EdgeInsets.only(top: 4, bottom: 16),
                 child: TextFormField(
-                  controller: _address,
                   textInputAction: TextInputAction.done,
+                  onChanged: (address) =>
+                      _contactOutput.copyWith(address: address),
                 ),
               ),
               const SizedBox(height: 20),
@@ -134,17 +130,7 @@ class _AddContactDialogState extends State<AddContactDialog> {
                   GestureDetector(
                     onTap: () {
                       if (Form.of(context)!.validate()) {
-                        Navigator.pop(
-                          context,
-                          Contact(
-                            name: _name.text,
-                            address: _address.text,
-                            celullar: _cellular.text,
-                            email: _email.text,
-                            fax: _fax.text,
-                            telephone: _telephone.text,
-                          ),
-                        );
+                        Navigator.pop(context, _contactOutput);
                       }
                     },
                     child: Text(

@@ -1,4 +1,4 @@
-import 'package:basso_hoogerheide/data_objects/app_user.dart';
+import 'package:basso_hoogerheide/data_objects/input/app_user.dart';
 import 'package:basso_hoogerheide/pages/home/app_bar.dart';
 import 'package:basso_hoogerheide/pages/home/calendar/calendar.dart';
 import 'package:basso_hoogerheide/pages/home/contacts/contacts.dart';

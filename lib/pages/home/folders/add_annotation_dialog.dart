@@ -1,3 +1,4 @@
+import 'package:basso_hoogerheide/controllers/folders.dart';
 import 'package:basso_hoogerheide/widgets/searchbar.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +10,8 @@ class AddAnnotationDialog extends StatefulWidget {
 }
 
 class _AddAnnotationDialogState extends State<AddAnnotationDialog> {
+  final FoldersController _controller = const FoldersController();
+
   String? _annotation;
 
   @override
@@ -40,10 +43,9 @@ class _AddAnnotationDialogState extends State<AddAnnotationDialog> {
                     const SizedBox(height: 4),
                     SearchBar<String>(
                       // TODO: usar dados de anotação
-                      options: [],
+                      options: const [],
                       onChanged: (value) => _annotation = value,
-                      validator: (value) =>
-                          value == null ? 'Selecione uma opção' : null,
+                      validator: _controller.validateAnnotation,
                     ),
                     const SizedBox(height: 24),
                     Row(
