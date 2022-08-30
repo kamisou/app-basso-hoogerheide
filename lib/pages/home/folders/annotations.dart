@@ -15,10 +15,15 @@ class AnnotationsPage extends StatelessWidget {
       appBar: AppBar(title: Text('${folder.id} - ${folder.name}')),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.note_add),
-        onPressed: () => showDialog(
-          context: context,
-          builder: (context) => const AddAnnotationDialog(),
-        ),
+        onPressed: () async {
+          final String? annotation = await showDialog(
+            context: context,
+            builder: (context) => const AddAnnotationDialog(),
+          );
+          if (annotation != null) {
+            // TODO: adicionar anotação
+          }
+        },
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32),

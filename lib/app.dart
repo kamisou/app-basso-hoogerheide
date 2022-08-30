@@ -29,7 +29,6 @@ class App extends StatelessWidget {
       darkTheme: _appTheme.dark,
       debugShowCheckedModeBanner: false,
       home: SplashPage(
-        // TODO: lógica de inicialização
         initialWork: () async {
           await _initializeLocale();
           await _loadAppConfiguration();
@@ -73,6 +72,7 @@ class App extends StatelessWidget {
           Colors.white,
           Colors.black,
         ],
+        annotationOptions: [],
       ),
     );
   }

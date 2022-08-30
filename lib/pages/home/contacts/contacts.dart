@@ -14,10 +14,15 @@ class ContactsPage extends StatelessWidget {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.person_add),
-        onPressed: () => showDialog(
-          context: context,
-          builder: (context) => const AddContactDialog(),
-        ),
+        onPressed: () async {
+          final Contact? contact = await showDialog(
+            context: context,
+            builder: (context) => const AddContactDialog(),
+          );
+          if (contact != null) {
+            // TODO: adicionar contato
+          }
+        },
       ),
       body: Column(
         children: [
@@ -25,7 +30,7 @@ class ContactsPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: SearchBar(
               hintText: 'Pesquisar contato...',
-              // TODO: atualizar lista de contatos
+              // TODO: atualizar filtro da lista de contatos
               onChanged: (value) {},
             ),
           ),

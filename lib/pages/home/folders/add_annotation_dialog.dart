@@ -1,15 +1,17 @@
+import 'package:basso_hoogerheide/app.dart';
 import 'package:basso_hoogerheide/widgets/searchbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddAnnotationDialog extends StatefulWidget {
+class AddAnnotationDialog extends ConsumerStatefulWidget {
   const AddAnnotationDialog({super.key});
 
   @override
-  State<AddAnnotationDialog> createState() => _AddAnnotationDialogState();
+  ConsumerState<AddAnnotationDialog> createState() =>
+      _AddAnnotationDialogState();
 }
 
-class _AddAnnotationDialogState extends State<AddAnnotationDialog> {
-  // TODO: sincronizar com initial value da searchbar
+class _AddAnnotationDialogState extends ConsumerState<AddAnnotationDialog> {
   String? _annotation;
 
   @override
@@ -39,13 +41,13 @@ class _AddAnnotationDialogState extends State<AddAnnotationDialog> {
                 builder: (context) => Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text('Assunto:',
-                        style: Theme.of(context).textTheme.labelLarge),
+                    Text(
+                      'Assunto:',
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
                     const SizedBox(height: 4),
                     SearchBar<String>(
-                      // TODO: utilizar dados de anotações
-                      options: const ['A', 'B', 'C'],
-                      // initialValue: 'B',
+                      options: ref.read(appConfigProvider).annotationOptions,
                       onChanged: (value) => _annotation = value,
                       validator: (value) =>
                           value == null ? 'Selecione uma opção' : null,
@@ -65,8 +67,7 @@ class _AddAnnotationDialogState extends State<AddAnnotationDialog> {
                         GestureDetector(
                           onTap: () {
                             if (Form.of(context)!.validate()) {
-                              // TODO: adicionar anotação
-                              Navigator.pop(context);
+                              Navigator.pop(context, _annotation);
                             }
                           },
                           child: Text(

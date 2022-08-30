@@ -16,11 +16,7 @@ class ContactTile extends StatelessWidget {
     final TextStyle? detailStyle = Theme.of(context).textTheme.labelMedium;
     return Row(
       children: [
-        AvatarCircle(
-          initials: contact.initials,
-          avatarUrl: contact.avatarUrl,
-          radius: 48,
-        ),
+        AvatarCircle(initials: contact.initials, radius: 48),
         const SizedBox(width: 24),
         Expanded(
           child: Column(

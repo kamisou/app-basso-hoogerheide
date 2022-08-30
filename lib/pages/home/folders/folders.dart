@@ -28,7 +28,7 @@ class FoldersPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: SearchBar(
               hintText: 'N° da pasta, cliente, procurador, CPF...',
-              // TODO: atualizar lista de pastas
+              // TODO: atualizar filtro da lista de pastas
               onChanged: (value) {},
             ),
           ),
