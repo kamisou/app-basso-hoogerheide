@@ -14,7 +14,7 @@ class CalendarPage extends StatelessWidget {
         child: const Icon(Icons.edit_calendar),
         onPressed: () => showDialog(
           context: context,
-          builder: (_) => const AddEventDialog(eventColors: []),
+          builder: (_) => const AddEventDialog(),
         ),
       ),
       body: InfiniteListView.builder(

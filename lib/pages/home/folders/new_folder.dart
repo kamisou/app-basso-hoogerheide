@@ -1,11 +1,13 @@
+import 'package:basso_hoogerheide/app.dart';
 import 'package:basso_hoogerheide/widgets/large_form.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class NewFolderPage extends StatelessWidget {
+class NewFolderPage extends ConsumerWidget {
   const NewFolderPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     return Scaffold(
@@ -47,7 +49,7 @@ class NewFolderPage extends StatelessWidget {
           ),
           const SizedBox(height: 24),
           LargeForm.fromJson(
-            json: args['new_folder_form_data'],
+            json: ref.watch(appConfigProvider).newFormFieldData,
             sectionTitleStyle:
                 Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: Theme.of(context).colorScheme.secondary,

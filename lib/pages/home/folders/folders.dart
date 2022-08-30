@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:basso_hoogerheide/data_objects/folder/folder.dart';
 import 'package:basso_hoogerheide/pages/home/folders/folder_card.dart';
 import 'package:basso_hoogerheide/widgets/collection.dart';
@@ -14,20 +12,16 @@ class FoldersPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.person_add),
-        onPressed: () => DefaultAssetBundle.of(context)
-            .loadString('assets/new_folder_form_data.json')
-            .then((value) => Navigator.pushNamed(
-                  context,
-                  '/newFolder',
-                  arguments: {
-                    // TODO: utilizar id de nova pasta
-                    'new_id': 1501,
-                    'folder_type': 'person',
-                    'new_folder_form_data': json.decode(value),
-                  },
-                )),
-      ),
+          child: const Icon(Icons.person_add),
+          onPressed: () => Navigator.pushNamed(
+                context,
+                '/newFolder',
+                arguments: {
+                  // TODO: utilizar id de nova pasta
+                  'new_id': 1501,
+                  'folder_type': 'person',
+                },
+              )),
       body: Column(
         children: [
           Padding(

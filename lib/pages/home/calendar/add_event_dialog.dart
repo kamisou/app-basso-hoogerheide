@@ -1,21 +1,18 @@
+import 'package:basso_hoogerheide/app.dart';
 import 'package:basso_hoogerheide/data_objects/calendar_event.dart';
 import 'package:basso_hoogerheide/widgets/color_picker.dart';
 import 'package:basso_hoogerheide/widgets/time_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddEventDialog extends StatefulWidget {
-  const AddEventDialog({
-    super.key,
-    required this.eventColors,
-  });
-
-  final List<Color> eventColors;
+class AddEventDialog extends ConsumerStatefulWidget {
+  const AddEventDialog({super.key});
 
   @override
-  State<AddEventDialog> createState() => _AddEventDialogState();
+  ConsumerState<AddEventDialog> createState() => _AddEventDialogState();
 }
 
-class _AddEventDialogState extends State<AddEventDialog> {
+class _AddEventDialogState extends ConsumerState<AddEventDialog> {
   final TextEditingController _title = TextEditingController();
 
   final TextEditingController _description = TextEditingController();
@@ -57,7 +54,7 @@ class _AddEventDialogState extends State<AddEventDialog> {
                           ),
                           const SizedBox(width: 8),
                           ColorPicker(
-                            colors: widget.eventColors,
+                            colors: ref.read(appConfigProvider).newEventColors,
                             dialogTitle: Text(
                               'Escolha uma cor:',
                               style: Theme.of(context)
