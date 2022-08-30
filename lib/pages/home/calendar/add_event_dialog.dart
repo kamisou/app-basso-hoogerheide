@@ -4,32 +4,27 @@ import 'package:basso_hoogerheide/widgets/time_picker.dart';
 import 'package:flutter/material.dart';
 
 class AddEventDialog extends StatefulWidget {
-  const AddEventDialog({super.key});
+  const AddEventDialog({
+    super.key,
+    required this.eventColors,
+  });
+
+  final List<Color> eventColors;
 
   @override
   State<AddEventDialog> createState() => _AddEventDialogState();
 }
 
 class _AddEventDialogState extends State<AddEventDialog> {
-  CalendarEvent _event = const CalendarEvent.empty();
+  final TextEditingController _title = TextEditingController();
 
-  // TODO: utilizar dados de cores para evento
-  final List<Color> _colors = const [
-    Colors.red,
-    Colors.green,
-    Colors.blue,
-    Colors.yellow,
-    Colors.pink,
-    Colors.cyan,
-    Colors.white,
-    Colors.black,
-  ];
+  final TextEditingController _description = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    _event = _event.copyWith(color: _colors.first);
-  }
+  Color? _color;
+
+  TimeOfDay? _start;
+
+  TimeOfDay? _end;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +33,6 @@ class _AddEventDialogState extends State<AddEventDialog> {
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Form(
-          autovalidateMode: AutovalidateMode.onUserInteraction,
           child: Builder(
             builder: (context) {
               return Column(
@@ -63,8 +57,7 @@ class _AddEventDialogState extends State<AddEventDialog> {
                           ),
                           const SizedBox(width: 8),
                           ColorPicker(
-                            colors: _colors,
-                            initialValue: _event.color,
+                            colors: widget.eventColors,
                             dialogTitle: Text(
                               'Escolha uma cor:',
                               style: Theme.of(context)
@@ -72,8 +65,7 @@ class _AddEventDialogState extends State<AddEventDialog> {
                                   .titleMedium
                                   ?.copyWith(fontWeight: FontWeight.bold),
                             ),
-                            onChanged: (value) =>
-                                _event = _event.copyWith(color: value),
+                            onChanged: (value) => _color = value,
                           ),
                         ],
                       ),
@@ -87,8 +79,7 @@ class _AddEventDialogState extends State<AddEventDialog> {
                   Padding(
                     padding: const EdgeInsets.only(top: 4, bottom: 24),
                     child: TextFormField(
-                      onChanged: (value) =>
-                          _event = _event.copyWith(title: value),
+                      controller: _title,
                       validator: (value) =>
                           value!.isEmpty ? 'Adicione um título' : null,
                     ),
@@ -98,8 +89,7 @@ class _AddEventDialogState extends State<AddEventDialog> {
                       Expanded(
                         child: TimePicker(
                           labelText: 'Início:',
-                          onChanged: (value) =>
-                              _event = _event.copyWith(startTime: value),
+                          onChanged: (value) => setState(() => _start = value),
                         ),
                       ),
                       Container(
@@ -114,9 +104,9 @@ class _AddEventDialogState extends State<AddEventDialog> {
                       Expanded(
                         child: TimePicker(
                           labelText: 'Fim:',
-                          initialTime: _event.startTime,
-                          onChanged: (value) =>
-                              _event = _event.copyWith(endTime: value),
+                          initialTime: _start,
+                          enabled: _start != null,
+                          onChanged: (value) => _end = value,
                         ),
                       ),
                     ],
@@ -133,9 +123,8 @@ class _AddEventDialogState extends State<AddEventDialog> {
                       Padding(
                         padding: const EdgeInsets.only(top: 4, bottom: 24),
                         child: TextFormField(
+                          controller: _description,
                           maxLines: 4,
-                          onChanged: (value) =>
-                              _event = _event.copyWith(description: value),
                         ),
                       ),
                       Row(
@@ -152,8 +141,16 @@ class _AddEventDialogState extends State<AddEventDialog> {
                           GestureDetector(
                             onTap: () {
                               if (Form.of(context)!.validate()) {
-                                // TODO: adicionar evento
-                                Navigator.pop(context);
+                                Navigator.pop(
+                                  context,
+                                  CalendarEvent(
+                                    startTime: _start,
+                                    endTime: _end,
+                                    title: _title.text,
+                                    description: _description.text,
+                                    color: _color!,
+                                  ),
+                                );
                               }
                             },
                             child: Text(

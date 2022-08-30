@@ -3,13 +3,12 @@ import 'dart:io';
 import 'package:basso_hoogerheide/data_objects/model_category.dart';
 import 'package:basso_hoogerheide/interface/uploader.dart';
 import 'package:basso_hoogerheide/pages/home/models/model_card.dart';
-import 'package:basso_hoogerheide/widgets/base_page_body.dart';
 import 'package:basso_hoogerheide/widgets/collection.dart';
 import 'package:basso_hoogerheide/widgets/empty_card.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
-class ModelsPage extends HomePageBody {
+class ModelsPage extends StatelessWidget {
   const ModelsPage({super.key});
 
   @override

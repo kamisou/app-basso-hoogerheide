@@ -7,6 +7,7 @@ class TimePicker extends StatelessWidget {
     this.initialTime,
     this.onChanged,
     this.validator,
+    this.enabled = true,
   });
 
   final String? labelText;
@@ -16,6 +17,8 @@ class TimePicker extends StatelessWidget {
   final void Function(TimeOfDay?)? onChanged;
 
   final String? Function(TimeOfDay?)? validator;
+
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
@@ -35,19 +38,24 @@ class TimePicker extends StatelessWidget {
                 ),
               ),
             GestureDetector(
-              onTap: () {
-                showTimePicker(
-                  context: context,
-                  initialTime:
-                      initialTime ?? const TimeOfDay(hour: 0, minute: 0),
-                ).then((value) {
-                  onChanged?.call(value);
-                  state.didChange(value);
-                });
-              },
+              onTap: (enabled)
+                  ? () {
+                      showTimePicker(
+                        context: context,
+                        initialTime:
+                            initialTime ?? const TimeOfDay(hour: 0, minute: 0),
+                      ).then((value) {
+                        onChanged?.call(value);
+                        state.didChange(value);
+                      });
+                    }
+                  : null,
               child: TextFormField(
                 decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.calendar_today_outlined),
+                  prefixIcon: Icon(
+                    Icons.calendar_today_outlined,
+                    color: enabled ? null : Theme.of(context).disabledColor,
+                  ),
                   hintText: state.value?.format(context),
                 ),
                 enabled: false,

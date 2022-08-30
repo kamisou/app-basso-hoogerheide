@@ -22,12 +22,12 @@ class ColorPicker extends StatefulWidget {
 }
 
 class _ColorPickerState extends State<ColorPicker> {
-  late Color? _color;
+  late Color _color;
 
   @override
   void initState() {
     super.initState();
-    _color = widget.initialValue;
+    _color = widget.initialValue ?? widget.colors.first;
   }
 
   @override
@@ -82,9 +82,6 @@ class _ColorPickerState extends State<ColorPicker> {
       },
       child: Container(
         decoration: BoxDecoration(
-          border: _color == null
-              ? Border.all(color: Theme.of(context).disabledColor)
-              : null,
           borderRadius: BorderRadius.circular(16),
           color: _color,
         ),

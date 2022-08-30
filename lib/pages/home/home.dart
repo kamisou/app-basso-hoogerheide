@@ -4,7 +4,6 @@ import 'package:basso_hoogerheide/pages/home/calendar/calendar.dart';
 import 'package:basso_hoogerheide/pages/home/contacts/contacts.dart';
 import 'package:basso_hoogerheide/pages/home/folders/folders.dart';
 import 'package:basso_hoogerheide/pages/home/models/models.dart';
-import 'package:basso_hoogerheide/widgets/base_page_body.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,13 +14,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final List<HomePageBody> _pageBodies = [
-    const CalendarPage(),
-    const ContactsPage(),
-    const FoldersPage(),
-    const ModelsPage(),
-  ];
-
   final PageController _pageController = PageController();
 
   int _pageIndex = 0;
@@ -62,25 +54,23 @@ class _HomePageState extends State<HomePage> {
                   name: 'João Marcos Kaminoski de Souza',
                 ),
                 controller: _pageController,
-                pageTitles: _pageBodies.map((e) => e.title).toList(),
+                pageTitles: const ['Agenda', 'Contatos', 'Pastas', 'Modelos'],
               ),
               const SizedBox(height: 40),
               Expanded(
                 child: PageView(
                   controller: _pageController,
-                  children: _pageBodies,
+                  children: const [
+                    CalendarPage(),
+                    ContactsPage(),
+                    FoldersPage(),
+                    ModelsPage(),
+                  ],
                 ),
               ),
             ],
           ),
         ),
-        floatingActionButton: _pageBodies[_pageIndex].fabAction != null
-            ? FloatingActionButton(
-                onPressed: () =>
-                    _pageBodies[_pageIndex].fabAction!.call(context),
-                child: const Icon(Icons.add),
-              )
-            : null,
       ),
     );
   }

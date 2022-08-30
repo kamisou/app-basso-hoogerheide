@@ -48,7 +48,7 @@ class _EventCardState extends State<EventCard> {
                     ),
                   ),
                   Text(
-                    widget.event.startTime.format(context),
+                    widget.event.startTime?.format(context) ?? 'O dia todo',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -73,14 +73,16 @@ class _EventCardState extends State<EventCard> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      KeyValueText(
-                        keyString: 'Horário de Início',
-                        valueString: widget.event.startTime.format(context),
-                      ),
-                      KeyValueText(
-                        keyString: 'Horário de Fim',
-                        valueString: widget.event.endTime.format(context),
-                      ),
+                      if (widget.event.startTime != null)
+                        KeyValueText(
+                          keyString: 'Horário de Início',
+                          valueString: widget.event.startTime!.format(context),
+                        ),
+                      if (widget.event.endTime != null)
+                        KeyValueText(
+                          keyString: 'Horário de Fim',
+                          valueString: widget.event.endTime!.format(context),
+                        ),
                       KeyValueText(
                         keyString: 'Descrição',
                         valueString: widget.event.description,

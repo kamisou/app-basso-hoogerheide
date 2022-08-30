@@ -13,6 +13,13 @@ class AnnotationsPage extends StatelessWidget {
     final folder = ModalRoute.of(context)!.settings.arguments as Folder;
     return Scaffold(
       appBar: AppBar(title: Text('${folder.id} - ${folder.name}')),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.note_add),
+        onPressed: () => showDialog(
+          context: context,
+          builder: (context) => const AddAnnotationDialog(),
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32),
         child: folder.annotations.isNotEmpty
@@ -39,13 +46,6 @@ class AnnotationsPage extends StatelessWidget {
                 ),
               )
             : const SizedBox.shrink(),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => showDialog(
-          context: context,
-          builder: (context) => const AddAnnotationDialog(),
-        ),
-        child: const Icon(Icons.add),
       ),
     );
   }
