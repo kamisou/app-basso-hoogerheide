@@ -1,12 +1,6 @@
 import 'dart:convert';
 
-import 'package:basso_hoogerheide/data_objects/app_user.dart';
-import 'package:basso_hoogerheide/data_objects/folder/address_info.dart';
-import 'package:basso_hoogerheide/data_objects/folder/company_folder.dart';
-import 'package:basso_hoogerheide/data_objects/folder/contact_info.dart';
 import 'package:basso_hoogerheide/data_objects/folder/folder.dart';
-import 'package:basso_hoogerheide/data_objects/folder/person_folder.dart';
-import 'package:basso_hoogerheide/data_objects/folder/process_info.dart';
 import 'package:basso_hoogerheide/pages/home/folders/folder_card.dart';
 import 'package:basso_hoogerheide/widgets/base_page_body.dart';
 import 'package:basso_hoogerheide/widgets/collection.dart';
