@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:basso_hoogerheide/data_objects/app_user.dart';
 import 'package:basso_hoogerheide/data_objects/folder/address_info.dart';
 import 'package:basso_hoogerheide/data_objects/folder/company_folder.dart';
@@ -92,9 +94,18 @@ class FoldersPage extends HomePageBody {
 
   @override
   void Function(BuildContext)? get fabAction =>
-      (context) => Navigator.pushNamed(context, '/newFolder',
-          // TODO: utilizar id de nova pasta
-          arguments: {'new_id': 1501, 'folder_type': 'person'});
+      (context) => DefaultAssetBundle.of(context)
+          .loadString('assets/new_folder_form_data.json')
+          .then((value) => Navigator.pushNamed(
+                context,
+                '/newFolder',
+                arguments: {
+                  // TODO: utilizar id de nova pasta
+                  'new_id': 1501,
+                  'folder_type': 'person',
+                  'new_folder_form_data': json.decode(value),
+                },
+              ));
 
   @override
   String get title => 'Clientes';

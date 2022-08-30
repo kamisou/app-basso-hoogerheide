@@ -7,27 +7,27 @@
                 "key": "name",
                 "title": "Nome completo",
                 "icon": "f27b",
-                "type": "name"
+                "type": 8
             },
             {
                 "key": "cpf",
                 "title": "CPF",
                 "icon": "f063a",
-                "type": "number",
+                "type": 2,
                 "mask": "999.999.999-99"
             },
             {
                 "key": "cnpj",
                 "title": "CNPJ",
                 "icon": "f063a",
-                "type": "number",
+                "type": 2,
                 "mask": "999.999.999-99"
             },
             {
                 "key": "rg",
                 "title": "RG",
                 "icon": "f075",
-                "type": "number",
+                "type": 2,
                 "mask": "99.999.999-99",
                 "required": false
             }
@@ -41,14 +41,14 @@
                 "key": "email",
                 "title": "E-mail",
                 "icon": "f018",
-                "type": "emailAddress",
+                "type": 5,
                 "required": false
             },
             {
                 "key": "telephone",
                 "title": "Telefone",
                 "icon": "f290",
-                "type": "phone",
+                "type": 3,
                 "mask": "(99) 9999-9999",
                 "required": false
             },
@@ -56,8 +56,8 @@
                 "key": "cellphone",
                 "title": "Celular",
                 "icon": "f28d",
-                "type": "phone",
-                "mask": [
+                "type": 3,
+                "masks": [
                     "(99) 9999-9999",
                     "(99) 9 9999-9999"
                 ],
@@ -73,19 +73,19 @@
                 "key": "address",
                 "title": "Endereço",
                 "icon": "f107",
-                "type": "name"
+                "type": 8
             },
             {
                 "key": "district",
                 "title": "Bairro",
                 "icon": "f190",
-                "type": "name"
+                "type": 8
             },
             {
                 "key": "city",
                 "title": "Cidade",
                 "icon": "e233",
-                "type": "name"
+                "type": 8
             },
             {
                 "key": "state",
@@ -102,7 +102,8 @@
                 "key": "cep",
                 "title": "CEP",
                 "icon": "f193",
-                "type": "number",
+                "type": 2,
+                "mask": "99.999-999",
                 "required": false
             }
         ]
@@ -133,7 +134,7 @@
                 "key": "number",
                 "title": "Número do processo",
                 "icon": "f063a",
-                "type": "number",
+                "type": 2,
                 "required": false
             },
             {
@@ -165,7 +166,8 @@
             {
                 "key": "attachments",
                 "title": "Anexos",
-                "type": "file"
+                "type": "file",
+                "multiple": true
             }
         ]
     }

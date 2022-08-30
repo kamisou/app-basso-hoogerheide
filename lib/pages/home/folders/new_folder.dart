@@ -7,7 +7,7 @@ class NewFolderPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final args =
-        ModalRoute.of(context)!.settings.arguments as Map<String, Object>;
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     return Scaffold(
       appBar: AppBar(title: const Text('Cadastro Nova Pasta')),
       body: ListView(
@@ -46,180 +46,26 @@ class NewFolderPage extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 24),
-          LargeForm(
-            sections: [
-              LargeFormSection(
-                title: 'Dados Pessoais',
-                key: 'personal_data',
-                fields: [
-                  const LargeFormTextField(
-                    title: 'Nome completo',
-                    key: 'name',
-                    icon: Icons.person_outlined,
-                    type: TextInputType.name,
-                  ),
-                  if (args['folder_type'] == 'person')
-                    const LargeFormTextField(
-                      title: 'CPF',
-                      key: 'cpf',
-                      icon: Icons.numbers_outlined,
-                      mask: '999.999.999-99',
-                      type: TextInputType.number,
-                    )
-                  else
-                    const LargeFormTextField(
-                      title: 'CNPJ',
-                      key: 'cnpj',
-                      icon: Icons.numbers_outlined,
-                      mask: '99.999.999/9999-99',
-                      type: TextInputType.number,
-                    ),
-                  if (args['folder_type'] == 'person')
-                    const LargeFormTextField(
-                      title: 'RG',
-                      key: 'rg',
-                      icon: Icons.fingerprint_outlined,
-                      mask: '99.999.999-99',
-                      type: TextInputType.number,
-                      required: false,
-                    ),
-                ],
-              ),
-              const LargeFormSection(
-                title: 'Dados de Contato',
-                key: 'contact_info',
-                fields: [
-                  LargeFormTextField(
-                    title: 'E-mail',
-                    key: 'email',
-                    icon: Icons.email_outlined,
-                    type: TextInputType.emailAddress,
-                    required: false,
-                  ),
-                  LargeFormTextField(
-                    title: 'Telefone',
-                    key: 'phone',
-                    icon: Icons.phone_outlined,
-                    mask: '(99) 9999-9999',
-                    type: TextInputType.phone,
-                    required: false,
-                  ),
-                  LargeFormTextField(
-                    title: 'Celular',
-                    key: 'cellphone',
-                    mask: ['(99) 9999-9999', '(99) 9 9999-9999'],
-                    icon: Icons.phone_iphone_outlined,
-                    type: TextInputType.phone,
-                    required: false,
-                  ),
-                ],
-              ),
-              const LargeFormSection(
-                title: 'Endereço',
-                key: 'address_info',
-                fields: [
-                  LargeFormTextField(
-                    title: 'Endereço',
-                    key: 'address',
-                    icon: Icons.home_outlined,
-                    type: TextInputType.name,
-                  ),
-                  LargeFormTextField(
-                    title: 'Bairro',
-                    key: 'district',
-                    icon: Icons.location_city_outlined,
-                    type: TextInputType.name,
-                  ),
-                  LargeFormTextField(
-                    title: 'Cidade',
-                    key: 'city',
-                    icon: Icons.emoji_transportation,
-                    type: TextInputType.name,
-                  ),
-                  LargeFormOptionsField(
-                    title: 'Estado',
-                    key: 'state',
-                    icon: Icons.map_outlined,
-                    // TODO: utilizar dados de estado
-                    options: ['PR'],
-                  ),
-                  LargeFormTextField(
-                    title: 'CEP',
-                    key: 'cep',
-                    mask: '99.999-999',
-                    icon: Icons.location_on_outlined,
-                    type: TextInputType.number,
-                    required: false,
-                  ),
-                ],
-              ),
-              LargeFormSection(
-                title: 'Detalhes do Processo',
-                key: 'process_info',
-                fields: [
-                  const LargeFormOptionsField(
-                    title: 'Procurador',
-                    key: 'attorney',
-                    icon: Icons.person_outlined,
-                    // TODO: utilizar dados de procuradores
-                    options: ['João Marcos Kaminoski de Souza'],
-                  ),
-                  const LargeFormOptionsField(
-                    title: 'Natureza',
-                    key: 'nature',
-                    icon: Icons.file_copy_outlined,
-                    // TODO: utilizar dados de natureza
-                    options: ['Trabalhista'],
-                  ),
-                  const LargeFormTextField(
-                    title: 'Número do processo',
-                    key: 'number',
-                    type: TextInputType.number,
-                    icon: Icons.numbers_outlined,
-                    required: false,
-                  ),
-                  LargeFormDateField(
-                    title: 'Data do protocolo',
-                    key: 'protocol_date',
-                    icon: Icons.numbers_outlined,
-                    firstDate: DateTime(2022),
-                    lastDate: DateTime(2023),
-                    required: false,
-                  ),
-                  const LargeFormOptionsField(
-                    title: 'Comarca',
-                    key: 'district',
-                    icon: Icons.map_outlined,
-                    // TODO: utilizar dados de comarca
-                    options: ['Paraná'],
-                  ),
-                  const LargeFormOptionsField(
-                    title: 'Vara',
-                    key: 'division',
-                    icon: Icons.gavel_outlined,
-                    // TODO: utilizar dados de vara
-                    options: ['1a Vara'],
-                  ),
-                ],
-              ),
-              const LargeFormSection(
-                title: 'Documentos do Processo',
-                key: 'documents',
-                fields: [
-                  LargeFormDocumentField(
-                    title: 'Anexos',
-                    key: 'attachments',
-                  ),
-                ],
-              ),
-            ],
+          LargeForm.fromJson(
+            json: args['new_folder_form_data'],
             sectionTitleStyle:
                 Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: Theme.of(context).colorScheme.secondary,
                       fontWeight: FontWeight.bold,
                     ),
+            fieldPredicate: (field) {
+              switch (field.key) {
+                case 'cpf':
+                case 'rg':
+                  return args['folder_type'] == 'person';
+                case 'cnpj':
+                  return args['folder_type'] == 'company';
+                default:
+                  return true;
+              }
+            },
             // TODO: salvar nova pasta
-            onSaved: (value) => print(value),
+            onSaved: print,
           ),
         ],
       ),

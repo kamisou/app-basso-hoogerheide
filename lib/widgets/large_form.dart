@@ -12,11 +12,82 @@ class LargeForm extends StatefulWidget {
     this.onSaved,
   });
 
+  LargeForm.fromJson({
+    super.key,
+    required dynamic json,
+    this.sectionTitleStyle,
+    this.onSaved,
+    bool Function(LargeFormField)? fieldPredicate,
+  }) : sections = _parseJson(json, fieldPredicate);
+
   final List<LargeFormSection> sections;
 
   final TextStyle? sectionTitleStyle;
 
   final void Function(Map<String, dynamic>)? onSaved;
+
+  static List<LargeFormSection> _parseJson(
+    dynamic json,
+    bool Function(LargeFormField)? fieldPredicate,
+  ) {
+    return (json as List? ?? [])
+        .cast<Map<String, dynamic>>()
+        .map((e) => LargeFormSection(
+              key: e['key'],
+              title: e['title'],
+              fields: (e['fields'] as List? ?? [])
+                  .cast<Map<String, dynamic>>()
+                  .map((e) {
+                    final IconData? icon = e['icon'] != null
+                        ? IconData(int.parse(e['icon'], radix: 16),
+                            fontFamily: 'MaterialIcons')
+                        : null;
+                    final bool required = e['required'] ?? true;
+                    switch (e['type']) {
+                      case 'option':
+                        return LargeFormOptionsField(
+                          key: e['key'],
+                          title: e['title'],
+                          icon: icon,
+                          options: (e['options'] as List? ?? []).cast<String>(),
+                          required: required,
+                        );
+                      case 'date':
+                        return LargeFormDateField(
+                          key: e['key'],
+                          title: e['title'],
+                          icon: icon,
+                          firstDate: DateTime.parse(e['first_date']),
+                          lastDate: DateTime.parse(e['last_date']),
+                          required: required,
+                        );
+                      case 'file':
+                        return LargeFormFileField(
+                          title: e['title'],
+                          key: e['key'],
+                          multiple: e['multiple'] ?? false,
+                          required: required,
+                        );
+                      case LargeFormTextField:
+                      default:
+                        return LargeFormTextField(
+                          key: e['key'],
+                          title: e['title'],
+                          icon: icon,
+                          type: TextInputType.values.firstWhere(
+                            (v) => v.index == e['type'],
+                          ),
+                          mask: e['mask'] ??
+                              (e['masks'] as List?)?.cast<String>(),
+                          required: required,
+                        );
+                    }
+                  })
+                  .where(fieldPredicate ?? (_) => true)
+                  .toList(),
+            ))
+        .toList();
+  }
 
   @override
   State<LargeForm> createState() => _LargeFormState();
@@ -93,7 +164,10 @@ class _LargeFormState extends State<LargeForm> {
   }
 
   Widget _fieldBuilder(
-      BuildContext context, LargeFormSection section, LargeFormField field) {
+    BuildContext context,
+    LargeFormSection section,
+    LargeFormField field,
+  ) {
     switch (field.runtimeType) {
       case LargeFormDateField:
         return DatePicker(
@@ -114,7 +188,7 @@ class _LargeFormState extends State<LargeForm> {
           validator: (value) => _validator(field.required, value),
           textInputAction: TextInputAction.next,
         );
-      case LargeFormDocumentField:
+      case LargeFormFileField:
         return FilePickerField(
           hintText: 'Anexar arquivos',
           icon: Icons.attach_file_outlined,
@@ -228,8 +302,8 @@ class LargeFormDateField extends LargeFormField {
   final DateTime lastDate;
 }
 
-class LargeFormDocumentField extends LargeFormField {
-  const LargeFormDocumentField({
+class LargeFormFileField extends LargeFormField {
+  const LargeFormFileField({
     required super.title,
     required super.key,
     super.required,
