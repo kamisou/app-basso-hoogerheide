@@ -1,0 +1,172 @@
+[
+    {
+        "key": "personal_data",
+        "title": "Dados Pessoais",
+        "fields": [
+            {
+                "key": "name",
+                "title": "Nome completo",
+                "icon": "f27b",
+                "type": "name"
+            },
+            {
+                "key": "cpf",
+                "title": "CPF",
+                "icon": "f063a",
+                "type": "number",
+                "mask": "999.999.999-99"
+            },
+            {
+                "key": "cnpj",
+                "title": "CNPJ",
+                "icon": "f063a",
+                "type": "number",
+                "mask": "999.999.999-99"
+            },
+            {
+                "key": "rg",
+                "title": "RG",
+                "icon": "f075",
+                "type": "number",
+                "mask": "99.999.999-99",
+                "required": false
+            }
+        ]
+    },
+    {
+        "key": "contact_info",
+        "title": "Dados de Contato",
+        "fields": [
+            {
+                "key": "email",
+                "title": "E-mail",
+                "icon": "f018",
+                "type": "emailAddress",
+                "required": false
+            },
+            {
+                "key": "telephone",
+                "title": "Telefone",
+                "icon": "f290",
+                "type": "phone",
+                "mask": "(99) 9999-9999",
+                "required": false
+            },
+            {
+                "key": "cellphone",
+                "title": "Celular",
+                "icon": "f28d",
+                "type": "phone",
+                "mask": [
+                    "(99) 9999-9999",
+                    "(99) 9 9999-9999"
+                ],
+                "required": false
+            }
+        ]
+    },
+    {
+        "key": "address_info",
+        "title": "Dados de Endereço",
+        "fields": [
+            {
+                "key": "address",
+                "title": "Endereço",
+                "icon": "f107",
+                "type": "name"
+            },
+            {
+                "key": "district",
+                "title": "Bairro",
+                "icon": "f190",
+                "type": "name"
+            },
+            {
+                "key": "city",
+                "title": "Cidade",
+                "icon": "e233",
+                "type": "name"
+            },
+            {
+                "key": "state",
+                "title": "Estado",
+                "icon": "f1ae",
+                "type": "option",
+                "options": [
+                    "PR",
+                    "SC",
+                    "RS"
+                ]
+            },
+            {
+                "key": "cep",
+                "title": "CEP",
+                "icon": "f193",
+                "type": "number",
+                "required": false
+            }
+        ]
+    },
+    {
+        "key": "process_info",
+        "title": "Detalhes do Processo",
+        "fields": [
+            {
+                "key": "attorney",
+                "title": "Procurador",
+                "icon": "f27b",
+                "type": "option",
+                "options": [
+                    "João Marcos Kaminoski de Souza"
+                ]
+            },
+            {
+                "key": "nature",
+                "title": "Natureza",
+                "icon": "f058",
+                "type": "option",
+                "options": [
+                    "Trabalhista"
+                ]
+            },
+            {
+                "key": "number",
+                "title": "Número do processo",
+                "icon": "f063a",
+                "type": "number",
+                "required": false
+            },
+            {
+                "key": "protocol_date",
+                "title": "Data do protocolo",
+                "icon": "f1ae",
+                "type": "date",
+                "first_date": "2020-01-01T00:00",
+                "last_date": "2023-12-31T00:00",
+                "required": false
+            },
+            {
+                "key": "division",
+                "title": "Vara",
+                "icon": "f0c0",
+                "type": "option",
+                "options": [
+                    "1a Vara",
+                    "2a Vara",
+                    "3a Vara"
+                ]
+            }
+        ]
+    },
+    {
+        "key": "documents",
+        "title": "Documentos do Processo",
+        "fields": [
+            {
+                "key": "attachments",
+                "title": "Anexos",
+                "type": "file"
+            }
+        ]
+    }
+]

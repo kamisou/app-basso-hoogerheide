@@ -107,7 +107,7 @@ class NewFolderPage extends StatelessWidget {
                   LargeFormTextField(
                     title: 'Celular',
                     key: 'cellphone',
-                    mask: ['(99) 9 9999-9999'],
+                    mask: ['(99) 9999-9999', '(99) 9 9999-9999'],
                     icon: Icons.phone_iphone_outlined,
                     type: TextInputType.phone,
                     required: false,
