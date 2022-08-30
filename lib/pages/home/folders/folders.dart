@@ -33,54 +33,7 @@ class FoldersPage extends HomePageBody {
         Expanded(
           child: Collection<Folder>(
             // TODO: utilizar dados de pasta
-            collection: const [
-              PersonFolder(
-                id: 1500,
-                name: 'Maria da Silva',
-                writtenOff: true,
-                cpf: '117.666.379-81',
-                contactInfo: ContactInfo(),
-                addressInfo: AddressInfo(
-                  street: 'Rua Cristiano Justus',
-                  district: 'Boa Vista',
-                  city: 'Ponta Grossa',
-                  state: 'Paraná',
-                ),
-                processInfo: ProcessInfo(
-                  nature: 'Trabalhista',
-                  color: Color(0xFFA0A0A0),
-                  attorney: AppUser(
-                    name: 'José Maria',
-                    email: 'jose@gmail.com',
-                    division: 'Something',
-                  ),
-                ),
-                files: [],
-              ),
-              CompanyFolder(
-                id: 1501,
-                name: 'Companhia XYZ',
-                writtenOff: false,
-                cnpj: '17.324.319/0001-32',
-                contactInfo: ContactInfo(),
-                addressInfo: AddressInfo(
-                  street: 'Rua Cristiano Justus',
-                  district: 'Boa Vista',
-                  city: 'Ponta Grossa',
-                  state: 'Paraná',
-                ),
-                processInfo: ProcessInfo(
-                  nature: 'Trabalhista',
-                  color: Color(0xFFA0A0A0),
-                  attorney: AppUser(
-                    name: 'José Maria',
-                    email: 'jose@gmail.com',
-                    division: 'Something',
-                  ),
-                ),
-                files: [],
-              ),
-            ],
+            collection: const [],
             itemBuilder: (_, item) => FolderCard(folder: item),
             emptyWidget: const EmptyCard(
               icon: Icons.folder_off_outlined,

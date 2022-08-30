@@ -14,7 +14,16 @@ class _AddEventDialogState extends State<AddEventDialog> {
   CalendarEvent _event = const CalendarEvent.empty();
 
   // TODO: utilizar dados de cores para evento
-  final List<Color> _colors = const [Colors.red];
+  final List<Color> _colors = const [
+    Colors.red,
+    Colors.green,
+    Colors.blue,
+    Colors.yellow,
+    Colors.pink,
+    Colors.cyan,
+    Colors.white,
+    Colors.black,
+  ];
 
   @override
   void initState() {
