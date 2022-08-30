@@ -51,7 +51,7 @@ class NewFolderPage extends StatelessWidget {
           const SizedBox(height: 24),
           LargeForm.fromJson(
             // TODO: usar dados do asset
-            json: const {},
+            json: const [],
             sectionTitleStyle:
                 Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: Theme.of(context).colorScheme.secondary,

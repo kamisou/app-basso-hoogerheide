@@ -24,13 +24,7 @@ class App extends StatelessWidget {
       color: _appTheme.dark.colorScheme.primary,
       darkTheme: _appTheme.dark,
       debugShowCheckedModeBanner: false,
-      home: SplashPage(
-        initialWork: () async {
-          await _initializeLocale();
-          await _loadAppConfiguration();
-          return '/login';
-        },
-      ),
+      home: SplashPage(initialWork: _initialWork),
       restorationScopeId: 'basso_hoogerheide',
       routes: {
         '/login': (_) => const LoginPage(),
@@ -42,6 +36,12 @@ class App extends StatelessWidget {
       themeMode: ThemeMode.dark,
       title: 'Basso Hoogerheide',
     );
+  }
+
+  Future<String> _initialWork() async {
+    await _initializeLocale();
+    await _loadAppConfiguration();
+    return '/login';
   }
 
   Future<void> _initializeLocale() {

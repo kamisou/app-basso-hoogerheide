@@ -56,6 +56,7 @@ class LoginPage extends StatelessWidget {
             hintText: 'Seu e-mail',
           ),
           keyboardType: TextInputType.emailAddress,
+          textInputAction: TextInputAction.next,
         ),
         const SizedBox(height: 18),
         TextFormField(

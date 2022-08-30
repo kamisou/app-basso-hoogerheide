@@ -1,10 +1,14 @@
 import 'dart:io';
 
 abstract class Uploader {
+  const Uploader();
+
   Stream<double> upload(File file);
 }
 
 class MockUploader extends Uploader {
+  const MockUploader();
+
   @override
   Stream<double> upload(File file) async* {
     final Stream<List<int>> fileStream = file.openRead();

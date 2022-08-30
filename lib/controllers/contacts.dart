@@ -6,4 +6,11 @@ class ContactsController {
   Future<void> addContact(ContactOutput? contact) async {
     if (contact == null) return;
   }
+
+  String? validateName(String? name) {
+    if (name?.isEmpty ?? true) {
+      return 'Insira um nome';
+    }
+    return null;
+  }
 }

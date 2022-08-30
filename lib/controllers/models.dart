@@ -8,6 +8,9 @@ import 'package:file_picker/file_picker.dart';
 class ModelsController {
   const ModelsController();
 
+  // TODO: substituir com uploader real
+  final Uploader _uploader = const MockUploader();
+
   // TODO: deletar documento dos modelos
   Future<void> deleteModel(DownloadableFile file) async {}
 
@@ -25,8 +28,7 @@ class ModelsController {
 
     return PickedModelData(
       title: file.path.split('/').last,
-      // TODO: substituir com uploader real
-      stream: MockUploader().upload(file).asBroadcastStream(),
+      stream: _uploader.upload(file).asBroadcastStream(),
     );
   }
 }
