@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
-  LoginPage({super.key});
-
-  final FocusNode _passwordFocus = FocusNode();
+  const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -55,11 +53,9 @@ class LoginPage extends StatelessWidget {
             hintText: 'Seu e-mail',
           ),
           keyboardType: TextInputType.emailAddress,
-          onEditingComplete: _passwordFocus.requestFocus,
         ),
         const SizedBox(height: 18),
         TextFormField(
-          focusNode: _passwordFocus,
           decoration: const InputDecoration(
             prefixIcon: Icon(Icons.lock_outline),
             hintText: 'Sua senha',

@@ -1,23 +1,15 @@
-import 'package:basso_hoogerheide/app.dart';
 import 'package:basso_hoogerheide/widgets/searchbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddAnnotationDialog extends ConsumerStatefulWidget {
+class AddAnnotationDialog extends StatefulWidget {
   const AddAnnotationDialog({super.key});
 
   @override
-  ConsumerState<AddAnnotationDialog> createState() =>
-      _AddAnnotationDialogState();
+  State<AddAnnotationDialog> createState() => _AddAnnotationDialogState();
 }
 
-class _AddAnnotationDialogState extends ConsumerState<AddAnnotationDialog> {
+class _AddAnnotationDialogState extends State<AddAnnotationDialog> {
   String? _annotation;
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +39,8 @@ class _AddAnnotationDialogState extends ConsumerState<AddAnnotationDialog> {
                     ),
                     const SizedBox(height: 4),
                     SearchBar<String>(
-                      options: ref.read(appConfigProvider).annotationOptions,
+                      // TODO: usar dados de anotação
+                      options: [],
                       onChanged: (value) => _annotation = value,
                       validator: (value) =>
                           value == null ? 'Selecione uma opção' : null,

@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:basso_hoogerheide/constants/theme_data.dart';
-import 'package:basso_hoogerheide/data_objects/app_config.dart';
 import 'package:basso_hoogerheide/pages/home/folders/annotations.dart';
 import 'package:basso_hoogerheide/pages/home/folders/new_folder.dart';
 import 'package:basso_hoogerheide/pages/home/home.dart';
@@ -11,11 +10,8 @@ import 'package:basso_hoogerheide/pages/profile/profile.dart';
 import 'package:basso_hoogerheide/pages/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
-
-late Provider<AppConfig> appConfigProvider;
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -37,7 +33,7 @@ class App extends StatelessWidget {
       ),
       restorationScopeId: 'basso_hoogerheide',
       routes: {
-        '/login': (_) => LoginPage(),
+        '/login': (_) => const LoginPage(),
         '/home': (_) => const HomePage(),
         '/newFolder': (_) => const NewFolderPage(),
         '/annotations': (_) => const AnnotationsPage(),
@@ -54,26 +50,9 @@ class App extends StatelessWidget {
     return initializeDateFormatting(localeTag);
   }
 
-  Future<void> _loadAppConfiguration() async {
-    final folderFormData = await rootBundle
+  Future<void> _loadAppConfiguration() {
+    return rootBundle
         .loadString('./assets/new_folder_form_data.json')
         .then((value) => json.decode(value));
-
-    appConfigProvider = Provider(
-      (ref) => AppConfig(
-        newFormFieldData: folderFormData,
-        newEventColors: [
-          Colors.red,
-          Colors.green,
-          Colors.blue,
-          Colors.yellow,
-          Colors.pink,
-          Colors.cyan,
-          Colors.white,
-          Colors.black,
-        ],
-        annotationOptions: [],
-      ),
-    );
   }
 }
