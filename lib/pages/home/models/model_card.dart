@@ -1,4 +1,3 @@
-import 'package:basso_hoogerheide/controllers/models.dart';
 import 'package:basso_hoogerheide/data_objects/input/downloadable_file.dart';
 import 'package:basso_hoogerheide/data_objects/input/model_category.dart';
 import 'package:basso_hoogerheide/widgets/shimmering_image.dart';
@@ -10,19 +9,20 @@ class ModelCard extends StatefulWidget {
     super.key,
     required this.modelCategory,
     this.onTapUpload,
+    this.onTapDelete,
   });
 
   final ModelCategory modelCategory;
 
   final VoidCallback? onTapUpload;
 
+  final void Function(DownloadableFile)? onTapDelete;
+
   @override
   State<ModelCard> createState() => _ModelCardState();
 }
 
 class _ModelCardState extends State<ModelCard> {
-  final ModelsController _controller = const ModelsController();
-
   bool _expanded = false;
 
   @override
@@ -142,7 +142,9 @@ class _ModelCardState extends State<ModelCard> {
         ),
         const SizedBox(width: 8),
         GestureDetector(
-          onTap: () => _controller.deleteModel(file),
+          onTap: widget.onTapDelete != null
+              ? () => widget.onTapDelete!(file)
+              : null,
           child: Icon(
             Icons.delete_outlined,
             color: Theme.of(context).colorScheme.error,

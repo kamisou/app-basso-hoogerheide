@@ -21,6 +21,7 @@ class ModelsPage extends ConsumerWidget {
             .read(modelsControllerProvider)
             .pickAndUploadModelFile()
             .then((upload) => _displaySnackbar(context, upload)),
+        onTapDelete: ref.read(modelsControllerProvider).deleteModel,
       ),
       emptyWidget: const EmptyCard(
         icon: Icons.file_download_off_outlined,
