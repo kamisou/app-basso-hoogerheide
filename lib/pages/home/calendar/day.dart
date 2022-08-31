@@ -1,4 +1,5 @@
 import 'package:basso_hoogerheide/data_objects/input/calendar_event.dart';
+import 'package:basso_hoogerheide/extensions.dart';
 import 'package:basso_hoogerheide/pages/home/calendar/event_card.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -19,9 +20,7 @@ class DayWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isToday = date.day == today.day &&
-        date.month == today.month &&
-        date.year == today.year;
+    final bool isToday = today.dayOnly() == date;
     return Column(
       children: [
         Row(

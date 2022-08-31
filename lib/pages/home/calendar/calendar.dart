@@ -1,7 +1,10 @@
 import 'package:basso_hoogerheide/controllers/calendar.dart';
 import 'package:basso_hoogerheide/data_objects/output/new_calendar_event.dart';
+import 'package:basso_hoogerheide/extensions.dart';
 import 'package:basso_hoogerheide/pages/home/calendar/add_event_dialog.dart';
 import 'package:basso_hoogerheide/pages/home/calendar/day.dart';
+import 'package:basso_hoogerheide/repository/calendar.dart';
+import 'package:basso_hoogerheide/widgets/empty_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:infinite_listview/infinite_listview.dart';
@@ -20,20 +23,32 @@ class CalendarPage extends ConsumerWidget {
           builder: (_) => const AddEventDialog(),
         ).then(ref.read(calendarControllerProvider).addEvent),
       ),
-      body: InfiniteListView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        itemBuilder: (_, index) => Padding(
-          padding: const EdgeInsets.only(bottom: 32),
-          child: DayWidget(
-            date: (index > 0)
-                ? today.add(Duration(days: index))
-                : today.subtract(Duration(days: index)),
-            today: today,
-            // TODO: utilizar dados de eventos do calendário
-            events: const [],
+      body: ref.watch(calendarEventsProvider).when(
+            data: (data) {
+              return InfiniteListView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                itemBuilder: (_, index) {
+                  final DateTime thisDate =
+                      today.dayOnly().add(Duration(days: index));
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 32),
+                    child: DayWidget(
+                      date: thisDate,
+                      today: today,
+                      events: data[thisDate],
+                    ),
+                  );
+                },
+              );
+            },
+            error: (_, __) => const EmptyCard(
+              icon: Icons.error,
+              message: 'Não foi possível buscar os eventos do calendário',
+            ),
+            loading: () => const Center(
+              child: CircularProgressIndicator(),
+            ),
           ),
-        ),
-      ),
     );
   }
 }

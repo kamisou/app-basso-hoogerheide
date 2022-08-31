@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 extension NavigatorExtension on Navigator {
-  static Future<T?> pushReplacementNamedAndNotify<T extends Object?, TO extends Object?>(
+  static Future<T?>
+      pushReplacementNamedAndNotify<T extends Object?, TO extends Object?>(
     BuildContext context,
     String routeName,
     VoidCallback onAnimationFinished, {
@@ -15,6 +16,7 @@ extension NavigatorExtension on Navigator {
         animation!.removeStatusListener(animationListener);
       }
     }
+
     animation?.addStatusListener(animationListener);
     return Navigator.pushReplacementNamed(
       context,
@@ -23,4 +25,8 @@ extension NavigatorExtension on Navigator {
       arguments: arguments,
     );
   }
+}
+
+extension DateTimeExtension on DateTime {
+  DateTime dayOnly() => DateTime(year, month, day);
 }

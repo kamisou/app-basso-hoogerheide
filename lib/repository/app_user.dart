@@ -4,6 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final appUserRepositoryProvider =
     Provider.autoDispose((ref) => const AppUserRepository());
 
+final appUserProvider = FutureProvider.autoDispose(
+  (ref) => ref.read(appUserRepositoryProvider).getMyUser(),
+);
+
 class AppUserRepository {
   const AppUserRepository();
 
@@ -17,7 +21,3 @@ class AppUserRepository {
         ),
       );
 }
-
-final appUserProvider = FutureProvider.autoDispose(
-  (ref) => ref.read(appUserRepositoryProvider).getMyUser(),
-);
