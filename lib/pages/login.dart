@@ -1,13 +1,12 @@
 import 'package:basso_hoogerheide/controllers/login.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends ConsumerWidget {
   const LoginPage({super.key});
 
-  final LoginController _controller = const LoginController();
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -28,7 +27,59 @@ class LoginPage extends StatelessWidget {
                     horizontal: 20,
                     vertical: 32,
                   ),
-                  child: Form(child: _formBuilder(context)),
+                  child: Form(
+                    child: Builder(
+                      builder: (context) => Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            'Insira suas credenciais:',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 18),
+                          TextFormField(
+                            decoration: const InputDecoration(
+                              prefixIcon: Icon(Icons.email_outlined),
+                              hintText: 'Seu e-mail',
+                            ),
+                            keyboardType: TextInputType.emailAddress,
+                            textInputAction: TextInputAction.next,
+                          ),
+                          const SizedBox(height: 18),
+                          TextFormField(
+                            decoration: const InputDecoration(
+                              prefixIcon: Icon(Icons.lock_outline),
+                              hintText: 'Sua senha',
+                            ),
+                            keyboardType: TextInputType.visiblePassword,
+                            obscureText: true,
+                            onEditingComplete: () =>
+                                _signInAndNavigate(context, ref),
+                          ),
+                          const SizedBox(height: 20),
+                          ElevatedButton(
+                            onPressed: () => _signInAndNavigate(context, ref),
+                            child: const Text('Login'),
+                          ),
+                          const SizedBox(height: 18),
+                          Center(
+                            child: GestureDetector(
+                              onTap: ref
+                                  .read(loginControllerProvider)
+                                  .recoverPassword,
+                              child: Text(
+                                'Esqueceu sua senha?',
+                                style: Theme.of(context).textTheme.labelLarge,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -38,56 +89,8 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Widget _formBuilder(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text(
-          'Insira suas credenciais:',
-          style: Theme.of(context)
-              .textTheme
-              .titleMedium!
-              .copyWith(fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 18),
-        TextFormField(
-          decoration: const InputDecoration(
-            prefixIcon: Icon(Icons.email_outlined),
-            hintText: 'Seu e-mail',
-          ),
-          keyboardType: TextInputType.emailAddress,
-          textInputAction: TextInputAction.next,
-        ),
-        const SizedBox(height: 18),
-        TextFormField(
-          decoration: const InputDecoration(
-            prefixIcon: Icon(Icons.lock_outline),
-            hintText: 'Sua senha',
-          ),
-          keyboardType: TextInputType.visiblePassword,
-          obscureText: true,
-          onEditingComplete: () => _signInAndNavigate(context),
-        ),
-        const SizedBox(height: 20),
-        ElevatedButton(
-          onPressed: () => _signInAndNavigate(context),
-          child: const Text('Login'),
-        ),
-        const SizedBox(height: 18),
-        Center(
-          child: GestureDetector(
-            onTap: _controller.recoverPassword,
-            child: Text(
-              'Esqueceu sua senha?',
-              style: Theme.of(context).textTheme.labelLarge,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  void _signInAndNavigate(BuildContext context) => _controller
+  void _signInAndNavigate(BuildContext context, WidgetRef ref) => ref
+      .read(loginControllerProvider)
       .signIn()
       .then((_) => Navigator.pushReplacementNamed(context, '/home'));
 }

@@ -1,3 +1,8 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final loginControllerProvider =
+    Provider.autoDispose((ref) => const LoginController());
+
 class LoginController {
   const LoginController();
 
