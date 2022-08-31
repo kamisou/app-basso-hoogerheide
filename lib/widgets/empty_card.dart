@@ -30,6 +30,7 @@ class EmptyCard extends StatelessWidget {
                   message,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
                         color: Theme.of(context).colorScheme.secondary,
                       ),

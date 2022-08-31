@@ -40,7 +40,6 @@ class App extends StatelessWidget {
 
   Future<String> _initialWork() async {
     await _initializeLocale();
-    await _loadAppConfiguration();
     return '/login';
   }
 
@@ -48,11 +47,5 @@ class App extends StatelessWidget {
     final String localeTag = PlatformDispatcher.instance.locale.toLanguageTag();
     Intl.defaultLocale = localeTag;
     return initializeDateFormatting(localeTag);
-  }
-
-  Future<void> _loadAppConfiguration() {
-    return rootBundle
-        .loadString('./assets/new_folder_form_data.json')
-        .then((value) => json.decode(value));
   }
 }

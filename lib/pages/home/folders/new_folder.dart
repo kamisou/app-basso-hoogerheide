@@ -1,15 +1,26 @@
+import 'dart:convert';
+
 import 'package:basso_hoogerheide/controllers/folders.dart';
+import 'package:basso_hoogerheide/widgets/empty_card.dart';
 import 'package:basso_hoogerheide/widgets/large_form.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class NewFolderPage extends StatelessWidget {
+final FutureProvider formDataProvider = FutureProvider(
+  (ref) => rootBundle
+      .loadString('./assets/new_folder_form_data.json')
+      .then((value) => json.decode(value)),
+);
+
+class NewFolderPage extends ConsumerWidget {
   const NewFolderPage({super.key});
 
   final FoldersController _controller = const FoldersController();
 
   @override
-  Widget build(BuildContext context) {
-    final args =
+  Widget build(BuildContext context, WidgetRef ref) {
+    final Map<String, dynamic> args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     return Scaffold(
       appBar: AppBar(title: const Text('Cadastro Nova Pasta')),
@@ -49,27 +60,33 @@ class NewFolderPage extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 24),
-          LargeForm.fromJson(
-            // TODO: usar dados do asset
-            json: const [],
-            sectionTitleStyle:
-                Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.secondary,
-                      fontWeight: FontWeight.bold,
-                    ),
-            fieldPredicate: (field) {
-              switch (field.key) {
-                case 'cpf':
-                case 'rg':
-                  return args['folder_type'] == 'person';
-                case 'cnpj':
-                  return args['folder_type'] == 'company';
-                default:
-                  return true;
-              }
-            },
-            onSaved: _controller.addFolder,
-          ),
+          ref.watch(formDataProvider).when(
+                data: (data) => LargeForm.fromJson(
+                  json: data,
+                  sectionTitleStyle:
+                      Theme.of(context).textTheme.titleMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.secondary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                  fieldPredicate: (field) {
+                    switch (field.key) {
+                      case 'cpf':
+                      case 'rg':
+                        return args['folder_type'] == 'person';
+                      case 'cnpj':
+                        return args['folder_type'] == 'company';
+                      default:
+                        return true;
+                    }
+                  },
+                  onSaved: _controller.addFolder,
+                ),
+                error: (_, __) => const EmptyCard(
+                  icon: Icons.error,
+                  message: 'Falha ao carregar dados do formulário!',
+                ),
+                loading: () => const Center(child: CircularProgressIndicator()),
+              ),
         ],
       ),
     );
