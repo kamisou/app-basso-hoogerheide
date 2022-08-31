@@ -186,10 +186,10 @@ class _FolderCardState extends State<FolderCard> {
             keyString: 'Telefone',
             valueString: contact.telephone!,
           ),
-        if (contact.cellular != null)
+        if (contact.cellphone != null)
           KeyValueText(
             keyString: 'Celular',
-            valueString: contact.cellular!,
+            valueString: contact.cellphone!,
           ),
         _cardSection(context, Icons.description_outlined, 'Detalhes'),
         KeyValueText(

@@ -1,16 +1,9 @@
-import 'package:basso_hoogerheide/data_objects/output/calendar_event.dart';
+import 'package:basso_hoogerheide/data_objects/output/new_calendar_event.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final calendarControllerProvider = Provider((ref) => CalendarController());
 
 class CalendarController {
-  const CalendarController();
-
-  Future<void> addEvent(CalendarEventOutput? event) async {
-    if (event == null) return;
-  }
-
-  String? validateEventTitle(String? title) {
-    if (title?.isEmpty ?? true) {
-      return 'Adicione um título';
-    }
-    return null;
-  }
+  // TODO: adicionar evento
+  Future<void> addEvent(NewCalendarEvent? event) async {}
 }

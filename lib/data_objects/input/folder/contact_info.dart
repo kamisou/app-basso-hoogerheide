@@ -2,12 +2,12 @@ class ContactInfo {
   const ContactInfo({
     this.email,
     this.telephone,
-    this.cellular,
+    this.cellphone,
   });
 
   final String? email;
 
   final String? telephone;
 
-  final String? cellular;
+  final String? cellphone;
 }

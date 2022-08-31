@@ -48,6 +48,7 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: [
               HomeAppBar(
+                // TODO: usar dados de appuser
                 appUser: const AppUser(
                   division: 'Administrador',
                   email: 'kamisou@outlook.com',

@@ -37,11 +37,11 @@ class ContactTile extends StatelessWidget {
                       ),
                     ),
                   const SizedBox(width: 8),
-                  if (contact.cellular != null)
+                  if (contact.cellphone != null)
                     Flexible(
                       child: KeyValueText(
                         keyString: 'Cel',
-                        valueString: contact.cellular!,
+                        valueString: contact.cellphone!,
                         style: detailStyle,
                       ),
                     ),

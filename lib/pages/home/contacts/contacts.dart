@@ -1,27 +1,26 @@
 import 'package:basso_hoogerheide/controllers/contacts.dart';
 import 'package:basso_hoogerheide/data_objects/input/contact.dart';
-import 'package:basso_hoogerheide/data_objects/output/contact.dart';
+import 'package:basso_hoogerheide/data_objects/output/new_contact.dart';
 import 'package:basso_hoogerheide/pages/home/contacts/add_contact_dialog.dart';
 import 'package:basso_hoogerheide/pages/home/contacts/contact_tile.dart';
 import 'package:basso_hoogerheide/widgets/collection.dart';
 import 'package:basso_hoogerheide/widgets/empty_card.dart';
 import 'package:basso_hoogerheide/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ContactsPage extends StatelessWidget {
+class ContactsPage extends ConsumerWidget {
   const ContactsPage({super.key});
 
-  final ContactsController controller = const ContactsController();
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.person_add),
-        onPressed: () => showDialog<ContactOutput>(
+        onPressed: () => showDialog<NewContact>(
           context: context,
           builder: (context) => const AddContactDialog(),
-        ).then(controller.addContact),
+        ).then(ref.read(contactsControllerProvider).addContact),
       ),
       body: Column(
         children: [

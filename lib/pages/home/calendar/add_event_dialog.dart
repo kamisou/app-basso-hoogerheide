@@ -1,23 +1,15 @@
-import 'package:basso_hoogerheide/controllers/calendar.dart';
-import 'package:basso_hoogerheide/data_objects/output/calendar_event.dart';
+import 'package:basso_hoogerheide/data_objects/output/new_calendar_event.dart';
 import 'package:basso_hoogerheide/widgets/color_picker.dart';
 import 'package:basso_hoogerheide/widgets/time_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddEventDialog extends StatefulWidget {
+class AddEventDialog extends ConsumerWidget {
   const AddEventDialog({super.key});
 
   @override
-  State<AddEventDialog> createState() => _AddEventDialogState();
-}
-
-class _AddEventDialogState extends State<AddEventDialog> {
-  CalendarEventOutput _eventOutput = const CalendarEventOutput.empty();
-
-  final CalendarController _controller = const CalendarController();
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final newEvent = ref.read(newEventProvider.notifier);
     return Dialog(
       insetPadding: const EdgeInsets.all(16),
       child: Padding(
@@ -56,8 +48,7 @@ class _AddEventDialogState extends State<AddEventDialog> {
                                   .titleMedium
                                   ?.copyWith(fontWeight: FontWeight.bold),
                             ),
-                            onChanged: (color) =>
-                                _eventOutput.copyWith(color: color),
+                            onChanged: newEvent.setColor,
                           ),
                         ],
                       ),
@@ -71,9 +62,8 @@ class _AddEventDialogState extends State<AddEventDialog> {
                   Padding(
                     padding: const EdgeInsets.only(top: 4, bottom: 24),
                     child: TextFormField(
-                      onChanged: (title) =>
-                          _eventOutput = _eventOutput.copyWith(title: title),
-                      validator: _controller.validateEventTitle,
+                      onChanged: newEvent.setTitle,
+                      validator: newEvent.validateTitle,
                     ),
                   ),
                   Row(
@@ -81,10 +71,7 @@ class _AddEventDialogState extends State<AddEventDialog> {
                       Expanded(
                         child: TimePicker(
                           labelText: 'Início:',
-                          onChanged: (startTime) => setState(
-                            () => _eventOutput =
-                                _eventOutput.copyWith(startTime: startTime),
-                          ),
+                          onChanged: newEvent.setStartTime,
                         ),
                       ),
                       Container(
@@ -99,10 +86,10 @@ class _AddEventDialogState extends State<AddEventDialog> {
                       Expanded(
                         child: TimePicker(
                           labelText: 'Fim:',
-                          initialTime: _eventOutput.startTime,
-                          enabled: _eventOutput.startTime != null,
-                          onChanged: (endTime) => _eventOutput =
-                              _eventOutput.copyWith(endTime: endTime),
+                          initialTime: ref.watch(newEventProvider).startTime,
+                          enabled:
+                              ref.watch(newEventProvider).startTime != null,
+                          onChanged: newEvent.setEndTime,
                         ),
                       ),
                     ],
@@ -120,8 +107,7 @@ class _AddEventDialogState extends State<AddEventDialog> {
                         padding: const EdgeInsets.only(top: 4, bottom: 24),
                         child: TextFormField(
                           maxLines: 4,
-                          onChanged: (description) => _eventOutput =
-                              _eventOutput.copyWith(description: description),
+                          onChanged: newEvent.setDescription,
                         ),
                       ),
                       Row(
@@ -138,7 +124,10 @@ class _AddEventDialogState extends State<AddEventDialog> {
                           GestureDetector(
                             onTap: () {
                               if (Form.of(context)!.validate()) {
-                                Navigator.pop(context, _eventOutput);
+                                Navigator.pop(
+                                  context,
+                                  ref.watch(newEventProvider),
+                                );
                               }
                             },
                             child: Text(

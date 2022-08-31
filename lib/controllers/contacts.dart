@@ -1,16 +1,9 @@
-import 'package:basso_hoogerheide/data_objects/output/contact.dart';
+import 'package:basso_hoogerheide/data_objects/output/new_contact.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final contactsControllerProvider = Provider((ref) => ContactsController());
 
 class ContactsController {
-  const ContactsController();
-
-  Future<void> addContact(ContactOutput? contact) async {
-    if (contact == null) return;
-  }
-
-  String? validateName(String? name) {
-    if (name?.isEmpty ?? true) {
-      return 'Insira um nome';
-    }
-    return null;
-  }
+  // TODO: adicionar contato
+  Future<void> addContact(NewContact? contact) async {}
 }
