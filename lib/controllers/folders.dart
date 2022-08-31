@@ -1,4 +1,8 @@
 import 'package:basso_hoogerheide/data_objects/input/downloadable_file.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final foldersControllerProvider =
+    Provider.autoDispose((ref) => const FoldersController());
 
 class FoldersController {
   const FoldersController();
@@ -12,10 +16,6 @@ class FoldersController {
   // TODO: deletar arquivo da pasta
   Future<void> deleteFolderFile(DownloadableFile file) async {}
 
-  String? validateAnnotation(String? annotation) {
-    if (annotation?.isEmpty ?? true) {
-      return 'Selecione uma opção';
-    }
-    return null;
-  }
+  String? validateAnnotation(String? value) =>
+      (value?.isEmpty ?? true) ? 'Informe um valor para a anotação' : null;
 }

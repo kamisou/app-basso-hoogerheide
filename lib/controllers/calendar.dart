@@ -6,4 +6,7 @@ final calendarControllerProvider = Provider((ref) => CalendarController());
 class CalendarController {
   // TODO: adicionar evento
   Future<void> addEvent(NewCalendarEvent? event) async {}
+
+  String? validateEventTitle(String? value) =>
+      (value?.isEmpty ?? true) ? 'Insira um nome para o evento' : null;
 }

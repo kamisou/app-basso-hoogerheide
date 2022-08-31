@@ -1,27 +1,30 @@
 import 'package:basso_hoogerheide/data_objects/input/folder/folder.dart';
 import 'package:basso_hoogerheide/pages/home/folders/folder_card.dart';
+import 'package:basso_hoogerheide/repository/folders.dart';
 import 'package:basso_hoogerheide/widgets/collection.dart';
 import 'package:basso_hoogerheide/widgets/empty_card.dart';
 import 'package:basso_hoogerheide/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class FoldersPage extends StatelessWidget {
+class FoldersPage extends ConsumerWidget {
   const FoldersPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.person_add),
-          onPressed: () => Navigator.pushNamed(
-                context,
-                '/newFolder',
-                arguments: {
-                  // TODO: utilizar id de nova pasta
-                  'new_id': 1501,
-                  'folder_type': 'person',
-                },
-              )),
+        child: const Icon(Icons.person_add),
+        onPressed: () => ref
+            .read(foldersRepositoryProvider)
+            .getNewFolderId()
+            .then((id) => Navigator.pushNamed(
+                  context,
+                  '/newFolder',
+                  // TODO: pessoa física e jurídica
+                  arguments: {'new_id': id, 'folder_type': 'person'},
+                )),
+      ),
       body: Column(
         children: [
           Padding(

@@ -1,14 +1,21 @@
+import 'package:basso_hoogerheide/controllers/contacts.dart';
 import 'package:basso_hoogerheide/data_objects/output/new_contact.dart';
 import 'package:easy_mask/easy_mask.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddContactDialog extends ConsumerWidget {
+class AddContactDialog extends ConsumerStatefulWidget {
   const AddContactDialog({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final newContact = ref.read(newContactProvider.notifier);
+  ConsumerState<AddContactDialog> createState() => _AddContactDialogState();
+}
+
+class _AddContactDialogState extends ConsumerState<AddContactDialog> {
+  final NewContact _contact = NewContact.empty();
+
+  @override
+  Widget build(BuildContext context) {
     return Dialog(
       insetPadding: const EdgeInsets.all(16),
       child: Container(
@@ -45,8 +52,9 @@ class AddContactDialog extends ConsumerWidget {
                       padding: const EdgeInsets.only(top: 4, bottom: 16),
                       child: TextFormField(
                         textInputAction: TextInputAction.next,
-                        onChanged: newContact.setName,
-                        validator: newContact.validateName,
+                        onChanged: _contact.setName,
+                        validator:
+                            ref.read(contactsControllerProvider).validateName,
                       ),
                     ),
                     Text(
@@ -60,7 +68,7 @@ class AddContactDialog extends ConsumerWidget {
                           TextInputMask(mask: '(99) 9999-9999')
                         ],
                         textInputAction: TextInputAction.next,
-                        onChanged: newContact.setTelephone,
+                        onChanged: _contact.setTelephone,
                       ),
                     ),
                     Text(
@@ -76,7 +84,7 @@ class AddContactDialog extends ConsumerWidget {
                           ),
                         ],
                         textInputAction: TextInputAction.next,
-                        onChanged: newContact.setCellphone,
+                        onChanged: _contact.setCellphone,
                       ),
                     ),
                     Text(
@@ -87,7 +95,7 @@ class AddContactDialog extends ConsumerWidget {
                       padding: const EdgeInsets.only(top: 4, bottom: 16),
                       child: TextFormField(
                         textInputAction: TextInputAction.next,
-                        onChanged: newContact.setEmail,
+                        onChanged: _contact.setEmail,
                       ),
                     ),
                     Text(
@@ -98,7 +106,7 @@ class AddContactDialog extends ConsumerWidget {
                       padding: const EdgeInsets.only(top: 4, bottom: 16),
                       child: TextFormField(
                         textInputAction: TextInputAction.next,
-                        onChanged: newContact.setFax,
+                        onChanged: _contact.setFax,
                       ),
                     ),
                     Text(
@@ -109,7 +117,7 @@ class AddContactDialog extends ConsumerWidget {
                       padding: const EdgeInsets.only(top: 4, bottom: 16),
                       child: TextFormField(
                         textInputAction: TextInputAction.done,
-                        onChanged: newContact.setAddress,
+                        onChanged: _contact.setAddress,
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -127,10 +135,7 @@ class AddContactDialog extends ConsumerWidget {
                         GestureDetector(
                           onTap: () {
                             if (Form.of(context)!.validate()) {
-                              Navigator.pop(
-                                context,
-                                ref.watch(newContactProvider),
-                              );
+                              Navigator.pop(context, _contact);
                             }
                           },
                           child: Text(

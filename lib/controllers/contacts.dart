@@ -6,4 +6,7 @@ final contactsControllerProvider = Provider((ref) => ContactsController());
 class ContactsController {
   // TODO: adicionar contato
   Future<void> addContact(NewContact? contact) async {}
+
+  String? validateName(String? value) =>
+      (value?.isEmpty ?? true) ? 'Informe um nome para o contato' : null;
 }

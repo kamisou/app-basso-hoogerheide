@@ -4,15 +4,14 @@ import 'package:basso_hoogerheide/data_objects/input/folder/folder.dart';
 import 'package:basso_hoogerheide/pages/home/folders/add_annotation_dialog.dart';
 import 'package:basso_hoogerheide/widgets/avatar_circle.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-class AnnotationsPage extends StatelessWidget {
+class AnnotationsPage extends ConsumerWidget {
   const AnnotationsPage({super.key});
 
-  final FoldersController _controller = const FoldersController();
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final folder = ModalRoute.of(context)!.settings.arguments as Folder;
     return Scaffold(
       appBar: AppBar(title: Text('${folder.id} - ${folder.name}')),
@@ -21,7 +20,7 @@ class AnnotationsPage extends StatelessWidget {
         onPressed: () => showDialog<String?>(
           context: context,
           builder: (context) => const AddAnnotationDialog(),
-        ).then(_controller.addAnnotation),
+        ).then(ref.read(foldersControllerProvider).addAnnotation),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32),

@@ -6,7 +6,8 @@ import 'package:basso_hoogerheide/interface/uploader.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final modelsControllerProvider = Provider((ref) => const ModelsController());
+final modelsControllerProvider =
+    Provider.autoDispose((ref) => const ModelsController());
 
 class ModelsController {
   const ModelsController();

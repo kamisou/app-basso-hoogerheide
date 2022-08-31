@@ -1,5 +1,5 @@
 import 'package:basso_hoogerheide/constants/theme_data.dart';
-import 'package:basso_hoogerheide/controllers/folders.dart';
+import 'package:basso_hoogerheide/data_objects/input/downloadable_file.dart';
 import 'package:basso_hoogerheide/data_objects/input/folder/address_info.dart';
 import 'package:basso_hoogerheide/data_objects/input/folder/company_folder.dart';
 import 'package:basso_hoogerheide/data_objects/input/folder/contact_info.dart';
@@ -13,7 +13,10 @@ class FolderCard extends StatefulWidget {
   const FolderCard({
     super.key,
     required this.folder,
+    this.onDeleteFolderFile,
   });
+
+  final void Function(DownloadableFile)? onDeleteFolderFile;
 
   final Folder folder;
 
@@ -22,8 +25,6 @@ class FolderCard extends StatefulWidget {
 }
 
 class _FolderCardState extends State<FolderCard> {
-  final FoldersController _controller = const FoldersController();
-
   bool _expanded = false;
 
   @override
@@ -156,9 +157,10 @@ class _FolderCardState extends State<FolderCard> {
             ),
             child: Text(
               'Baixado',
-              style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(context)
+                  .textTheme
+                  .labelLarge
+                  ?.copyWith(fontWeight: FontWeight.bold),
             ),
           ),
         _cardSection(context, Icons.home_outlined, 'Endereço'),
@@ -227,7 +229,9 @@ class _FolderCardState extends State<FolderCard> {
                 ),
                 const SizedBox(width: 16),
                 GestureDetector(
-                  onTap: () => _controller.deleteFolderFile(e),
+                  onTap: widget.onDeleteFolderFile != null
+                      ? () => widget.onDeleteFolderFile!(e)
+                      : null,
                   child: Icon(
                     Icons.delete_outlined,
                     color: Theme.of(context).colorScheme.error,
@@ -286,10 +290,7 @@ class _FolderCardState extends State<FolderCard> {
       padding: const EdgeInsets.only(bottom: 4),
       child: Row(
         children: [
-          Icon(
-            icon,
-            color: Theme.of(context).colorScheme.secondary,
-          ),
+          Icon(icon, color: Theme.of(context).colorScheme.secondary),
           const SizedBox(width: 10),
           Text(
             title,

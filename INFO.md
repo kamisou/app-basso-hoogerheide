@@ -7,7 +7,7 @@
 - **data_objects**:
     - **input**: objects built from data coming from API requests and other sources. Used to introduce type safety in the codebase. All their fields **MUST BE** `final`.
 
-    - **output**: objects built by the user and are sent in API requests and other servers. Used to introduce type safety in the codebase. All their fields **MUST BE** `final` and changes should be made through a `copyWith` method. Most importantly, they are coupled with a `ChangeNotifier` where the **BUSINESS LOGIC** and validation should go. These ChangeNotifiers are provided through the application with the `Riverpod` library.
+    - **output**: objects built by the user and are sent in API requests and other servers. Used to introduce type safety in the codebase. These objects **MUST HAVE** an `empty` constructor with all fields nullable and set methods for using with `onChanged` events from the interface.
 
 - **repository**: this is where `data_objects` are stored. They are coupled with `FutureProviders` that cache the computations of its asynchronous calls. Autodispose these values as needed. These are provided through the application with the `Riverpod` library.
 

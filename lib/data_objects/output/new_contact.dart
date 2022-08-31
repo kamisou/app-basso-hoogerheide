@@ -1,39 +1,5 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-final newContactProvider =
-    StateNotifierProvider<NewContactNotifier, NewContact>(
-        (ref) => NewContactNotifier());
-
-class NewContactNotifier extends StateNotifier<NewContact> {
-  NewContactNotifier() : super(const NewContact.empty());
-
-  void setName(String? value) => state = state.copyWith(name: value);
-
-  void setTelephone(String? value) => state = state.copyWith(telephone: value);
-
-  void setCellphone(String? value) => state = state.copyWith(cellphone: value);
-
-  void setEmail(String? value) => state = state.copyWith(email: value);
-
-  void setFax(String? value) => state = state.copyWith(fax: value);
-
-  void setAddress(String? value) => state = state.copyWith(address: value);
-
-  String? validateName(String? name) =>
-      (name?.isEmpty ?? true) ? 'Insira um nome para o evento' : null;
-}
-
 class NewContact {
-  const NewContact({
-    required this.name,
-    required this.telephone,
-    required this.cellphone,
-    required this.email,
-    required this.fax,
-    required this.address,
-  });
-
-  const NewContact.empty()
+  NewContact.empty()
       : name = null,
         telephone = null,
         cellphone = null,
@@ -41,32 +7,27 @@ class NewContact {
         fax = null,
         address = null;
 
-  final String? name;
+  String? name;
 
-  final String? telephone;
+  String? telephone;
 
-  final String? cellphone;
+  String? cellphone;
 
-  final String? email;
+  String? email;
 
-  final String? fax;
+  String? fax;
 
-  final String? address;
+  String? address;
 
-  NewContact copyWith({
-    String? name,
-    String? telephone,
-    String? cellphone,
-    String? email,
-    String? fax,
-    String? address,
-  }) =>
-      NewContact(
-        name: name ?? this.name,
-        telephone: telephone ?? this.telephone,
-        cellphone: cellphone ?? this.cellphone,
-        email: email ?? this.email,
-        fax: fax ?? this.fax,
-        address: address ?? this.address,
-      );
+  void setName(String? value) => name = value;
+
+  void setTelephone(String? value) => telephone = value;
+
+  void setCellphone(String? value) => cellphone = value;
+
+  void setEmail(String? value) => email = value;
+
+  void setFax(String? value) => fax = value;
+
+  void setAddress(String? value) => address = value;
 }

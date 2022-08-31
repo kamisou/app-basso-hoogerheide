@@ -1,15 +1,22 @@
+import 'package:basso_hoogerheide/controllers/calendar.dart';
 import 'package:basso_hoogerheide/data_objects/output/new_calendar_event.dart';
 import 'package:basso_hoogerheide/widgets/color_picker.dart';
 import 'package:basso_hoogerheide/widgets/time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddEventDialog extends ConsumerWidget {
+class AddEventDialog extends ConsumerStatefulWidget {
   const AddEventDialog({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final newEvent = ref.read(newEventProvider.notifier);
+  ConsumerState<AddEventDialog> createState() => _AddEventDialogState();
+}
+
+class _AddEventDialogState extends ConsumerState<AddEventDialog> {
+  final NewCalendarEvent _event = NewCalendarEvent.empty();
+
+  @override
+  Widget build(BuildContext context) {
     return Dialog(
       insetPadding: const EdgeInsets.all(16),
       child: Padding(
@@ -48,7 +55,7 @@ class AddEventDialog extends ConsumerWidget {
                                   .titleMedium
                                   ?.copyWith(fontWeight: FontWeight.bold),
                             ),
-                            onChanged: newEvent.setColor,
+                            onChanged: _event.setColor,
                           ),
                         ],
                       ),
@@ -62,8 +69,10 @@ class AddEventDialog extends ConsumerWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 4, bottom: 24),
                     child: TextFormField(
-                      onChanged: newEvent.setTitle,
-                      validator: newEvent.validateTitle,
+                      onChanged: _event.setTitle,
+                      validator: ref
+                          .read(calendarControllerProvider)
+                          .validateEventTitle,
                     ),
                   ),
                   Row(
@@ -71,7 +80,7 @@ class AddEventDialog extends ConsumerWidget {
                       Expanded(
                         child: TimePicker(
                           labelText: 'Início:',
-                          onChanged: newEvent.setStartTime,
+                          onChanged: _event.setStartTime,
                         ),
                       ),
                       Container(
@@ -86,10 +95,10 @@ class AddEventDialog extends ConsumerWidget {
                       Expanded(
                         child: TimePicker(
                           labelText: 'Fim:',
-                          initialTime: ref.watch(newEventProvider).startTime,
-                          enabled:
-                              ref.watch(newEventProvider).startTime != null,
-                          onChanged: newEvent.setEndTime,
+                          initialTime: _event.startTime,
+                          enabled: _event.startTime != null,
+                          onChanged: (value) =>
+                              setState(() => _event.setEndTime(value)),
                         ),
                       ),
                     ],
@@ -107,7 +116,7 @@ class AddEventDialog extends ConsumerWidget {
                         padding: const EdgeInsets.only(top: 4, bottom: 24),
                         child: TextFormField(
                           maxLines: 4,
-                          onChanged: newEvent.setDescription,
+                          onChanged: _event.setDescription,
                         ),
                       ),
                       Row(
@@ -124,10 +133,7 @@ class AddEventDialog extends ConsumerWidget {
                           GestureDetector(
                             onTap: () {
                               if (Form.of(context)!.validate()) {
-                                Navigator.pop(
-                                  context,
-                                  ref.watch(newEventProvider),
-                                );
+                                Navigator.pop(context, _event);
                               }
                             },
                             child: Text(
