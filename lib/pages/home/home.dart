@@ -1,4 +1,3 @@
-import 'package:basso_hoogerheide/data_objects/input/app_user.dart';
 import 'package:basso_hoogerheide/pages/home/app_bar.dart';
 import 'package:basso_hoogerheide/pages/home/calendar/calendar.dart';
 import 'package:basso_hoogerheide/pages/home/contacts/contacts.dart';
@@ -48,12 +47,6 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: [
               HomeAppBar(
-                // TODO: usar dados de appuser
-                appUser: const AppUser(
-                  division: 'Administrador',
-                  email: 'kamisou@outlook.com',
-                  name: 'João Marcos Kaminoski de Souza',
-                ),
                 controller: _pageController,
                 pageTitles: const ['Agenda', 'Contatos', 'Pastas', 'Modelos'],
               ),

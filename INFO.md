@@ -2,12 +2,14 @@
 
 - **constants**: values used throught the application that won't change at runtime
 
-- **controllers**: As in MVC. They **MUST NOT** have any state other than _loading_ and _error_ for the asynchronous computations they execute. Every user input action that doesn't depend on a `BuildContext` should be put in here. These controllers are provided through the application with the `Riverpod` library.
+- **controllers**: As in MVC. They **MUST NOT** have any state. Every user input action that doesn't depend on a `BuildContext` should be put in here. These controllers are provided through the application with the `Riverpod` library.
 
 - **data_objects**:
     - **input**: objects built from data coming from API requests and other sources. Used to introduce type safety in the codebase. All their fields **MUST BE** `final`.
 
     - **output**: objects built by the user and are sent in API requests and other servers. Used to introduce type safety in the codebase. All their fields **MUST BE** `final` and changes should be made through a `copyWith` method. Most importantly, they are coupled with a `ChangeNotifier` where the **BUSINESS LOGIC** and validation should go. These ChangeNotifiers are provided through the application with the `Riverpod` library.
+
+- **repository**: this is where `data_objects` are stored. They are coupled with `FutureProviders` that cache the computations of its asynchronous calls. Autodispose these values as needed. These are provided through the application with the `Riverpod` library.
 
 - **interface**: abstractions for external sources, such as the filesystem, file picking dialogs, rest APIs, etc.
 

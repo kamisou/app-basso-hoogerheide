@@ -1,28 +1,27 @@
 import 'package:basso_hoogerheide/controllers/login.dart';
-import 'package:basso_hoogerheide/data_objects/input/app_user.dart';
 import 'package:basso_hoogerheide/extensions.dart';
+import 'package:basso_hoogerheide/repository/app_user.dart';
 import 'package:basso_hoogerheide/widgets/avatar_circle.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shimmer/shimmer.dart';
 
-class HomeAppBar extends StatefulWidget {
+class HomeAppBar extends ConsumerStatefulWidget {
   const HomeAppBar({
     super.key,
     required this.controller,
     required this.pageTitles,
-    required this.appUser,
   });
 
   final PageController controller;
 
   final List<String> pageTitles;
 
-  final AppUser appUser;
-
   @override
-  State<HomeAppBar> createState() => _HomeAppBarState();
+  ConsumerState<HomeAppBar> createState() => _HomeAppBarState();
 }
 
-class _HomeAppBarState extends State<HomeAppBar> {
+class _HomeAppBarState extends ConsumerState<HomeAppBar> {
   static const double _tabWidth = 100;
 
   final ScrollController _scrollController = ScrollController();
@@ -60,17 +59,33 @@ class _HomeAppBarState extends State<HomeAppBar> {
       margin: const EdgeInsets.only(left: 24, right: 24, top: 32),
       child: Row(
         children: [
-          GestureDetector(
-            onTap: () => Navigator.pushNamed(
-              context,
-              '/profile',
-              arguments: widget.appUser,
-            ),
-            child: AvatarCircle(
-              avatarUrl: widget.appUser.avatarUrl,
-              initials: widget.appUser.initials,
-            ),
-          ),
+          ref.watch(appUserProvider).when(
+                data: (data) => GestureDetector(
+                  onTap: () => Navigator.pushNamed(
+                    context,
+                    '/profile',
+                    arguments: data,
+                  ),
+                  child: AvatarCircle(
+                    avatarUrl: data.avatarUrl,
+                    initials: data.initials,
+                  ),
+                ),
+                error: (_, __) => const SizedBox.shrink(),
+                loading: () => Shimmer.fromColors(
+                  baseColor: Theme.of(context).colorScheme.surface,
+                  highlightColor:
+                      Theme.of(context).inputDecorationTheme.fillColor!,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Theme.of(context).colorScheme.surface,
+                    ),
+                    width: 40,
+                    height: 40,
+                  ),
+                ),
+              ),
           const SizedBox(width: 50),
           Expanded(
             child: ShaderMask(
