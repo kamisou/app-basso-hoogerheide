@@ -1,36 +1,25 @@
 import 'package:basso_hoogerheide/controllers/models.dart';
 import 'package:basso_hoogerheide/data_objects/input/model_category.dart';
+import 'package:basso_hoogerheide/data_objects/output/picked_model_data.dart';
 import 'package:basso_hoogerheide/pages/home/models/model_card.dart';
 import 'package:basso_hoogerheide/widgets/collection.dart';
 import 'package:basso_hoogerheide/widgets/empty_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class PickedModelData {
-  const PickedModelData({
-    required this.title,
-    required this.stream,
-  });
-
-  final String title;
-
-  final Stream<double> stream;
-}
-
-class ModelsPage extends StatelessWidget {
+class ModelsPage extends ConsumerWidget {
   const ModelsPage({super.key});
 
-  final ModelsController _controller = const ModelsController();
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Collection<ModelCategory>(
       // TODO: utilizar dados de modelos
       collection: const [],
       itemBuilder: (_, item) => ModelCard(
         modelCategory: item,
-        onTapUpload: () => _controller
-            .pickModelFile()
-            .then(_controller.uploadModelFile)
+        onTapUpload: () => ref
+            .read(modelsControllerProvider)
+            .pickAndUploadModelFile()
             .then((upload) => _displaySnackbar(context, upload)),
       ),
       emptyWidget: const EmptyCard(

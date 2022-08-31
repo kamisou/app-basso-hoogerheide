@@ -1,9 +1,12 @@
 import 'dart:io';
 
 import 'package:basso_hoogerheide/data_objects/input/downloadable_file.dart';
+import 'package:basso_hoogerheide/data_objects/output/picked_model_data.dart';
 import 'package:basso_hoogerheide/interface/uploader.dart';
-import 'package:basso_hoogerheide/pages/home/models/models.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final modelsControllerProvider = Provider((ref) => const ModelsController());
 
 class ModelsController {
   const ModelsController();
@@ -14,17 +17,14 @@ class ModelsController {
   // TODO: deletar documento dos modelos
   Future<void> deleteModel(DownloadableFile file) async {}
 
-  Future<File?> pickModelFile() async {
+  Future<PickedModelData?> pickAndUploadModelFile() async {
     final FilePickerResult? result = await FilePicker.platform.pickFiles(
       dialogTitle: 'Selecione um arquivo:',
       withReadStream: true,
     );
     if (result == null) return null;
-    return File(result.files.first.path!);
-  }
 
-  Future<PickedModelData?> uploadModelFile(File? file) async {
-    if (file == null) return null;
+    final file = File(result.files.first.path!);
 
     return PickedModelData(
       title: file.path.split('/').last,
