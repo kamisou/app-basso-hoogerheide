@@ -5,16 +5,13 @@ import 'package:basso_hoogerheide/extensions.dart';
 import 'package:basso_hoogerheide/pages/profile/profile_option.dart';
 import 'package:basso_hoogerheide/widgets/shimmering_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});
 
-  final ProfileController _profileController = const ProfileController();
-
-  final LoginController _loginController = const LoginController();
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final appUser = ModalRoute.of(context)!.settings.arguments as AppUser;
     return Scaffold(
       appBar: AppBar(
@@ -28,7 +25,7 @@ class ProfilePage extends StatelessWidget {
         children: [
           Center(
             child: GestureDetector(
-              onTap: _profileController.changePicture,
+              onTap: ref.read(profileControllerProvider).changePicture,
               child: Stack(
                 alignment: Alignment.topRight,
                 clipBehavior: Clip.none,
@@ -139,7 +136,7 @@ class ProfilePage extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   GestureDetector(
-                    onTap: _profileController.changePassword,
+                    onTap: ref.read(profileControllerProvider).changePassword,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4),
                       child: Text(
@@ -167,7 +164,7 @@ class ProfilePage extends StatelessWidget {
               onTap: () => NavigatorExtension.pushReplacementNamedAndNotify(
                 context,
                 '/login',
-                _loginController.signOut,
+                ref.read(loginControllerProvider).signOut,
               ),
               child: Text(
                 'Sair',
