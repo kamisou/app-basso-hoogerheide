@@ -1,4 +1,4 @@
-import 'package:basso_hoogerheide/data_objects/input/calendar_event.dart';
+import 'package:basso_hoogerheide/models/input/calendar_event.dart';
 import 'package:basso_hoogerheide/extensions.dart';
 import 'package:basso_hoogerheide/pages/home/calendar/event_card.dart';
 import 'package:flutter/material.dart';

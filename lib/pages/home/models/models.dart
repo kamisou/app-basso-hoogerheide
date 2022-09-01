@@ -1,6 +1,6 @@
-import 'package:basso_hoogerheide/controllers/models.dart';
-import 'package:basso_hoogerheide/data_objects/input/model_category.dart';
-import 'package:basso_hoogerheide/data_objects/output/picked_model_data.dart';
+import 'package:basso_hoogerheide/models/input/model_category.dart';
+import 'package:basso_hoogerheide/models/output/picked_model_data.dart';
+import 'package:basso_hoogerheide/models/repository/models.dart';
 import 'package:basso_hoogerheide/pages/home/models/model_card.dart';
 import 'package:basso_hoogerheide/widgets/collection.dart';
 import 'package:basso_hoogerheide/widgets/empty_card.dart';
@@ -18,10 +18,10 @@ class ModelsPage extends ConsumerWidget {
       itemBuilder: (_, item) => ModelCard(
         modelCategory: item,
         onTapUpload: () => ref
-            .read(modelsControllerProvider)
+            .read(modelsRepositoryProvider)
             .pickAndUploadModelFile()
             .then((upload) => _displaySnackbar(context, upload)),
-        onTapDelete: ref.read(modelsControllerProvider).deleteModel,
+        onTapDelete: ref.read(modelsRepositoryProvider).deleteModel,
       ),
       emptyWidget: const EmptyCard(
         icon: Icons.file_download_off_outlined,

@@ -1,9 +1,8 @@
-import 'package:basso_hoogerheide/controllers/calendar.dart';
-import 'package:basso_hoogerheide/data_objects/output/new_calendar_event.dart';
 import 'package:basso_hoogerheide/extensions.dart';
+import 'package:basso_hoogerheide/models/output/new_calendar_event.dart';
+import 'package:basso_hoogerheide/models/repository/calendar.dart';
 import 'package:basso_hoogerheide/pages/home/calendar/add_event_dialog.dart';
 import 'package:basso_hoogerheide/pages/home/calendar/day.dart';
-import 'package:basso_hoogerheide/repository/calendar.dart';
 import 'package:basso_hoogerheide/widgets/empty_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,7 +20,7 @@ class CalendarPage extends ConsumerWidget {
         onPressed: () => showDialog<NewCalendarEvent>(
           context: context,
           builder: (_) => const AddEventDialog(),
-        ).then(ref.read(calendarControllerProvider).addEvent),
+        ).then(ref.read(calendarRepositoryProvider).addEvent),
       ),
       body: ref.watch(calendarEventsProvider).when(
             data: (data) {

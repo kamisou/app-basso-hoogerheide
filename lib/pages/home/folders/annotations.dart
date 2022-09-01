@@ -1,6 +1,6 @@
-import 'package:basso_hoogerheide/controllers/folders.dart';
-import 'package:basso_hoogerheide/data_objects/input/folder/annotation.dart';
-import 'package:basso_hoogerheide/data_objects/input/folder/folder.dart';
+import 'package:basso_hoogerheide/models/input/folder/annotation.dart';
+import 'package:basso_hoogerheide/models/input/folder/folder.dart';
+import 'package:basso_hoogerheide/models/repository/folders.dart';
 import 'package:basso_hoogerheide/pages/home/folders/add_annotation_dialog.dart';
 import 'package:basso_hoogerheide/widgets/avatar_circle.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +20,7 @@ class AnnotationsPage extends ConsumerWidget {
         onPressed: () => showDialog<String?>(
           context: context,
           builder: (context) => const AddAnnotationDialog(),
-        ).then(ref.read(foldersControllerProvider).addAnnotation),
+        ).then(ref.read(foldersRepositoryProvider).addAnnotation),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32),

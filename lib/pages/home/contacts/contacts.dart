@@ -1,6 +1,6 @@
-import 'package:basso_hoogerheide/controllers/contacts.dart';
-import 'package:basso_hoogerheide/data_objects/input/contact.dart';
-import 'package:basso_hoogerheide/data_objects/output/new_contact.dart';
+import 'package:basso_hoogerheide/models/input/contact.dart';
+import 'package:basso_hoogerheide/models/output/new_contact.dart';
+import 'package:basso_hoogerheide/models/repository/contacts.dart';
 import 'package:basso_hoogerheide/pages/home/contacts/add_contact_dialog.dart';
 import 'package:basso_hoogerheide/pages/home/contacts/contact_tile.dart';
 import 'package:basso_hoogerheide/widgets/collection.dart';
@@ -20,7 +20,7 @@ class ContactsPage extends ConsumerWidget {
         onPressed: () => showDialog<NewContact>(
           context: context,
           builder: (context) => const AddContactDialog(),
-        ).then(ref.read(contactsControllerProvider).addContact),
+        ).then(ref.read(contactsRepositoryProvider).addContact),
       ),
       body: Column(
         children: [

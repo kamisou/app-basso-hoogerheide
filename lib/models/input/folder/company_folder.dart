@@ -1,9 +1,9 @@
-import 'package:basso_hoogerheide/data_objects/input/downloadable_file.dart';
-import 'package:basso_hoogerheide/data_objects/input/folder/address_info.dart';
-import 'package:basso_hoogerheide/data_objects/input/folder/annotation.dart';
-import 'package:basso_hoogerheide/data_objects/input/folder/contact_info.dart';
-import 'package:basso_hoogerheide/data_objects/input/folder/folder.dart';
-import 'package:basso_hoogerheide/data_objects/input/folder/process_info.dart';
+import 'package:basso_hoogerheide/models/input/downloadable_file.dart';
+import 'package:basso_hoogerheide/models/input/folder/address_info.dart';
+import 'package:basso_hoogerheide/models/input/folder/annotation.dart';
+import 'package:basso_hoogerheide/models/input/folder/contact_info.dart';
+import 'package:basso_hoogerheide/models/input/folder/folder.dart';
+import 'package:basso_hoogerheide/models/input/folder/process_info.dart';
 
 class CompanyFolder extends Folder {
   const CompanyFolder({

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:basso_hoogerheide/controllers/folders.dart';
+import 'package:basso_hoogerheide/models/repository/folders.dart';
 import 'package:basso_hoogerheide/widgets/empty_card.dart';
 import 'package:basso_hoogerheide/widgets/large_form.dart';
 import 'package:flutter/material.dart';
@@ -15,8 +15,6 @@ final FutureProvider formDataProvider = FutureProvider(
 
 class NewFolderPage extends ConsumerWidget {
   const NewFolderPage({super.key});
-
-  final FoldersController _controller = const FoldersController();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -79,7 +77,7 @@ class NewFolderPage extends ConsumerWidget {
                         return true;
                     }
                   },
-                  onSaved: _controller.addFolder,
+                  onSaved: ref.read(foldersRepositoryProvider).addFolder,
                 ),
                 error: (_, __) => const EmptyCard(
                   icon: Icons.error,

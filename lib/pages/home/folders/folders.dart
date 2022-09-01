@@ -1,6 +1,6 @@
-import 'package:basso_hoogerheide/data_objects/input/folder/folder.dart';
+import 'package:basso_hoogerheide/models/input/folder/folder.dart';
+import 'package:basso_hoogerheide/models/repository/folders.dart';
 import 'package:basso_hoogerheide/pages/home/folders/folder_card.dart';
-import 'package:basso_hoogerheide/repository/folders.dart';
 import 'package:basso_hoogerheide/widgets/collection.dart';
 import 'package:basso_hoogerheide/widgets/empty_card.dart';
 import 'package:basso_hoogerheide/widgets/search_bar.dart';

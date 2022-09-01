@@ -1,23 +1,21 @@
 import 'dart:io';
 
-import 'package:basso_hoogerheide/data_objects/input/downloadable_file.dart';
-import 'package:basso_hoogerheide/data_objects/output/picked_model_data.dart';
 import 'package:basso_hoogerheide/interface/uploader.dart';
+import 'package:basso_hoogerheide/models/input/downloadable_file.dart';
+import 'package:basso_hoogerheide/models/output/picked_model_data.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final modelsControllerProvider =
-    Provider.autoDispose((ref) => const ModelsController());
+final modelsRepositoryProvider =
+    Provider((ref) => const ModelsRepositoryProvider());
 
-class ModelsController {
-  const ModelsController();
+class ModelsRepositoryProvider {
+  const ModelsRepositoryProvider();
 
-  // TODO: substituir com uploader real
-  final Uploader _uploader = const MockUploader();
-
-  // TODO: deletar documento dos modelos
+  // TODO: deletar modelo
   Future<void> deleteModel(DownloadableFile file) async {}
 
+  // TODO: fazer upload real do arquivo
   Future<PickedModelData?> pickAndUploadModelFile() async {
     final FilePickerResult? result = await FilePicker.platform.pickFiles(
       dialogTitle: 'Selecione um arquivo:',
@@ -25,11 +23,11 @@ class ModelsController {
     );
     if (result == null) return null;
 
-    final file = File(result.files.first.path!);
+    final File file = File(result.files.first.path!);
 
     return PickedModelData(
       title: file.path.split('/').last,
-      stream: _uploader.upload(file).asBroadcastStream(),
+      stream: const MockUploader().upload(file).asBroadcastStream(),
     );
   }
 }

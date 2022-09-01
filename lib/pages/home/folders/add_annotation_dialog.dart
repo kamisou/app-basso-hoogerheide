@@ -1,4 +1,3 @@
-import 'package:basso_hoogerheide/controllers/folders.dart';
 import 'package:basso_hoogerheide/widgets/searchbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -45,9 +44,9 @@ class _AddAnnotationDialogState extends ConsumerState<AddAnnotationDialog> {
                       // TODO: usar dados de anotação
                       options: const [],
                       onChanged: (value) => _annotation = value,
-                      validator: ref
-                          .read(foldersControllerProvider)
-                          .validateAnnotation,
+                      validator: (value) => (value?.isEmpty ?? true)
+                          ? 'Insira um assunto para a anotação'
+                          : null,
                     ),
                     const SizedBox(height: 24),
                     Row(

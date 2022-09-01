@@ -1,4 +1,4 @@
-import 'package:basso_hoogerheide/controllers/login.dart';
+import 'package:basso_hoogerheide/models/repository/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -68,7 +68,7 @@ class LoginPage extends ConsumerWidget {
                           Center(
                             child: GestureDetector(
                               onTap: ref
-                                  .read(loginControllerProvider)
+                                  .read(authenticationRepositoryProvider)
                                   .recoverPassword,
                               child: Text(
                                 'Esqueceu sua senha?',
@@ -90,7 +90,7 @@ class LoginPage extends ConsumerWidget {
   }
 
   void _signInAndNavigate(BuildContext context, WidgetRef ref) => ref
-      .read(loginControllerProvider)
+      .read(authenticationRepositoryProvider)
       .signIn()
       .then((_) => Navigator.pushReplacementNamed(context, '/home'));
 }

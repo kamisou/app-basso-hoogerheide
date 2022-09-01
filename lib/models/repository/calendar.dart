@@ -1,5 +1,5 @@
-import 'package:basso_hoogerheide/data_objects/input/calendar_event.dart';
-import 'package:basso_hoogerheide/data_objects/output/new_calendar_event.dart';
+import 'package:basso_hoogerheide/models/input/calendar_event.dart';
+import 'package:basso_hoogerheide/models/output/new_calendar_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -13,7 +13,7 @@ class CalendarRepository {
   const CalendarRepository();
 
   // TODO: adicionar evento
-  Future<void> addEvent(NewCalendarEvent event) =>
+  Future<void> addEvent(NewCalendarEvent? event) =>
       Future.delayed(const Duration(seconds: 3));
 
   // TODO: buscar eventos reais

@@ -1,11 +1,11 @@
 import 'package:basso_hoogerheide/constants/theme_data.dart';
-import 'package:basso_hoogerheide/data_objects/input/downloadable_file.dart';
-import 'package:basso_hoogerheide/data_objects/input/folder/address_info.dart';
-import 'package:basso_hoogerheide/data_objects/input/folder/company_folder.dart';
-import 'package:basso_hoogerheide/data_objects/input/folder/contact_info.dart';
-import 'package:basso_hoogerheide/data_objects/input/folder/folder.dart';
-import 'package:basso_hoogerheide/data_objects/input/folder/person_folder.dart';
-import 'package:basso_hoogerheide/data_objects/input/folder/process_info.dart';
+import 'package:basso_hoogerheide/models/input/downloadable_file.dart';
+import 'package:basso_hoogerheide/models/input/folder/address_info.dart';
+import 'package:basso_hoogerheide/models/input/folder/company_folder.dart';
+import 'package:basso_hoogerheide/models/input/folder/contact_info.dart';
+import 'package:basso_hoogerheide/models/input/folder/folder.dart';
+import 'package:basso_hoogerheide/models/input/folder/person_folder.dart';
+import 'package:basso_hoogerheide/models/input/folder/process_info.dart';
 import 'package:basso_hoogerheide/widgets/key_value_text.dart';
 import 'package:flutter/material.dart';
 

@@ -1,4 +1,4 @@
-import 'package:basso_hoogerheide/data_objects/input/contact.dart';
+import 'package:basso_hoogerheide/models/input/contact.dart';
 import 'package:basso_hoogerheide/widgets/avatar_circle.dart';
 import 'package:basso_hoogerheide/widgets/key_value_text.dart';
 import 'package:flutter/material.dart';

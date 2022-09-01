@@ -1,6 +1,5 @@
-import 'package:basso_hoogerheide/controllers/login.dart';
 import 'package:basso_hoogerheide/extensions.dart';
-import 'package:basso_hoogerheide/repository/app_user.dart';
+import 'package:basso_hoogerheide/models/repository/authentication.dart';
 import 'package:basso_hoogerheide/widgets/avatar_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,8 +24,6 @@ class _HomeAppBarState extends ConsumerState<HomeAppBar> {
   static const double _tabWidth = 100;
 
   final ScrollController _scrollController = ScrollController();
-
-  final LoginController _loginController = const LoginController();
 
   int _pageIndex = 0;
 
@@ -128,7 +125,7 @@ class _HomeAppBarState extends ConsumerState<HomeAppBar> {
             onTap: () => NavigatorExtension.pushReplacementNamedAndNotify(
               context,
               '/login',
-              _loginController.signOut,
+              ref.read(authenticationRepositoryProvider).signOut,
             ),
             child: const Icon(Icons.exit_to_app),
           ),

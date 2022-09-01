@@ -1,5 +1,4 @@
-import 'package:basso_hoogerheide/controllers/contacts.dart';
-import 'package:basso_hoogerheide/data_objects/output/new_contact.dart';
+import 'package:basso_hoogerheide/models/output/new_contact.dart';
 import 'package:easy_mask/easy_mask.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -53,8 +52,9 @@ class _AddContactDialogState extends ConsumerState<AddContactDialog> {
                       child: TextFormField(
                         textInputAction: TextInputAction.next,
                         onChanged: _contact.setName,
-                        validator:
-                            ref.read(contactsControllerProvider).validateName,
+                        validator: (value) => (value?.isEmpty ?? true)
+                            ? 'Insira um nome para o contato'
+                            : null,
                       ),
                     ),
                     Text(

@@ -1,5 +1,4 @@
-import 'package:basso_hoogerheide/controllers/calendar.dart';
-import 'package:basso_hoogerheide/data_objects/output/new_calendar_event.dart';
+import 'package:basso_hoogerheide/models/output/new_calendar_event.dart';
 import 'package:basso_hoogerheide/widgets/color_picker.dart';
 import 'package:basso_hoogerheide/widgets/time_picker.dart';
 import 'package:flutter/material.dart';
@@ -70,9 +69,9 @@ class _AddEventDialogState extends ConsumerState<AddEventDialog> {
                     padding: const EdgeInsets.only(top: 4, bottom: 24),
                     child: TextFormField(
                       onChanged: _event.setTitle,
-                      validator: ref
-                          .read(calendarControllerProvider)
-                          .validateEventTitle,
+                      validator: (value) => (value?.isEmpty ?? true)
+                          ? 'Informe um título para o evento'
+                          : null,
                     ),
                   ),
                   Row(

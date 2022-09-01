@@ -1,7 +1,6 @@
-import 'package:basso_hoogerheide/controllers/login.dart';
-import 'package:basso_hoogerheide/controllers/profile.dart';
-import 'package:basso_hoogerheide/data_objects/input/app_user.dart';
 import 'package:basso_hoogerheide/extensions.dart';
+import 'package:basso_hoogerheide/models/input/app_user.dart';
+import 'package:basso_hoogerheide/models/repository/authentication.dart';
 import 'package:basso_hoogerheide/pages/profile/profile_option.dart';
 import 'package:basso_hoogerheide/widgets/shimmering_image.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +24,7 @@ class ProfilePage extends ConsumerWidget {
         children: [
           Center(
             child: GestureDetector(
-              onTap: ref.read(profileControllerProvider).changePicture,
+              onTap: ref.read(authenticationRepositoryProvider).changePicture,
               child: Stack(
                 alignment: Alignment.topRight,
                 clipBehavior: Clip.none,
@@ -136,7 +135,9 @@ class ProfilePage extends ConsumerWidget {
                   ),
                   const SizedBox(height: 16),
                   GestureDetector(
-                    onTap: ref.read(profileControllerProvider).changePassword,
+                    onTap: ref
+                        .read(authenticationRepositoryProvider)
+                        .changePassword,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4),
                       child: Text(
@@ -164,7 +165,7 @@ class ProfilePage extends ConsumerWidget {
               onTap: () => NavigatorExtension.pushReplacementNamedAndNotify(
                 context,
                 '/login',
-                ref.read(loginControllerProvider).signOut,
+                ref.read(authenticationRepositoryProvider).signOut,
               ),
               child: Text(
                 'Sair',
