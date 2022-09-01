@@ -4,6 +4,7 @@ import 'package:basso_hoogerheide/models/repository/models.dart';
 import 'package:basso_hoogerheide/pages/home/models/model_card.dart';
 import 'package:basso_hoogerheide/widgets/collection.dart';
 import 'package:basso_hoogerheide/widgets/empty_card.dart';
+import 'package:basso_hoogerheide/widgets/loading_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -14,13 +15,24 @@ class ModelsPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Collection<ModelCategory>(
       // TODO: utilizar dados de modelos
-      collection: const [],
+      collection: const [
+        ModelCategory(
+          title: 'Categoria',
+        ),
+      ],
       itemBuilder: (_, item) => ModelCard(
         modelCategory: item,
         onTapUpload: () => ref
             .read(modelsRepositoryProvider)
             .pickAndUploadModelFile()
-            .then((upload) => _displaySnackbar(context, upload)),
+            .then((upload) {
+          if (upload == null) return;
+          LoadingSnackbar(
+            content: (context) => _loadingContentBuilder(context, upload),
+            onError: (context) => _errorContentBuilder(context, upload.title),
+            onFinished: (context) => _finishedContentBuilder(context, upload.title),
+          ).show(context, upload.stream);
+        }),
         onTapDelete: ref.read(modelsRepositoryProvider).deleteModel,
       ),
       emptyWidget: const EmptyCard(
@@ -30,128 +42,61 @@ class ModelsPage extends ConsumerWidget {
     );
   }
 
-  void _displaySnackbar(BuildContext context, PickedModelData? upload) {
-    if (upload == null) return;
-
-    final ScaffoldFeatureController scaffoldController =
-        _showLoadingSnackbar(context, upload.title, upload.stream);
-
-    upload.stream.last.then(
-      (_) {
-        scaffoldController.close();
-        _showSuccessSnackbar(context, upload.title);
-      },
-      onError: (_) {
-        scaffoldController.close();
-        _showErrorSnackbar(context, upload.title);
-      },
-    );
-  }
-
-  ScaffoldFeatureController _showLoadingSnackbar(
+  Widget _loadingContentBuilder(
     BuildContext context,
-    String fileTitle,
-    Stream<double> uploaded,
+    PickedModelData pickedModel,
   ) {
-    return ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        duration: const Duration(minutes: 5),
-        dismissDirection: DismissDirection.none,
-        padding: EdgeInsets.zero,
-        content: StreamBuilder<double>(
-          stream: uploaded,
-          builder: (context, snapshot) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 10,
-                  ),
-                  child: RichText(
-                    text: TextSpan(
-                      text: 'Fazendo upload de ',
-                      style: Theme.of(context).textTheme.titleMedium,
-                      children: [
-                        TextSpan(
-                          text: fileTitle,
-                          style:
-                              Theme.of(context).textTheme.titleMedium?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Container(
-                  clipBehavior: Clip.antiAlias,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.vertical(
-                      bottom: Radius.circular(4),
-                    ),
-                  ),
-                  child: LinearProgressIndicator(value: snapshot.data),
-                ),
-              ],
-            );
-          },
-        ),
+    return RichText(
+      text: TextSpan(
+        text: 'Fazendo upload de ',
+        style: Theme.of(context).textTheme.titleMedium,
+        children: [
+          TextSpan(
+            text: pickedModel.title,
+            style: Theme.of(context)
+                .textTheme
+                .titleMedium
+                ?.copyWith(fontWeight: FontWeight.bold),
+          ),
+        ],
       ),
     );
   }
 
-  void _showErrorSnackbar(BuildContext context, String fileTitle) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        action: SnackBarAction(
-          label: 'Fechar',
-          onPressed: () {},
-        ),
-        content: RichText(
-          text: TextSpan(
-            text: 'Falha ao fazer upload de ',
-            style: Theme.of(context).textTheme.titleMedium,
-            children: [
-              TextSpan(
-                text: fileTitle,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-            ],
+  Widget _errorContentBuilder(BuildContext context, String fileTitle) {
+    return RichText(
+      text: TextSpan(
+        text: 'Falha ao fazer upload de ',
+        style: Theme.of(context).textTheme.titleMedium,
+        children: [
+          TextSpan(
+            text: fileTitle,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
           ),
-        ),
+        ],
       ),
     );
   }
 
-  void _showSuccessSnackbar(BuildContext context, String fileTitle) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        action: SnackBarAction(
-          label: 'Fechar',
-          onPressed: () {},
-        ),
-        content: RichText(
-          text: TextSpan(
-            text: 'Upload de ',
-            style: Theme.of(context).textTheme.titleMedium,
-            children: [
-              TextSpan(
-                text: fileTitle,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-              TextSpan(
-                text: ' finalizado',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-            ],
+  Widget _finishedContentBuilder(BuildContext context, String fileTitle) {
+    return RichText(
+      text: TextSpan(
+        text: 'Upload de ',
+        style: Theme.of(context).textTheme.titleMedium,
+        children: [
+          TextSpan(
+            text: fileTitle,
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
           ),
-        ),
+          TextSpan(
+            text: ' finalizado',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+        ],
       ),
     );
   }
