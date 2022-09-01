@@ -1,4 +1,14 @@
-# Folder Structure:
+## TL;DR:
+
+- **constants** -> constants (duh).
+- **data_objects** -> DTOs. Used for CRUD.
+- **interface** -> for accessing stuff external to the application.
+- **pages** -> application pages.
+- **widgets** -> reusable widgets.
+
+---
+
+## Folder Structure:
 
 - **constants**: values and settings used throught the application that won't change at runtime.
 
