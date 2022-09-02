@@ -23,6 +23,10 @@ class HomeAppBar extends ConsumerStatefulWidget {
 class _HomeAppBarState extends ConsumerState<HomeAppBar> {
   static const double _tabWidth = 100;
 
+  static const Duration _animationDuration = Duration(milliseconds: 250);
+
+  static const Curve _animationCurve = Curves.easeInOutQuad;
+
   final ScrollController _scrollController = ScrollController();
 
   int _pageIndex = 0;
@@ -103,15 +107,22 @@ class _HomeAppBarState extends ConsumerState<HomeAppBar> {
                     (index) => Container(
                       alignment: Alignment.centerLeft,
                       width: _tabWidth,
-                      child: Text(
-                        widget.pageTitles[index],
-                        overflow: TextOverflow.ellipsis,
-                        style:
-                            Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  fontWeight: index == _pageIndex
-                                      ? FontWeight.bold
-                                      : FontWeight.normal,
-                                ),
+                      child: GestureDetector(
+                        onTap: () => widget.controller.animateToPage(
+                          index,
+                          duration: _animationDuration,
+                          curve: _animationCurve,
+                        ),
+                        child: Text(
+                          widget.pageTitles[index],
+                          overflow: TextOverflow.ellipsis,
+                          style:
+                              Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontWeight: index == _pageIndex
+                                        ? FontWeight.bold
+                                        : FontWeight.normal,
+                                  ),
+                        ),
                       ),
                     ),
                   ),
