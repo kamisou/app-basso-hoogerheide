@@ -66,5 +66,5 @@ class AppUserRepository {
   }
 
   // TODO: mudar senha
-  Future<void> changePassword() async {}
+  Future<void> changePassword() async => log('changePassword');
 }

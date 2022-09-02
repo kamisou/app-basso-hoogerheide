@@ -13,7 +13,7 @@ class ProfileOption extends StatefulWidget {
 
   final Widget subtitle;
 
-  final WidgetBuilder bodyBuilder;
+  final Widget Function(BuildContext, VoidCallback) bodyBuilder;
 
   final EdgeInsets? headerPadding;
 
@@ -48,7 +48,8 @@ class _ProfileOptionState extends State<ProfileOption> {
           AnimatedContainer(
             duration: const Duration(milliseconds: 300),
             child: _expanded
-                ? widget.bodyBuilder(context)
+                ? widget.bodyBuilder(
+                    context, () => setState(() => _expanded = false))
                 : const SizedBox(width: double.infinity),
           ),
         ],

@@ -112,39 +112,13 @@ class ProfilePage extends ConsumerWidget {
                 ),
               ],
             ),
-            bodyBuilder: (context) => Padding(
+            bodyBuilder: (_, close) => Padding(
               padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      hintText: 'Senha',
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                      hintText: 'Confirmar Senha',
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  GestureDetector(
-                    onTap: ref
-                        .read(appUserRepository)
-                        .changePassword,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: Text(
-                        'Salvar',
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                ],
+              child: Form(
+                child: Builder(
+                  builder: (context) =>
+                      _changePasswordFormBuilder(context, ref, close),
+                ),
               ),
             ),
             headerPadding: const EdgeInsets.only(
@@ -174,6 +148,70 @@ class ProfilePage extends ConsumerWidget {
           )
         ],
       ),
+    );
+  }
+
+  Widget _changePasswordFormBuilder(
+    BuildContext context,
+    WidgetRef ref,
+    VoidCallback close,
+  ) {
+    final TextEditingController passwordController = TextEditingController();
+    return StatefulBuilder(
+      builder: (context, state) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            TextFormField(
+              controller: passwordController,
+              decoration: const InputDecoration(
+                hintText: 'Senha',
+              ),
+              obscureText: true,
+              textInputAction: TextInputAction.next,
+              validator: (value) =>
+                  (value?.isEmpty ?? true) ? 'Informe a nova senha' : null,
+            ),
+            const SizedBox(height: 10),
+            TextFormField(
+              decoration: const InputDecoration(
+                hintText: 'Confirmar Senha',
+              ),
+              obscureText: true,
+              validator: (value) {
+                if (value?.isEmpty ?? true) {
+                  return 'Repita a nova senha';
+                } else if (passwordController.text != value) {
+                  return 'As senhas não se coincidem';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 16),
+            // TODO: substituir por async button
+            GestureDetector(
+              onTap: () {
+                if (Form.of(context)!.validate()) {
+                  ref
+                      .read(appUserRepository)
+                      .changePassword()
+                      .then((value) => close());
+                }
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: Text(
+                  'Salvar',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
