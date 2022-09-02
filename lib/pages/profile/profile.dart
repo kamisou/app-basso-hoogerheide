@@ -1,6 +1,6 @@
 import 'package:basso_hoogerheide/extensions.dart';
 import 'package:basso_hoogerheide/models/input/app_user.dart';
-import 'package:basso_hoogerheide/models/repository/authentication.dart';
+import 'package:basso_hoogerheide/models/repository/app_user.dart';
 import 'package:basso_hoogerheide/pages/profile/profile_option.dart';
 import 'package:basso_hoogerheide/widgets/shimmering_image.dart';
 import 'package:flutter/material.dart';
@@ -13,18 +13,13 @@ class ProfilePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final appUser = ModalRoute.of(context)!.settings.arguments as AppUser;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Perfil'),
-      ),
+      appBar: AppBar(title: const Text('Perfil')),
       body: ListView(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-          vertical: 48,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 48),
         children: [
           Center(
             child: GestureDetector(
-              onTap: ref.read(authenticationRepositoryProvider).changePicture,
+              onTap: ref.read(appUserRepository).changePicture,
               child: Stack(
                 alignment: Alignment.topRight,
                 clipBehavior: Clip.none,
@@ -136,7 +131,7 @@ class ProfilePage extends ConsumerWidget {
                   const SizedBox(height: 16),
                   GestureDetector(
                     onTap: ref
-                        .read(authenticationRepositoryProvider)
+                        .read(appUserRepository)
                         .changePassword,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -165,7 +160,7 @@ class ProfilePage extends ConsumerWidget {
               onTap: () => NavigatorExtension.pushReplacementNamedAndNotify(
                 context,
                 '/login',
-                ref.read(authenticationRepositoryProvider).signOut,
+                ref.read(appUserRepository).signOut,
               ),
               child: Text(
                 'Sair',

@@ -1,12 +1,18 @@
 import 'dart:io';
 
-abstract class Uploader {
-  const Uploader();
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+// TODO: usar uploader de arquivos real
+final fileUploaderProvider =
+    Provider.autoDispose<FileUploader>((ref) => const MockUploader());
+
+abstract class FileUploader {
+  const FileUploader();
 
   Stream<double> upload(File file);
 }
 
-class MockUploader extends Uploader {
+class MockUploader extends FileUploader {
   const MockUploader();
 
   @override

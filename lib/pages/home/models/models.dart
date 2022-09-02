@@ -1,5 +1,4 @@
 import 'package:basso_hoogerheide/models/input/model_category.dart';
-import 'package:basso_hoogerheide/models/output/picked_model_data.dart';
 import 'package:basso_hoogerheide/models/repository/models.dart';
 import 'package:basso_hoogerheide/pages/home/models/model_card.dart';
 import 'package:basso_hoogerheide/widgets/collection.dart';
@@ -20,15 +19,14 @@ class ModelsPage extends ConsumerWidget {
         modelCategory: item,
         onTapUpload: () => ref
             .read(modelsRepositoryProvider)
-            .pickAndUploadModelFile()
+            .uploadModelFile()
             .then((upload) {
           if (upload == null) return;
-          LoadingSnackbar(
-            content: (context) => _loadingContentBuilder(context, upload),
-            onError: (context) => _errorContentBuilder(context, upload.title),
-            onFinished: (context) =>
-                _finishedContentBuilder(context, upload.title),
-          ).show(context, upload.stream);
+          LoadingSnackbar<FileUploadProgressStream>(
+            contentBuilder: (_) => _loadingContentBuilder(context, upload),
+            errorBuilder: (_) => _errorContentBuilder(context, upload),
+            finishedBuilder: (_) => _finishedContentBuilder(context, upload),
+          ).show(context, upload);
         }),
         onTapDelete: ref.read(modelsRepositoryProvider).deleteModel,
       ),
@@ -41,7 +39,7 @@ class ModelsPage extends ConsumerWidget {
 
   Widget _loadingContentBuilder(
     BuildContext context,
-    PickedModelData pickedModel,
+    FileUploadProgressStream upload,
   ) {
     return RichText(
       text: TextSpan(
@@ -49,7 +47,7 @@ class ModelsPage extends ConsumerWidget {
         style: Theme.of(context).textTheme.titleMedium,
         children: [
           TextSpan(
-            text: pickedModel.title,
+            text: upload.fileName,
             style: Theme.of(context)
                 .textTheme
                 .titleMedium
@@ -60,14 +58,17 @@ class ModelsPage extends ConsumerWidget {
     );
   }
 
-  Widget _errorContentBuilder(BuildContext context, String fileTitle) {
+  Widget _errorContentBuilder(
+    BuildContext context,
+    FileUploadProgressStream upload,
+  ) {
     return RichText(
       text: TextSpan(
         text: 'Falha ao fazer upload de ',
         style: Theme.of(context).textTheme.titleMedium,
         children: [
           TextSpan(
-            text: fileTitle,
+            text: upload.fileName,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -77,14 +78,17 @@ class ModelsPage extends ConsumerWidget {
     );
   }
 
-  Widget _finishedContentBuilder(BuildContext context, String fileTitle) {
+  Widget _finishedContentBuilder(
+    BuildContext context,
+    FileUploadProgressStream upload,
+  ) {
     return RichText(
       text: TextSpan(
         text: 'Upload de ',
         style: Theme.of(context).textTheme.titleMedium,
         children: [
           TextSpan(
-            text: fileTitle,
+            text: upload.fileName,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),

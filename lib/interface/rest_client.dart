@@ -1,6 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+final restClientProvider = Provider.autoDispose<RestClient>(
+  // TODO: apontar para servidor rest real
+  (ref) => const RestClient(host: ''),
+);
+
 class RestClient {
   const RestClient({
     required this.host,

@@ -1,5 +1,5 @@
 import 'package:basso_hoogerheide/extensions.dart';
-import 'package:basso_hoogerheide/models/repository/authentication.dart';
+import 'package:basso_hoogerheide/models/repository/app_user.dart';
 import 'package:basso_hoogerheide/widgets/avatar_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -125,7 +125,7 @@ class _HomeAppBarState extends ConsumerState<HomeAppBar> {
             onTap: () => NavigatorExtension.pushReplacementNamedAndNotify(
               context,
               '/login',
-              ref.read(authenticationRepositoryProvider).signOut,
+              ref.read(appUserRepository).signOut,
             ),
             child: const Icon(Icons.exit_to_app),
           ),

@@ -6,13 +6,16 @@ import 'package:flutter/material.dart';
 class FilePickerField extends StatelessWidget {
   const FilePickerField({
     super.key,
+    required this.filePicker,
     this.icon,
     this.hintText,
     this.onDocumentAdded,
-    this.allowMultiple,
+    this.allowMultiple = false,
   });
 
-  final bool? allowMultiple;
+  final FilePicker filePicker;
+
+  final bool allowMultiple;
 
   final IconData? icon;
 
@@ -26,7 +29,7 @@ class FilePickerField extends StatelessWidget {
       builder: (state) {
         return GestureDetector(
           onTap: () async {
-            final List<File>? files = await FilePicker().pickFiles(
+            final List<File>? files = await filePicker.pickFiles(
               dialogTitle: hintText,
               allowMultiple: allowMultiple,
             );

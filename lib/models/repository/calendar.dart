@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:basso_hoogerheide/extensions.dart';
 import 'package:basso_hoogerheide/models/input/calendar_event.dart';
 import 'package:basso_hoogerheide/models/output/new_calendar_event.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 typedef CalendarEvents = Map<DateTime, List<CalendarEvent>>;

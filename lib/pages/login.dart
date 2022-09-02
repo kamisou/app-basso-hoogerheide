@@ -1,12 +1,20 @@
-import 'package:basso_hoogerheide/models/repository/authentication.dart';
+import 'package:basso_hoogerheide/models/repository/app_user.dart';
+import 'package:basso_hoogerheide/widgets/async_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class LoginPage extends ConsumerWidget {
+class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends ConsumerState<LoginPage> {
+  final AsyncButtonController _controller = AsyncButtonController();
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -29,55 +37,7 @@ class LoginPage extends ConsumerWidget {
                   ),
                   child: Form(
                     child: Builder(
-                      builder: (context) => Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Text(
-                            'Insira suas credenciais:',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium!
-                                .copyWith(fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 18),
-                          TextFormField(
-                            decoration: const InputDecoration(
-                              prefixIcon: Icon(Icons.email_outlined),
-                              hintText: 'Seu e-mail',
-                            ),
-                            keyboardType: TextInputType.emailAddress,
-                            textInputAction: TextInputAction.next,
-                          ),
-                          const SizedBox(height: 18),
-                          TextFormField(
-                            decoration: const InputDecoration(
-                              prefixIcon: Icon(Icons.lock_outline),
-                              hintText: 'Sua senha',
-                            ),
-                            keyboardType: TextInputType.visiblePassword,
-                            obscureText: true,
-                            onEditingComplete: () =>
-                                _signInAndNavigate(context, ref),
-                          ),
-                          const SizedBox(height: 20),
-                          ElevatedButton(
-                            onPressed: () => _signInAndNavigate(context, ref),
-                            child: const Text('Login'),
-                          ),
-                          const SizedBox(height: 18),
-                          Center(
-                            child: GestureDetector(
-                              onTap: ref
-                                  .read(authenticationRepositoryProvider)
-                                  .recoverPassword,
-                              child: Text(
-                                'Esqueceu sua senha?',
-                                style: Theme.of(context).textTheme.labelLarge,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                      builder: (context) => _formBuilder(context, ref),
                     ),
                   ),
                 ),
@@ -89,8 +49,70 @@ class LoginPage extends ConsumerWidget {
     );
   }
 
-  void _signInAndNavigate(BuildContext context, WidgetRef ref) => ref
-      .read(authenticationRepositoryProvider)
-      .signIn()
-      .then((_) => Navigator.pushReplacementNamed(context, '/home'));
+  Widget _formBuilder(BuildContext context, WidgetRef ref) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          'Insira suas credenciais:',
+          style: Theme.of(context)
+              .textTheme
+              .titleMedium!
+              .copyWith(fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 18),
+        TextFormField(
+            decoration: const InputDecoration(
+              prefixIcon: Icon(Icons.email_outlined),
+              hintText: 'Seu e-mail',
+            ),
+            keyboardType: TextInputType.emailAddress,
+            textInputAction: TextInputAction.next,
+            validator: (value) => (value?.isEmpty ?? true)
+                ? 'Informe seu endereço de e-mail'
+                : null),
+        const SizedBox(height: 18),
+        TextFormField(
+          decoration: const InputDecoration(
+            prefixIcon: Icon(Icons.lock_outline),
+            hintText: 'Sua senha',
+          ),
+          keyboardType: TextInputType.visiblePassword,
+          obscureText: true,
+          onEditingComplete: _controller.press,
+          validator: (value) =>
+              (value?.isEmpty ?? true) ? 'Informe sua senha' : null,
+        ),
+        const SizedBox(height: 20),
+        AsyncButton(
+          controller: _controller,
+          onPressed: () async {
+            if (Form.of(context)!.validate()) {
+              return ref.read(appUserRepository).signIn().then(
+                    (_) => Navigator.pushReplacementNamed(context, '/home'),
+                  );
+            }
+          },
+          loadingChild: SizedBox(
+            height: 25,
+            width: 25,
+            child: CircularProgressIndicator(
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
+          ),
+          child: const Text('Login'),
+        ),
+        const SizedBox(height: 18),
+        Center(
+          child: GestureDetector(
+            onTap: ref.read(appUserRepository).recoverPassword,
+            child: Text(
+              'Esqueceu sua senha?',
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 }

@@ -1,3 +1,4 @@
+import 'package:basso_hoogerheide/interface/file_picker.dart';
 import 'package:basso_hoogerheide/widgets/date_picker.dart';
 import 'package:basso_hoogerheide/widgets/file_picker_field.dart';
 import 'package:basso_hoogerheide/widgets/searchbar.dart';
@@ -8,6 +9,7 @@ class LargeForm extends StatefulWidget {
   const LargeForm({
     super.key,
     required this.sections,
+    required this.filePicker,
     this.sectionTitleStyle,
     this.onSaved,
   });
@@ -15,12 +17,15 @@ class LargeForm extends StatefulWidget {
   LargeForm.fromJson({
     super.key,
     required dynamic json,
+    required this.filePicker,
     this.sectionTitleStyle,
     this.onSaved,
     bool Function(LargeFormField)? fieldPredicate,
   }) : sections = _parseJson(json, fieldPredicate);
 
   final List<LargeFormSection> sections;
+
+  final FilePicker filePicker;
 
   final TextStyle? sectionTitleStyle;
 
@@ -190,6 +195,7 @@ class _LargeFormState extends State<LargeForm> {
         );
       case LargeFormFileField:
         return FilePickerField(
+          filePicker: widget.filePicker,
           hintText: 'Anexar arquivos',
           icon: Icons.attach_file_outlined,
           allowMultiple: true,
