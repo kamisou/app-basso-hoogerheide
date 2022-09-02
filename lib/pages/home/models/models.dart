@@ -12,29 +12,40 @@ class ModelsPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Collection<ModelCategory>(
-      // TODO: utilizar dados de modelos
-      collection: const [],
-      itemBuilder: (_, item) => ModelCard(
-        modelCategory: item,
-        onTapUpload: () => ref
-            .read(modelsRepositoryProvider)
-            .uploadModelFile()
-            .then((upload) {
-          if (upload == null) return;
-          LoadingSnackbar<FileUploadProgressStream>(
-            contentBuilder: (_) => _loadingContentBuilder(context, upload),
-            errorBuilder: (_) => _errorContentBuilder(context, upload),
-            finishedBuilder: (_) => _finishedContentBuilder(context, upload),
-          ).show(context, upload);
-        }),
-        onTapDelete: ref.read(modelsRepositoryProvider).deleteModel,
-      ),
-      emptyWidget: const EmptyCard(
-        icon: Icons.file_download_off_outlined,
-        message: 'Nenhum modelo encontrado',
-      ),
-    );
+    return ref.watch(modelsProvider).when(
+          data: (data) => Collection<ModelCategory>(
+            // TODO: utilizar dados de modelos
+            collection: data,
+            itemBuilder: (_, item) => ModelCard(
+              modelCategory: item,
+              onTapUpload: () => ref
+                  .read(modelsRepositoryProvider)
+                  .uploadModelFile()
+                  .then((upload) {
+                if (upload == null) return;
+                LoadingSnackbar(
+                  contentBuilder: (_) => _loadingContentBuilder(context, upload),
+                  errorBuilder: (_) => _errorContentBuilder(context, upload),
+                  finishedBuilder: (_) => _finishedContentBuilder(context, upload),
+                ).show(context, upload);
+              }),
+              onTapDelete: ref.read(modelsRepositoryProvider).deleteModel,
+            ),
+            emptyWidget: const EmptyCard(
+              icon: Icons.file_download_off_outlined,
+              message: 'Nenhum modelo encontrado',
+            ),
+          ),
+          error: (_, __) => const EmptyCard(
+            icon: Icons.error,
+            message: 'Houve um erro ao buscar os modelos',
+          ),
+          loading: () => Container(
+            alignment: Alignment.topCenter,
+            padding: const EdgeInsets.all(20),
+            child: const CircularProgressIndicator(),
+          ),
+        );
   }
 
   Widget _loadingContentBuilder(

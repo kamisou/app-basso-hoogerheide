@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
-class LoadingSnackbar<T extends ProgressStream> {
+class LoadingSnackbar {
   LoadingSnackbar({
     required this.contentBuilder,
     this.errorBuilder,
@@ -15,7 +16,7 @@ class LoadingSnackbar<T extends ProgressStream> {
 
   ScaffoldFeatureController? _scaffoldFeatureController;
 
-  void show(BuildContext context, T upload) {
+  void show(BuildContext context, ProgressStream upload) {
     _scaffoldFeatureController = ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         duration: const Duration(minutes: 5),
@@ -28,14 +29,18 @@ class LoadingSnackbar<T extends ProgressStream> {
               _scaffoldFeatureController?.close();
               if (snapshot.hasError) {
                 if (errorBuilder != null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: errorBuilder!(context)),
+                  SchedulerBinding.instance.addPostFrameCallback(
+                    (_) => ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: errorBuilder!(context)),
+                    ),
                   );
                 }
               } else {
                 if (finishedBuilder != null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: finishedBuilder!(context)),
+                  SchedulerBinding.instance.addPostFrameCallback(
+                    (_) => ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: finishedBuilder!(context)),
+                    ),
                   );
                 }
               }
