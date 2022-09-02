@@ -20,7 +20,6 @@ class DayWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isToday = today.dayOnly() == date;
     return Column(
       children: [
         Row(
@@ -35,7 +34,7 @@ class DayWidget extends StatelessWidget {
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(24),
-                    color: isToday
+                    color: today == date
                         ? Theme.of(context).colorScheme.primary
                         : Theme.of(context).colorScheme.surface,
                   ),
@@ -56,7 +55,7 @@ class DayWidget extends StatelessWidget {
                 const SizedBox(height: 20),
                 Text(
                   DateFormat("'de 'MMMM' de 'yyyy").format(date),
-                  style: isToday
+                  style: today == date
                       ? Theme.of(context).textTheme.headlineSmall?.copyWith(
                             fontWeight: FontWeight.bold,
                           )

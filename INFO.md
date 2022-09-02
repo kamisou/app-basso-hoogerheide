@@ -24,3 +24,14 @@
 - **pages**: Flutter `Widgets` that serve as pages for the application. Use subfolders to group widgets that are **strongly coupled** to the page (that is, only make sense there). For pages that have `PageViews` or similar "subpage" widgets, create a subfolder for this page and use the same logic as this folder.
 
 - **widgets**: flutter `Widgets` that are reusable through multiple pages of the application. Widgets **MUST NOT** have dependencies on the objects from the other folders. Ideally, they shouldn't have dependencies on other widgets or libraries either.
+
+--- 
+## Asynchronous calls:
+
+Asynchronous calls have 4 states:
+
+- **loading**: self explanatory. while waiting for the data to arrive, the application should exhibit some sort of loading state to the user **and also** disable further data requests of the same sort.
+
+- **error**: your request failed. show some sort of interface element to display that an error has occured. also, even if you show a snackbar, don't forget that castaway'd null elements (`!`) shouldn't be displayed.
+
+- **finished**: data might or not exist here. when reaching the page that uses this data, or when a error occurs reaching the data, it will be `null`.

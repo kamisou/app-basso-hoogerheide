@@ -13,7 +13,7 @@ class CalendarPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final DateTime today = DateTime.now();
+    final DateTime today = DateTime.now().dayOnly();
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.edit_calendar),
@@ -22,30 +22,31 @@ class CalendarPage extends ConsumerWidget {
           builder: (_) => const AddEventDialog(),
         ).then(ref.read(calendarRepositoryProvider).addEvent),
       ),
-      body: ref.watch(calendarEventsProvider).when(
-            data: (data) {
-              return InfiniteListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                itemBuilder: (_, index) {
-                  final DateTime thisDate =
-                      today.dayOnly().add(Duration(days: index));
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 32),
-                    child: DayWidget(
-                      date: thisDate,
-                      today: today,
-                      events: data[thisDate],
-                    ),
-                  );
-                },
-              );
-            },
+      body: ref.watch(initialCalendarEventsProvider(today)).when(
+            data: (data) => InfiniteListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              itemBuilder: (_, index) {
+                final DateTime thisDate = today.add(Duration(days: index));
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 32),
+                  child: DayWidget(
+                    date: thisDate,
+                    today: today,
+                    events: ref
+                        .read(calendarEventsRepositoryProvider(today))
+                        .getDayEvents(thisDate),
+                  ),
+                );
+              },
+            ),
             error: (_, __) => const EmptyCard(
               icon: Icons.error,
               message: 'Não foi possível buscar os eventos do calendário',
             ),
-            loading: () => const Center(
-              child: CircularProgressIndicator(),
+            loading: () => Container(
+              alignment: Alignment.topCenter,
+              padding: const EdgeInsets.all(20),
+              child: const CircularProgressIndicator(),
             ),
           ),
     );

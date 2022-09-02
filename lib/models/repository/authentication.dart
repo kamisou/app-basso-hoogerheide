@@ -5,7 +5,7 @@ final authenticationRepositoryProvider =
     Provider.autoDispose((ref) => const AuthenticationRepository());
 
 final appUserProvider = FutureProvider.autoDispose(
-    (ref) => ref.read(authenticationRepositoryProvider).getMyUser());
+    (ref) => ref.watch(authenticationRepositoryProvider).getMyUser());
 
 class AuthenticationRepository {
   const AuthenticationRepository();

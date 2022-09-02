@@ -15,11 +15,7 @@ class ModelsPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Collection<ModelCategory>(
       // TODO: utilizar dados de modelos
-      collection: const [
-        ModelCategory(
-          title: 'Categoria',
-        ),
-      ],
+      collection: const [],
       itemBuilder: (_, item) => ModelCard(
         modelCategory: item,
         onTapUpload: () => ref
@@ -30,7 +26,8 @@ class ModelsPage extends ConsumerWidget {
           LoadingSnackbar(
             content: (context) => _loadingContentBuilder(context, upload),
             onError: (context) => _errorContentBuilder(context, upload.title),
-            onFinished: (context) => _finishedContentBuilder(context, upload.title),
+            onFinished: (context) =>
+                _finishedContentBuilder(context, upload.title),
           ).show(context, upload.stream);
         }),
         onTapDelete: ref.read(modelsRepositoryProvider).deleteModel,
