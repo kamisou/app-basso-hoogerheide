@@ -7,11 +7,18 @@ import 'package:basso_hoogerheide/widgets/loading_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ModelsPage extends ConsumerWidget {
+class ModelsPage extends ConsumerStatefulWidget {
   const ModelsPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ModelsPage> createState() => _ModelsPageState();
+}
+
+class _ModelsPageState extends ConsumerState<ModelsPage>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
     return ref.watch(modelsProvider).when(
           data: (data) => Collection<ModelCategory>(
             // TODO: utilizar dados de modelos
@@ -24,9 +31,11 @@ class ModelsPage extends ConsumerWidget {
                   .then((upload) {
                 if (upload == null) return;
                 LoadingSnackbar(
-                  contentBuilder: (_) => _loadingContentBuilder(context, upload),
+                  contentBuilder: (_) =>
+                      _loadingContentBuilder(context, upload),
                   errorBuilder: (_) => _errorContentBuilder(context, upload),
-                  finishedBuilder: (_) => _finishedContentBuilder(context, upload),
+                  finishedBuilder: (_) =>
+                      _finishedContentBuilder(context, upload),
                 ).show(context, upload);
               }),
               onTapDelete: ref.read(modelsRepositoryProvider).deleteModel,
@@ -112,4 +121,7 @@ class ModelsPage extends ConsumerWidget {
       ),
     );
   }
+  
+  @override
+  bool get wantKeepAlive => true;
 }

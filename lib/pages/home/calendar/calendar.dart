@@ -8,14 +8,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:infinite_listview/infinite_listview.dart';
 
-class CalendarPage extends ConsumerWidget {
+class CalendarPage extends ConsumerStatefulWidget {
   const CalendarPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<CalendarPage> createState() => _CalendarPageState();
+}
+
+class _CalendarPageState extends ConsumerState<CalendarPage>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+
     final DateTime today = DateTime.now().dayOnly();
     return Scaffold(
       floatingActionButton: FloatingActionButton(
+        heroTag: 'calendar_fab',
         child: const Icon(Icons.edit_calendar),
         onPressed: () => showDialog<NewCalendarEvent>(
           context: context,
@@ -51,4 +60,7 @@ class CalendarPage extends ConsumerWidget {
           ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

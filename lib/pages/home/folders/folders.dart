@@ -7,13 +7,20 @@ import 'package:basso_hoogerheide/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class FoldersPage extends ConsumerWidget {
+class FoldersPage extends ConsumerStatefulWidget {
   const FoldersPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<FoldersPage> createState() => _FoldersPageState();
+}
+
+class _FoldersPageState extends ConsumerState<FoldersPage> with AutomaticKeepAliveClientMixin {
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       floatingActionButton: FloatingActionButton(
+        heroTag: 'folder_fab',
         child: const Icon(Icons.person_add),
         onPressed: () => ref
             .read(foldersRepositoryProvider)
@@ -51,4 +58,7 @@ class FoldersPage extends ConsumerWidget {
       ),
     );
   }
+  
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -55,8 +55,7 @@ class CalendarEventsRepository {
   })  : _events = initialData,
         _repository = repository,
         _startDate = initialDate.subtract(prefetchDays),
-        _endDate = initialDate.add(prefetchDays) {
-  }
+        _endDate = initialDate.add(prefetchDays);
 
   final CalendarRepository _repository;
 
