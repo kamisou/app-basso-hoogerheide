@@ -26,10 +26,13 @@ class _CalendarPageState extends ConsumerState<CalendarPage>
       floatingActionButton: FloatingActionButton(
         heroTag: 'calendar_fab',
         child: const Icon(Icons.edit_calendar),
-        onPressed: () => showDialog<NewCalendarEvent>(
-          context: context,
-          builder: (_) => const AddEventDialog(),
-        ).then(ref.read(calendarRepositoryProvider).addEvent),
+        onPressed: () => ref.watch(calendarEventColorsProvider).then(
+              (value) => showDialog<NewCalendarEvent>(
+                context: context,
+                builder: (_) => const AddEventDialog(),
+                routeSettings: RouteSettings(arguments: value),
+              ).then(ref.read(calendarRepositoryProvider).addEvent),
+            ),
       ),
       body: ref.watch(initialCalendarEventsProvider(today)).when(
             data: (data) => InfiniteListView.builder(

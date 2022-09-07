@@ -6,6 +6,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 final foldersRepositoryProvider =
     Provider.autoDispose((ref) => const FoldersRepository());
 
+final annotationOptionsProvider = Provider.autoDispose(
+  (ref) => ref.read(foldersRepositoryProvider).getNewAnnotationOptions(),
+);
+
 class FoldersRepository {
   const FoldersRepository();
 
@@ -13,6 +17,19 @@ class FoldersRepository {
   Future<int> getNewFolderId() {
     log('getNewFolderId');
     return Future.delayed(const Duration(seconds: 2), () => 1501);
+  }
+
+  // TODO: buscar opções de anotação
+  Future<List<String>> getNewAnnotationOptions() {
+    log('getNewAnnotationOptions');
+    return Future.delayed(
+      const Duration(seconds: 1),
+      () => [
+        'Atendimento inicial',
+        'Petição Inicial',
+        'Audiência',
+      ],
+    );
   }
 
   // TODO: salvar nova pasta

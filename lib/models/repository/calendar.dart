@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:basso_hoogerheide/extensions.dart';
 import 'package:basso_hoogerheide/models/input/calendar_event.dart';
 import 'package:basso_hoogerheide/models/output/new_calendar_event.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 typedef CalendarEvents = Map<DateTime, List<CalendarEvent>>;
@@ -28,6 +29,10 @@ final calendarEventsRepositoryProvider = Provider.family(
   },
 );
 
+final calendarEventColorsProvider = Provider.autoDispose(
+  (ref) => ref.read(calendarRepositoryProvider).getEventColors(),
+);
+
 class CalendarRepository {
   const CalendarRepository();
 
@@ -41,6 +46,21 @@ class CalendarRepository {
   Future<CalendarEvents> getEvents(DateTime startDate, DateTime endDate) async {
     log('getEvents');
     return {};
+  }
+
+  // TODO: buscar cores reais
+  Future<List<Color>> getEventColors() async {
+    log('getEventColors');
+    return [
+      Colors.red,
+      Colors.green,
+      Colors.blue,
+      Colors.yellow,
+      Colors.purple,
+      Colors.orange,
+      Colors.black,
+      Colors.white,
+    ];
   }
 }
 

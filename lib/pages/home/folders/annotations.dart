@@ -17,10 +17,13 @@ class AnnotationsPage extends ConsumerWidget {
       appBar: AppBar(title: Text('${folder.id} - ${folder.name}')),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.note_add),
-        onPressed: () => showDialog<String?>(
-          context: context,
-          builder: (context) => const AddAnnotationDialog(),
-        ).then(ref.read(foldersRepositoryProvider).addAnnotation),
+        onPressed: () => ref.watch(annotationOptionsProvider).then(
+              (value) => showDialog<String?>(
+                context: context,
+                builder: (context) => const AddAnnotationDialog(),
+                routeSettings: RouteSettings(arguments: value),
+              ).then(ref.read(foldersRepositoryProvider).addAnnotation),
+            ),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32),

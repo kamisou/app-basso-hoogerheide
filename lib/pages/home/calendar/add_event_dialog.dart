@@ -16,6 +16,7 @@ class _AddEventDialogState extends ConsumerState<AddEventDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Color> colors = ModalRoute.of(context)!.settings.arguments as List<Color>;
     return Dialog(
       insetPadding: const EdgeInsets.all(16),
       child: Padding(
@@ -45,8 +46,7 @@ class _AddEventDialogState extends ConsumerState<AddEventDialog> {
                           ),
                           const SizedBox(width: 8),
                           ColorPicker(
-                            // TODO: usar dados de cor
-                            colors: const [],
+                            colors: colors,
                             dialogTitle: Text(
                               'Escolha uma cor:',
                               style: Theme.of(context)

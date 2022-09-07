@@ -15,6 +15,8 @@ class _AddAnnotationDialogState extends ConsumerState<AddAnnotationDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final List<String> options =
+        ModalRoute.of(context)!.settings.arguments as List<String>;
     return Dialog(
       insetPadding: const EdgeInsets.all(16),
       child: Padding(
@@ -41,8 +43,7 @@ class _AddAnnotationDialogState extends ConsumerState<AddAnnotationDialog> {
                     ),
                     const SizedBox(height: 4),
                     SearchBar<String>(
-                      // TODO: usar dados de anotação
-                      options: const [],
+                      options: options,
                       onChanged: (value) => _annotation = value,
                       validator: (value) => (value?.isEmpty ?? true)
                           ? 'Insira um assunto para a anotação'
