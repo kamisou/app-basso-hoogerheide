@@ -26,7 +26,7 @@ class AppUserRepository {
     final String response = await ref
         .read(restClientProvider)
         .post('/login', body: body)
-        .then((value) => utf8.decode(value));
+        .then((value) => json.decode(value)['token']);
     return ref
         .read(secureStorageProvider)
         .write(SecureStorageKey.authToken.key, response);
