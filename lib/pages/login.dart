@@ -13,6 +13,10 @@ class LoginPage extends ConsumerStatefulWidget {
 class _LoginPageState extends ConsumerState<LoginPage> {
   final AsyncButtonController _controller = AsyncButtonController();
 
+  final TextEditingController _emailController = TextEditingController();
+
+  final TextEditingController _passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,6 +66,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         ),
         const SizedBox(height: 18),
         TextFormField(
+            controller: _emailController,
             decoration: const InputDecoration(
               prefixIcon: Icon(Icons.email_outlined),
               hintText: 'Seu e-mail',
@@ -73,6 +78,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 : null),
         const SizedBox(height: 18),
         TextFormField(
+          controller: _passwordController,
           decoration: const InputDecoration(
             prefixIcon: Icon(Icons.lock_outline),
             hintText: 'Sua senha',
@@ -88,9 +94,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           controller: _controller,
           onPressed: () async {
             if (Form.of(context)!.validate()) {
-              return ref.read(appUserRepository).signIn().then(
-                    (_) => Navigator.pushReplacementNamed(context, '/home'),
-                  );
+              return ref.read(appUserRepository).signIn({
+                'email': _emailController.text,
+                'password': _passwordController.text,
+              }).then((_) => Navigator.pushReplacementNamed(context, '/home'));
             }
           },
           loadingChild: SizedBox(

@@ -6,6 +6,12 @@ class AppUser {
     this.avatarUrl,
   });
 
+  AppUser.fromJson(Map<String, dynamic> json)
+      : name = json['name'],
+        email = json['email'],
+        division = json['division'],
+        avatarUrl = json['avatar_url'];
+
   final String name;
 
   final String email;
