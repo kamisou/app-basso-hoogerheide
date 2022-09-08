@@ -27,4 +27,12 @@ class NewCalendarEvent {
   void setDescription(String? value) => description = value;
 
   void setColor(Color? value) => color = value;
+
+  Map<String, dynamic> toJson() => {
+        'start_time': '${startTime!.hour}${startTime!.minute}',
+        'end_time': '${endTime!.hour}${endTime!.minute}',
+        'title': title,
+        'description': description,
+        'color': color!.value,
+      };
 }

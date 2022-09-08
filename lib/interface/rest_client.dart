@@ -11,7 +11,7 @@ final restClientProvider = Provider.autoDispose<RestClient>(
     final String? authToken = ref.watch(authTokenProvider).value;
     // TODO: apontar para servidor rest real
     return RestClient(
-      host: '',
+      host: 'http://10.0.2.2:3000/api',
       defaultHeaders: authToken != null
           ? {
               'Authorization': 'Bearer $authToken',
@@ -67,8 +67,6 @@ class RestClient {
     final HttpClient client = HttpClient();
     final HttpClientRequest request = await client.openUrl(method, url);
 
-    if (body != null) request.write(body);
-
     defaultHeaders?.forEach((key, value) {
       request.headers.add(key, value);
     });
@@ -78,14 +76,15 @@ class RestClient {
       }
     });
 
+    if (body != null) request.write(body);
+
     log('$method ${url.path}');
     final HttpClientResponse response = await request.close();
 
+    // TODO: exceção = erro não tratado pela api
     if (response.statusCode > 399) {
-      final String statusMessage =
-          await response.transform(utf8.decoder).join();
-      throw HttpException(statusMessage);
+      throw HttpException(response.reasonPhrase);
     }
-    return response.single;
+    return response.transform(utf8.decoder).join();
   }
 }

@@ -25,22 +25,26 @@ class AppUserRepository {
   Future<void> signIn(Map<String, dynamic> body) async {
     final String response = await ref
         .read(restClientProvider)
-        .post('/login', body: body)
+        .post('/profile/login', body: body)
         .then((value) => json.decode(value)['token']);
     return ref
         .read(secureStorageProvider)
         .write(SecureStorageKey.authToken.key, response);
   }
 
-  Future<void> signOut() =>
-      ref.read(secureStorageProvider).delete(SecureStorageKey.authToken.key);
+  Future<void> signOut() {
+    log('signOut');
+    return ref
+        .read(secureStorageProvider)
+        .delete(SecureStorageKey.authToken.key);
+  }
 
-  // TODO: recuperar senha
-  Future<void> recoverPassword() async => log('recoverPassword');
+  Future<void> recoverPassword() =>
+      ref.read(restClientProvider).get('/profile/recover_password');
 
   Future<AppUser> getMyUser() => ref
       .read(restClientProvider)
-      .get('/user')
+      .get('/profile')
       .then((value) => AppUser.fromJson(json.decode(value)));
 
   // TODO: mudar imagem de perfil
@@ -58,6 +62,6 @@ class AppUserRepository {
     );
   }
 
-  // TODO: mudar senha
-  Future<void> changePassword() async => log('changePassword');
+  Future<void> changePassword() =>
+      ref.read(restClientProvider).get('/profile/change_password');
 }

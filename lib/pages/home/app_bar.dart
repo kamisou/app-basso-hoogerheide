@@ -133,11 +133,13 @@ class _HomeAppBarState extends ConsumerState<HomeAppBar> {
           ),
           const SizedBox(width: 32),
           GestureDetector(
-            onTap: () => NavigatorExtension.pushReplacementNamedAndNotify(
-              context,
-              '/login',
-              ref.read(appUserRepository).signOut,
-            ),
+            onTap: () {
+              Navigator.pushReplacementNamed(context, '/login');
+              Future.delayed(
+                const Duration(milliseconds: 500),
+                ref.read(appUserRepository).signOut,
+              );
+            },
             child: const Icon(Icons.exit_to_app),
           ),
         ],

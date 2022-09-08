@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:basso_hoogerheide/extensions.dart';
+import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/input/calendar_event.dart';
 import 'package:basso_hoogerheide/models/output/new_calendar_event.dart';
 import 'package:flutter/material.dart';
@@ -8,19 +9,25 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 typedef CalendarEvents = Map<DateTime, List<CalendarEvent>>;
 
-final calendarRepositoryProvider =
-    Provider.autoDispose((ref) => const CalendarRepository());
+final calendarRepositoryProvider = Provider.autoDispose(CalendarRepository.new);
 
-final initialCalendarEventsProvider = FutureProvider.autoDispose.family(
-  (ref, DateTime initialDate) => ref.read(calendarRepositoryProvider).getEvents(
-        initialDate.subtract(CalendarEventsRepository.prefetchDays),
-        initialDate.add(CalendarEventsRepository.prefetchDays),
-      ),
+final initialDateRepositoryProvider =
+    Provider.autoDispose((ref) => DateTime.now().dayOnly());
+
+final initialCalendarEventsProvider = FutureProvider.autoDispose(
+  (ref) {
+    final initialDate = ref.watch(initialDateRepositoryProvider);
+    return ref.read(calendarRepositoryProvider).getEvents(
+          initialDate.subtract(CalendarEventsRepository.prefetchDays),
+          initialDate.add(CalendarEventsRepository.prefetchDays),
+        );
+  },
 );
 
-final calendarEventsRepositoryProvider = Provider.family(
-  (ref, DateTime initialDate) {
-    final initialData = ref.read(initialCalendarEventsProvider(initialDate));
+final calendarEventsRepositoryProvider = Provider(
+  (ref) {
+    final initialDate = ref.read(initialDateRepositoryProvider);
+    final initialData = ref.read(initialCalendarEventsProvider);
     return CalendarEventsRepository(
       repository: ref.read(calendarRepositoryProvider),
       initialData: initialData.value!,
@@ -34,12 +41,16 @@ final calendarEventColorsProvider = Provider.autoDispose(
 );
 
 class CalendarRepository {
-  const CalendarRepository();
+  const CalendarRepository(this.ref);
 
-  // TODO: adicionar evento
-  Future<void> addEvent(NewCalendarEvent? event) {
-    log('addEvent');
-    return Future.delayed(const Duration(seconds: 3));
+  final Ref ref;
+
+  Future<void> addEvent(NewCalendarEvent? event) async {
+    if (event == null) return;
+    return ref
+        .read(restClientProvider)
+        .post('/event/add', body: event.toJson())
+        .then((_) => ref.refresh(initialCalendarEventsProvider));
   }
 
   // TODO: buscar eventos reais
@@ -65,8 +76,8 @@ class CalendarRepository {
 }
 
 class CalendarEventsRepository {
-  static const Duration prefetchDays = Duration(days: 180);
-  static const int _prefetchTriggerDays = 60;
+  static const Duration prefetchDays = Duration(days: 150);
+  static const int _prefetchTriggerDays = 120;
 
   CalendarEventsRepository({
     required CalendarRepository repository,

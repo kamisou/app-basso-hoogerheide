@@ -37,7 +37,7 @@ class _AsyncButtonState extends State<AsyncButton> {
   }
 
   void _onPressedCallback() {
-    widget.onPressed().whenComplete(() => _ready = true);
+    widget.onPressed().whenComplete(() => setState(() => _ready = true));
     setState(() => _ready = false);
   }
 

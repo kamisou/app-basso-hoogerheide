@@ -21,7 +21,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage>
   Widget build(BuildContext context) {
     super.build(context);
 
-    final DateTime today = DateTime.now().dayOnly();
+    final DateTime today = ref.watch(initialDateRepositoryProvider);
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         heroTag: 'calendar_fab',
@@ -34,7 +34,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage>
               ).then(ref.read(calendarRepositoryProvider).addEvent),
             ),
       ),
-      body: ref.watch(initialCalendarEventsProvider(today)).when(
+      body: ref.watch(initialCalendarEventsProvider).when(
             data: (data) => InfiniteListView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               itemBuilder: (_, index) {
@@ -45,7 +45,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage>
                     date: thisDate,
                     today: today,
                     events: ref
-                        .read(calendarEventsRepositoryProvider(today))
+                        .read(calendarEventsRepositoryProvider)
                         .getDayEvents(thisDate),
                   ),
                 );

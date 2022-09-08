@@ -97,7 +97,26 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               return ref.read(appUserRepository).signIn({
                 'email': _emailController.text,
                 'password': _passwordController.text,
-              }).then((_) => Navigator.pushReplacementNamed(context, '/home'));
+              }).then(
+                (_) => Navigator.pushReplacementNamed(context, '/home'),
+                onError: (e) => ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          e.toString(),
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        Icon(
+                          Icons.wifi_off,
+                          color: Theme.of(context).colorScheme.error,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
             }
           },
           loadingChild: SizedBox(

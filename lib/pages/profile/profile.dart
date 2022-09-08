@@ -131,11 +131,13 @@ class ProfilePage extends ConsumerWidget {
           const SizedBox(height: 40),
           Center(
             child: GestureDetector(
-              onTap: () => NavigatorExtension.pushReplacementNamedAndNotify(
-                context,
-                '/login',
-                ref.read(appUserRepository).signOut,
-              ),
+              onTap: () => () {
+                Navigator.pushReplacementNamed(context, '/login');
+                Future.delayed(
+                  const Duration(milliseconds: 500),
+                  ref.read(appUserRepository).signOut,
+                );
+              },
               child: Text(
                 'Sair',
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
