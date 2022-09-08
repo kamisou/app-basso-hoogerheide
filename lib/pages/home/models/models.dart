@@ -21,7 +21,6 @@ class _ModelsPageState extends ConsumerState<ModelsPage>
     super.build(context);
     return ref.watch(modelsProvider).when(
           data: (data) => Collection<ModelCategory>(
-            // TODO: utilizar dados de modelos
             collection: data,
             itemBuilder: (_, item) => ModelCard(
               modelCategory: item,

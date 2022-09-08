@@ -44,9 +44,14 @@ class ModelsRepositoryProvider {
               previewUrl: 'https://picsum.photos/200',
               uploadTimestamp: DateTime.now(),
             ),
+            DownloadableFile(
+              title: 'Modelo 2',
+              url: 'https://google.com',
+              previewUrl: 'https://picsum.photos/201',
+              uploadTimestamp: DateTime.now(),
+            ),
           ],
         ),
-        const ModelCategory(title: 'Categoria 2'),
       ],
     );
   }

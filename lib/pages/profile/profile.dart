@@ -182,7 +182,7 @@ class ProfilePage extends ConsumerWidget {
                 if (value?.isEmpty ?? true) {
                   return 'Repita a nova senha';
                 } else if (passwordController.text != value) {
-                  return 'As senhas não se coincidem';
+                  return 'As senhas não coincidem';
                 }
                 return null;
               },

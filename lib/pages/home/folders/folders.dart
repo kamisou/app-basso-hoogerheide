@@ -14,7 +14,8 @@ class FoldersPage extends ConsumerStatefulWidget {
   ConsumerState<FoldersPage> createState() => _FoldersPageState();
 }
 
-class _FoldersPageState extends ConsumerState<FoldersPage> with AutomaticKeepAliveClientMixin {
+class _FoldersPageState extends ConsumerState<FoldersPage>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -44,21 +45,31 @@ class _FoldersPageState extends ConsumerState<FoldersPage> with AutomaticKeepAli
           ),
           const SizedBox(height: 32),
           Expanded(
-            child: Collection<Folder>(
-              // TODO: utilizar dados de pasta
-              collection: const [],
-              itemBuilder: (_, item) => FolderCard(folder: item),
-              emptyWidget: const EmptyCard(
-                icon: Icons.folder_off_outlined,
-                message: 'Nenhuma pasta encontrada',
-              ),
-            ),
+            child: ref.watch(foldersProvider).when(
+                  data: (data) => Collection<Folder>(
+                    collection: data,
+                    itemBuilder: (_, item) => FolderCard(folder: item),
+                    emptyWidget: const EmptyCard(
+                      icon: Icons.folder_off_outlined,
+                      message: 'Nenhuma pasta encontrada',
+                    ),
+                  ),
+                  error: (_, __) => const EmptyCard(
+                    icon: Icons.error,
+                    message: 'Houve um erro ao buscar as pastas',
+                  ),
+                  loading: () => Container(
+                    alignment: Alignment.topCenter,
+                    padding: const EdgeInsets.all(20),
+                    child: const CircularProgressIndicator(),
+                  ),
+                ),
           ),
         ],
       ),
     );
   }
-  
+
   @override
   bool get wantKeepAlive => true;
 }

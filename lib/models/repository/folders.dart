@@ -1,10 +1,15 @@
 import 'dart:developer';
 
 import 'package:basso_hoogerheide/models/input/downloadable_file.dart';
+import 'package:basso_hoogerheide/models/input/folder/folder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final foldersRepositoryProvider =
     Provider.autoDispose((ref) => const FoldersRepository());
+
+final foldersProvider = FutureProvider(
+  (ref) => ref.read(foldersRepositoryProvider).getFolders(),
+);
 
 final annotationOptionsProvider = Provider.autoDispose(
   (ref) => ref.read(foldersRepositoryProvider).getNewAnnotationOptions(),
@@ -12,6 +17,12 @@ final annotationOptionsProvider = Provider.autoDispose(
 
 class FoldersRepository {
   const FoldersRepository();
+
+  // TODO: buscar folders reais
+  Future<List<Folder>> getFolders() {
+    log('getFolders');
+    return Future.delayed(const Duration(seconds: 3), () => []);
+  }
 
   // TODO: buscar id de nova pasta real
   Future<int> getNewFolderId() {
