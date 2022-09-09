@@ -15,7 +15,7 @@ class CalendarEvent {
         endTime = TimeOfDayExtension.parse(json['end_time']),
         title = json['title'],
         description = json['description'],
-        color = Color(json['color']);
+        color = Color(int.parse(json['color'], radix: 16));
 
   final TimeOfDay? startTime;
 
@@ -23,7 +23,7 @@ class CalendarEvent {
 
   final String title;
 
-  final String description;
+  final String? description;
 
   final Color color;
 }

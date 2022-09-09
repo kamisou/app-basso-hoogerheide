@@ -47,6 +47,9 @@ class AppUserRepository {
   // TODO: mudar imagem de perfil
   Future<void> changePicture(File file) async => log('changePicture');
 
-  Future<void> changePassword() =>
-      ref.read(restClientProvider).get('/profile/change_password');
+  Future<void> changePassword(String password) =>
+      ref.read(restClientProvider).get(
+        '/profile/change_password',
+        body: {'password': password},
+      ).then((_) => ref.refresh(appUserProvider));
 }

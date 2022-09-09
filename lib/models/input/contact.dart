@@ -8,6 +8,14 @@ class Contact {
     this.address,
   });
 
+  Contact.fromJson(Map<String, dynamic> json)
+      : name = json['name'],
+        telephone = json['telephone'],
+        cellphone = json['cellphone'],
+        email = json['email'],
+        fax = json['fax'],
+        address = json['address'];
+
   final String name;
 
   final String? telephone;

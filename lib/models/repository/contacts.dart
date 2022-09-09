@@ -1,11 +1,12 @@
-import 'dart:developer';
+import 'dart:convert';
 
+import 'package:basso_hoogerheide/extensions.dart';
+import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/input/contact.dart';
 import 'package:basso_hoogerheide/models/output/new_contact.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final contactsRepositoryProvider =
-    Provider.autoDispose((ref) => const ContactsRepository());
+final contactsRepositoryProvider = Provider.autoDispose(ContactsRepository.new);
 
 final contactsFilterProvider =
     StateProvider.autoDispose<String?>((ref) => null);
@@ -27,22 +28,21 @@ final filteredContactsProvider = FutureProvider.autoDispose((ref) {
 });
 
 class ContactsRepository {
-  const ContactsRepository();
+  const ContactsRepository(this.ref);
 
-  // TODO: adicionar contato
-  Future<void> addContact(NewContact? contact) async => log('addContact');
+  final Ref ref;
 
-  // TODO: buscar contatos reais
-  Future<List<Contact>> getContacts() async {
-    log('getContacts');
-    return Future.delayed(
-      const Duration(seconds: 3),
-      () => [
-        const Contact(name: 'José da Silva'),
-        const Contact(name: 'Maria Albuquerque'),
-        const Contact(name: 'Johnatan Souza'),
-        const Contact(name: 'João Marcos'),
-      ],
-    );
+  Future<void> addContact(NewContact? contact) async {
+    if (contact == null) return;
+    return ref
+        .read(restClientProvider)
+        .post('/contacts/add', body: contact.toJson())
+        .then((_) => ref.refresh(contactsRepositoryProvider));
   }
+
+  Future<List<Contact>> getContacts() =>
+      ref.read(restClientProvider).get('/contacts').then((value) => json
+          .decodeList<Map<String, dynamic>>(value)
+          .map(Contact.fromJson)
+          .toList());
 }

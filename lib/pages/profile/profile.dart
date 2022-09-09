@@ -208,8 +208,8 @@ class ProfilePage extends ConsumerWidget {
                 if (Form.of(context)!.validate()) {
                   ref
                       .read(appUserRepository)
-                      .changePassword()
-                      .then((value) => close());
+                      .changePassword(passwordController.text)
+                      .then((_) => close());
                 }
               },
               child: Padding(

@@ -30,4 +30,13 @@ class NewContact {
   void setFax(String? value) => fax = value;
 
   void setAddress(String? value) => address = value;
+
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'telephone': telephone,
+        'cellphone': cellphone,
+        'email': email,
+        'fax': fax,
+        'address': address,
+      };
 }

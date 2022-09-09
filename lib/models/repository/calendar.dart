@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:basso_hoogerheide/extensions.dart';
 import 'package:basso_hoogerheide/interface/rest_client.dart';
@@ -51,17 +50,16 @@ class CalendarRepository {
     if (event == null) return;
     return ref
         .read(restClientProvider)
-        .post('/event/add', body: event.toJson())
+        .post('/events/add', body: event.toJson())
         .then((_) => ref.refresh(initialCalendarEventsProvider));
   }
 
-  Future<CalendarEvents> getEvents(DateTime startDate, DateTime endDate) async {
-    log('getEvents');
+  Future<CalendarEvents> getEvents(DateTime startDate, DateTime endDate) {
     final DateFormat dateFormat = DateFormat('dd-MM-yyyy');
     return ref
         .read(restClientProvider)
         .get(
-          '/event'
+          '/events'
           '?startDate=${dateFormat.format(startDate)}'
           '&endTime=${dateFormat.format(endDate)}',
         )
@@ -76,20 +74,11 @@ class CalendarRepository {
             ));
   }
 
-  // TODO: buscar cores reais
-  Future<List<Color>> getEventColors() async {
-    log('getEventColors');
-    return [
-      Colors.red,
-      Colors.green,
-      Colors.blue,
-      Colors.yellow,
-      Colors.purple,
-      Colors.orange,
-      Colors.black,
-      Colors.white,
-    ];
-  }
+  Future<List<Color>> getEventColors() =>
+      ref.read(restClientProvider).get('/events/colors').then((value) => json
+          .decodeList<String>(value)
+          .map((e) => Color(int.parse(e, radix: 16)))
+          .toList());
 }
 
 class CalendarEventsRepository {

@@ -7,8 +7,8 @@ extension DateTimeExtension on DateTime {
 }
 
 extension JsonCodecExtension on JsonCodec {
-  List<Map<String, dynamic>> decodeList(String source) =>
-      (decode(source) as List? ?? []).cast<Map<String, dynamic>>();
+  List<T> decodeList<T>(String source) =>
+      (decode(source) as List? ?? []).cast<T>();
 
   Map<String, dynamic> decodeMap(String source) =>
       (decode(source) as Map<String, dynamic>);

@@ -83,10 +83,11 @@ class _EventCardState extends State<EventCard> {
                           keyString: 'Horário de Fim',
                           valueString: widget.event.endTime!.format(context),
                         ),
-                      KeyValueText(
-                        keyString: 'Descrição',
-                        valueString: widget.event.description,
-                      ),
+                      if (widget.event.description != null)
+                        KeyValueText(
+                          keyString: 'Descrição',
+                          valueString: widget.event.description!,
+                        ),
                     ],
                   ),
                 )
