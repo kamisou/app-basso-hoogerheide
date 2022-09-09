@@ -1,9 +1,11 @@
+import 'dart:io';
+
+import 'package:basso_hoogerheide/interface/file_picker.dart';
 import 'package:basso_hoogerheide/models/input/model_category.dart';
 import 'package:basso_hoogerheide/models/repository/models.dart';
 import 'package:basso_hoogerheide/pages/home/models/model_card.dart';
 import 'package:basso_hoogerheide/widgets/collection.dart';
 import 'package:basso_hoogerheide/widgets/empty_card.dart';
-import 'package:basso_hoogerheide/widgets/loading_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -24,19 +26,7 @@ class _ModelsPageState extends ConsumerState<ModelsPage>
             collection: data,
             itemBuilder: (_, item) => ModelCard(
               modelCategory: item,
-              onTapUpload: () => ref
-                  .read(modelsRepositoryProvider)
-                  .uploadModelFile()
-                  .then((upload) {
-                if (upload == null) return;
-                LoadingSnackbar(
-                  contentBuilder: (_) =>
-                      _loadingContentBuilder(context, upload),
-                  errorBuilder: (_) => _errorContentBuilder(context, upload),
-                  finishedBuilder: (_) =>
-                      _finishedContentBuilder(context, upload),
-                ).show(context, upload);
-              }),
+              onTapUpload: _onTapUpload,
               onTapDelete: ref.read(modelsRepositoryProvider).deleteModel,
             ),
             emptyWidget: const EmptyCard(
@@ -56,71 +46,16 @@ class _ModelsPageState extends ConsumerState<ModelsPage>
         );
   }
 
-  Widget _loadingContentBuilder(
-    BuildContext context,
-    FileUploadProgressStream upload,
-  ) {
-    return RichText(
-      text: TextSpan(
-        text: 'Fazendo upload de ',
-        style: Theme.of(context).textTheme.titleMedium,
-        children: [
-          TextSpan(
-            text: upload.fileName,
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium
-                ?.copyWith(fontWeight: FontWeight.bold),
-          ),
-        ],
-      ),
-    );
+  Future<void> _onTapUpload() async {
+    final List<File>? result = await ref.read(filePickerProvider).pickFiles(
+          allowMultiple: false,
+          dialogTitle: 'Selecione um arquivo para o modelo',
+        );
+    if (result == null) return;
+    // TOOD: exibir snackbar
+    return ref.read(modelsRepositoryProvider).uploadModelFile(result.first);
   }
 
-  Widget _errorContentBuilder(
-    BuildContext context,
-    FileUploadProgressStream upload,
-  ) {
-    return RichText(
-      text: TextSpan(
-        text: 'Falha ao fazer upload de ',
-        style: Theme.of(context).textTheme.titleMedium,
-        children: [
-          TextSpan(
-            text: upload.fileName,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _finishedContentBuilder(
-    BuildContext context,
-    FileUploadProgressStream upload,
-  ) {
-    return RichText(
-      text: TextSpan(
-        text: 'Upload de ',
-        style: Theme.of(context).textTheme.titleMedium,
-        children: [
-          TextSpan(
-            text: upload.fileName,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-          ),
-          TextSpan(
-            text: ' finalizado',
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-        ],
-      ),
-    );
-  }
-  
   @override
   bool get wantKeepAlive => true;
 }

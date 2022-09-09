@@ -34,7 +34,7 @@ class RestClient {
 
   final Map<String, Object>? defaultHeaders;
 
-  Future<dynamic> get(
+  Future<String> get(
     String endpoint, {
     Object? body,
     Map<String, Object?>? headers,
@@ -46,7 +46,7 @@ class RestClient {
         headers: headers,
       );
 
-  Future<dynamic> post(
+  Future<String> post(
     String endpoint, {
     Object? body,
     Map<String, Object?>? headers,
@@ -58,7 +58,7 @@ class RestClient {
         headers: headers,
       );
 
-  Future<Object> _request(
+  Future<String> _request(
     String method,
     Uri url, {
     Object? body,
@@ -81,10 +81,38 @@ class RestClient {
     log('$method ${url.path}');
     final HttpClientResponse response = await request.close();
 
-    // TODO: exceção = erro não tratado pela api
     if (response.statusCode > 399) {
-      throw HttpException(response.reasonPhrase);
+      String? serverMessage;
+      try {
+        serverMessage = await response
+            .transform(utf8.decoder)
+            .join()
+            .then(json.decode)
+            .then((value) => value['message']);
+      } on Object {
+        serverMessage = null;
+      }
+
+      throw RestException(
+        statusCode: response.statusCode,
+        reasonPhrase: response.reasonPhrase,
+        serverMessage: serverMessage,
+      );
     }
     return response.transform(utf8.decoder).join();
   }
+}
+
+class RestException {
+  const RestException({
+    required this.statusCode,
+    required this.reasonPhrase,
+    this.serverMessage,
+  });
+
+  final int statusCode;
+
+  final String reasonPhrase;
+
+  final String? serverMessage;
 }

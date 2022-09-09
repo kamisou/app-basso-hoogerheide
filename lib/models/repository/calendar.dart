@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:basso_hoogerheide/extensions.dart';
@@ -6,6 +7,7 @@ import 'package:basso_hoogerheide/models/input/calendar_event.dart';
 import 'package:basso_hoogerheide/models/output/new_calendar_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 typedef CalendarEvents = Map<DateTime, List<CalendarEvent>>;
 
@@ -53,10 +55,25 @@ class CalendarRepository {
         .then((_) => ref.refresh(initialCalendarEventsProvider));
   }
 
-  // TODO: buscar eventos reais
   Future<CalendarEvents> getEvents(DateTime startDate, DateTime endDate) async {
     log('getEvents');
-    return {};
+    final DateFormat dateFormat = DateFormat('dd-MM-yyyy');
+    return ref
+        .read(restClientProvider)
+        .get(
+          '/event'
+          '?startDate=${dateFormat.format(startDate)}'
+          '&endTime=${dateFormat.format(endDate)}',
+        )
+        .then((value) => json.decodeMap(value).map(
+              (key, value) => MapEntry(
+                DateTime.parse(key),
+                (value as List? ?? [])
+                    .cast<Map<String, dynamic>>()
+                    .map(CalendarEvent.fromJson)
+                    .toList(),
+              ),
+            ));
   }
 
   // TODO: buscar cores reais

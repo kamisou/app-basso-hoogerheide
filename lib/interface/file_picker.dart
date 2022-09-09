@@ -12,12 +12,10 @@ class FilePicker {
   Future<List<File>?> pickFiles({
     String? dialogTitle,
     bool allowMultiple = false,
-    bool withReadStream = false,
   }) async {
     final fp.FilePickerResult? result = await fp.FilePicker.platform.pickFiles(
       dialogTitle: dialogTitle,
       allowMultiple: allowMultiple,
-      withReadStream: withReadStream,
     );
     if (result == null) return null;
     return result.files.map((e) => File(e.path!)).toList();

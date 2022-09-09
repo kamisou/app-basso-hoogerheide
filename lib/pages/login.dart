@@ -1,5 +1,9 @@
+import 'dart:io';
+
+import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/repository/app_user.dart';
 import 'package:basso_hoogerheide/widgets/async_button.dart';
+import 'package:basso_hoogerheide/widgets/error_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -92,33 +96,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         const SizedBox(height: 20),
         AsyncButton(
           controller: _controller,
-          onPressed: () async {
-            if (Form.of(context)!.validate()) {
-              return ref.read(appUserRepository).signIn({
-                'email': _emailController.text,
-                'password': _passwordController.text,
-              }).then(
-                (_) => Navigator.pushReplacementNamed(context, '/home'),
-                onError: (e) => ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          e.toString(),
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        Icon(
-                          Icons.wifi_off,
-                          color: Theme.of(context).colorScheme.error,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              );
-            }
-          },
+          onPressed: () => _signIn(context),
           loadingChild: SizedBox(
             height: 25,
             width: 25,
@@ -140,5 +118,32 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         ),
       ],
     );
+  }
+
+  Future<void> _signIn(BuildContext context) async {
+    if (Form.of(context)!.validate()) {
+      FocusManager.instance.primaryFocus?.unfocus();
+      return ref.read(appUserRepository).signIn({
+        'email': _emailController.text,
+        'password': _passwordController.text,
+      }).then(
+        (_) => Navigator.pushReplacementNamed(context, '/home'),
+        onError: (e) => ErrorSnackbar<RestException>(
+          content: (context, error) => Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                error.serverMessage ?? 'Ocorreu um erro inesperado',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              Icon(
+                Icons.wifi_off,
+                color: Theme.of(context).colorScheme.error,
+              ),
+            ],
+          ),
+        ).show(context, e),
+      );
+    }
   }
 }

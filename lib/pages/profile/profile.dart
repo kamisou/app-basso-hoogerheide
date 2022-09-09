@@ -1,4 +1,6 @@
-import 'package:basso_hoogerheide/extensions.dart';
+import 'dart:io';
+
+import 'package:basso_hoogerheide/interface/file_picker.dart';
 import 'package:basso_hoogerheide/models/input/app_user.dart';
 import 'package:basso_hoogerheide/models/repository/app_user.dart';
 import 'package:basso_hoogerheide/pages/profile/profile_option.dart';
@@ -19,7 +21,7 @@ class ProfilePage extends ConsumerWidget {
         children: [
           Center(
             child: GestureDetector(
-              onTap: ref.read(appUserRepository).changePicture,
+              onTap: () => _onTapProfilePic(ref),
               child: Stack(
                 alignment: Alignment.topRight,
                 clipBehavior: Clip.none,
@@ -151,6 +153,16 @@ class ProfilePage extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+  Future<void> _onTapProfilePic(WidgetRef ref) async {
+    final List<File>? result = await ref.read(filePickerProvider).pickFiles(
+          allowMultiple: false,
+          dialogTitle: 'Selecione uma foto para o perfil:',
+        );
+    if (result == null) return;
+    // TOOD: exibir snackbar
+    return ref.read(appUserRepository).changePicture(result.first);
   }
 
   Widget _changePasswordFormBuilder(
