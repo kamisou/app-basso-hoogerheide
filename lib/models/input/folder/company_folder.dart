@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:basso_hoogerheide/extensions.dart';
 import 'package:basso_hoogerheide/models/input/downloadable_file.dart';
 import 'package:basso_hoogerheide/models/input/folder/address_info.dart';
 import 'package:basso_hoogerheide/models/input/folder/annotation.dart';
@@ -25,6 +28,25 @@ class CompanyFolder extends Folder {
           processInfo: processInfo,
           files: files,
           annotations: annotations ?? const [],
+        );
+
+  CompanyFolder.fromJson(Map<String, dynamic> js)
+      : cnpj = js['cnpj'],
+        super(
+          addressInfo: AddressInfo.fromJson(js['address_info']),
+          contactInfo: ContactInfo.fromJson(js['contact_info']),
+          files: json
+              .decodeList<Map<String, dynamic>>(js['files'])
+              .map(DownloadableFile.fromJson)
+              .toList(),
+          id: js['id'],
+          name: js['name'],
+          processInfo: ProcessInfo.fromJson(js['process_info']),
+          writtenOff: js['written_off'],
+          annotations: json
+              .decodeList<Map<String, dynamic>>(js['annotations'])
+              .map(Annotation.fromJson)
+              .toList(),
         );
 
   final String cnpj;

@@ -1,11 +1,13 @@
+import 'dart:convert';
 import 'dart:developer';
 
+import 'package:basso_hoogerheide/extensions.dart';
+import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/input/downloadable_file.dart';
 import 'package:basso_hoogerheide/models/input/folder/folder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final foldersRepositoryProvider =
-    Provider.autoDispose((ref) => const FoldersRepository());
+final foldersRepositoryProvider = Provider.autoDispose(FoldersRepository.new);
 
 final foldersProvider = FutureProvider(
   (ref) => ref.read(foldersRepositoryProvider).getFolders(),
@@ -16,19 +18,20 @@ final annotationOptionsProvider = Provider.autoDispose(
 );
 
 class FoldersRepository {
-  const FoldersRepository();
+  const FoldersRepository(this.ref);
 
-  // TODO: buscar folders reais
-  Future<List<Folder>> getFolders() {
-    log('getFolders');
-    return Future.delayed(const Duration(seconds: 3), () => []);
-  }
+  final Ref ref;
 
-  // TODO: buscar id de nova pasta real
-  Future<int> getNewFolderId() {
-    log('getNewFolderId');
-    return Future.delayed(const Duration(seconds: 2), () => 1501);
-  }
+  Future<List<Folder>> getFolders() =>
+      ref.read(restClientProvider).get('/folders').then((value) => json
+          .decodeList<Map<String, dynamic>>(value)
+          .map(Folder.fromJson)
+          .toList());
+
+  Future<int> getNewFolderId() => ref
+      .read(restClientProvider)
+      .get('/folders/new_id')
+      .then((value) => json.decode(value)['new_id']);
 
   // TODO: buscar opções de anotação
   Future<List<String>> getNewAnnotationOptions() {

@@ -7,6 +7,11 @@ class Annotation {
     required this.timestamp,
   });
 
+  Annotation.fromJson(Map<String, dynamic> json)
+      : description = json['description'],
+        author = AppUser.fromJson(json['author']),
+        timestamp = DateTime.parse(json['timestamp']);
+
   final String description;
 
   final AppUser author;

@@ -12,6 +12,15 @@ class ProcessInfo {
     this.division,
   });
 
+  ProcessInfo.fromJson(Map<String, dynamic> json)
+      : nature = json['nature'],
+        color = Color(int.parse(json['color'], radix: 16)),
+        attorney = AppUser.fromJson(json['attorney']),
+        number = json['number'],
+        protocolDate = DateTime.parse(json['protocol_date']),
+        district = json['district'],
+        division = json['division'];
+
   final String nature;
 
   final Color color;
