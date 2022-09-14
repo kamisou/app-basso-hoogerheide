@@ -1,4 +1,5 @@
 import 'package:basso_hoogerheide/models/input/folder/folder.dart';
+import 'package:basso_hoogerheide/models/repository/contacts.dart';
 import 'package:basso_hoogerheide/models/repository/folders.dart';
 import 'package:basso_hoogerheide/pages/home/folders/folder_card.dart';
 import 'package:basso_hoogerheide/widgets/collection.dart';
@@ -39,13 +40,13 @@ class _FoldersPageState extends ConsumerState<FoldersPage>
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: SearchBar(
               hintText: 'N° da pasta, cliente, procurador, CPF...',
-              // TODO: atualizar filtro da lista de pastas
-              onChanged: (value) {},
+              onChanged: (value) =>
+                  ref.read(contactsFilterProvider.notifier).state = value,
             ),
           ),
           const SizedBox(height: 32),
           Expanded(
-            child: ref.watch(foldersProvider).when(
+            child: ref.watch(filteredFoldersProvider).when(
                   data: (data) => Collection<Folder>(
                     collection: data,
                     itemBuilder: (_, item) => FolderCard(

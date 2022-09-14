@@ -8,9 +8,27 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final foldersRepositoryProvider = Provider.autoDispose(FoldersRepository.new);
 
+final foldersFilterProvider = StateProvider.autoDispose<String?>((ref) => null);
+
 final foldersProvider = FutureProvider(
   (ref) => ref.read(foldersRepositoryProvider).getFolders(),
 );
+
+final filteredFoldersProvider = FutureProvider.autoDispose((ref) {
+  final String? filter = ref.watch(foldersFilterProvider);
+  final Future<List<Folder>> folders = ref.watch(foldersProvider.future);
+  return folders.then((value) {
+    if (filter?.isNotEmpty ?? false) {
+      final regex = RegExp(filter!, caseSensitive: false);
+      return value
+          .where(
+            (e) => e.name.contains(regex) || e.id.toString().contains(regex),
+          )
+          .toList();
+    }
+    return value;
+  });
+});
 
 final annotationOptionsProvider = Provider.autoDispose(
   (ref) => ref.read(foldersRepositoryProvider).getNewAnnotationOptions(),
