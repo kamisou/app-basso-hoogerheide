@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:basso_hoogerheide/extensions.dart';
 import 'package:basso_hoogerheide/interface/rest_client.dart';
@@ -33,26 +32,23 @@ class FoldersRepository {
       .get('/folders/new_id')
       .then((value) => json.decode(value)['new_id']);
 
-  // TODO: buscar opções de anotação
-  Future<List<String>> getNewAnnotationOptions() {
-    log('getNewAnnotationOptions');
-    return Future.delayed(
-      const Duration(seconds: 1),
-      () => [
-        'Atendimento inicial',
-        'Petição Inicial',
-        'Audiência',
-      ],
-    );
+  Future<List<String>> getNewAnnotationOptions() => ref
+      .read(restClientProvider)
+      .get('/folders/annotations')
+      .then((value) => json.decodeList<String>(value).toList());
+
+  Future<void> addFolder(Map<String, dynamic> folder) => ref
+      .read(restClientProvider)
+      .post('/folders/add', body: folder)
+      .then((_) => ref.refresh(foldersProvider));
+
+  Future<void> addAnnotation(Map<String, dynamic>? annotation) async {
+    if (annotation == null) return;
+    await ref
+        .read(restClientProvider)
+        .post('/folders/annotations/add', body: annotation);
   }
 
-  // TODO: salvar nova pasta
-  Future<void> addFolder(Map<String, dynamic> folder) async => log('addFolder');
-
-  // TODO: adicionar anotação
-  Future<void> addAnnotation(String? annotation) async => log('addAnnotation');
-
-  // TODO: deletar arquivo da pasta
-  Future<void> deleteFolderFile(DownloadableFile file) async =>
-      log('deleteFolderFile');
+  Future<void> deleteFolderFile(DownloadableFile file) =>
+      ref.read(restClientProvider).delete('/folders/files/delete');
 }

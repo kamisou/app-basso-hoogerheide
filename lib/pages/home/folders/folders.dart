@@ -1,3 +1,4 @@
+import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/input/folder/folder.dart';
 import 'package:basso_hoogerheide/models/repository/folders.dart';
 import 'package:basso_hoogerheide/pages/home/folders/folder_card.dart';
@@ -48,7 +49,11 @@ class _FoldersPageState extends ConsumerState<FoldersPage>
             child: ref.watch(foldersProvider).when(
                   data: (data) => Collection<Folder>(
                     collection: data,
-                    itemBuilder: (_, item) => FolderCard(folder: item),
+                    itemBuilder: (_, item) => FolderCard(
+                      folder: item,
+                      onDeleteFolderFile:
+                          ref.read(foldersRepositoryProvider).deleteFolderFile,
+                    ),
                     emptyWidget: const EmptyCard(
                       icon: Icons.folder_off_outlined,
                       message: 'Nenhuma pasta encontrada',

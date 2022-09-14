@@ -18,10 +18,12 @@ class AnnotationsPage extends ConsumerWidget {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.note_add),
         onPressed: () => ref.watch(annotationOptionsProvider).then(
-              (value) => showDialog<String?>(
+              (value) => showDialog<Map<String, dynamic>?>(
                 context: context,
                 builder: (context) => const AddAnnotationDialog(),
-                routeSettings: RouteSettings(arguments: value),
+                routeSettings: RouteSettings(
+                  arguments: {'folder_id': folder.id, 'options': value},
+                ),
               ).then(ref.read(foldersRepositoryProvider).addAnnotation),
             ),
       ),

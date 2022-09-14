@@ -1,12 +1,12 @@
 import 'dart:convert';
 
+import 'package:basso_hoogerheide/extensions.dart';
 import 'package:basso_hoogerheide/models/input/downloadable_file.dart';
 import 'package:basso_hoogerheide/models/input/folder/address_info.dart';
 import 'package:basso_hoogerheide/models/input/folder/annotation.dart';
 import 'package:basso_hoogerheide/models/input/folder/contact_info.dart';
 import 'package:basso_hoogerheide/models/input/folder/folder.dart';
 import 'package:basso_hoogerheide/models/input/folder/process_info.dart';
-import 'package:basso_hoogerheide/extensions.dart';
 
 class PersonFolder extends Folder {
   const PersonFolder({

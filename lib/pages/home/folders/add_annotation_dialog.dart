@@ -15,8 +15,8 @@ class _AddAnnotationDialogState extends ConsumerState<AddAnnotationDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> options =
-        ModalRoute.of(context)!.settings.arguments as List<String>;
+    final Map<String, dynamic> args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     return Dialog(
       insetPadding: const EdgeInsets.all(16),
       child: Padding(
@@ -43,7 +43,7 @@ class _AddAnnotationDialogState extends ConsumerState<AddAnnotationDialog> {
                     ),
                     const SizedBox(height: 4),
                     SearchBar<String>(
-                      options: options,
+                      options: args['options'],
                       onChanged: (value) => _annotation = value,
                       validator: (value) => (value?.isEmpty ?? true)
                           ? 'Insira um assunto para a anotação'
@@ -64,7 +64,13 @@ class _AddAnnotationDialogState extends ConsumerState<AddAnnotationDialog> {
                         GestureDetector(
                           onTap: () {
                             if (Form.of(context)!.validate()) {
-                              Navigator.pop(context, _annotation);
+                              Navigator.pop(
+                                context,
+                                {
+                                  'folder_id': args['folder_id'],
+                                  'annotation': _annotation,
+                                },
+                              );
                             }
                           },
                           child: Text(

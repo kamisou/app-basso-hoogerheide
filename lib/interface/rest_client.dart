@@ -58,6 +58,18 @@ class RestClient {
         headers: headers,
       );
 
+  Future<String> delete(
+    String endpoint, {
+    Object? body,
+    Map<String, Object?>? headers,
+  }) =>
+      _request(
+        'DELETE',
+        Uri.parse('$host$endpoint'),
+        body: body,
+        headers: headers,
+      );
+
   Future<String> _request(
     String method,
     Uri url, {
