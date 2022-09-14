@@ -15,9 +15,9 @@ final calendarRepositoryProvider = Provider.autoDispose(CalendarRepository.new);
 final initialDateRepositoryProvider =
     Provider.autoDispose((ref) => DateTime.now().dayOnly());
 
-final initialCalendarEventsProvider = FutureProvider.autoDispose(
+final initialCalendarEventsProvider = FutureProvider(
   (ref) {
-    final initialDate = ref.watch(initialDateRepositoryProvider);
+    final initialDate = ref.read(initialDateRepositoryProvider);
     return ref.read(calendarRepositoryProvider).getEvents(
           initialDate.subtract(CalendarEventsRepository.prefetchDays),
           initialDate.add(CalendarEventsRepository.prefetchDays),
@@ -28,7 +28,7 @@ final initialCalendarEventsProvider = FutureProvider.autoDispose(
 final calendarEventsRepositoryProvider = Provider(
   (ref) {
     final initialDate = ref.read(initialDateRepositoryProvider);
-    final initialData = ref.read(initialCalendarEventsProvider);
+    final initialData = ref.watch(initialCalendarEventsProvider);
     return CalendarEventsRepository(
       repository: ref.read(calendarRepositoryProvider),
       initialData: initialData.value!,

@@ -4,6 +4,7 @@ import 'package:basso_hoogerheide/interface/file_picker.dart';
 import 'package:basso_hoogerheide/models/input/app_user.dart';
 import 'package:basso_hoogerheide/models/repository/app_user.dart';
 import 'package:basso_hoogerheide/pages/profile/profile_option.dart';
+import 'package:basso_hoogerheide/widgets/async_button.dart';
 import 'package:basso_hoogerheide/widgets/shimmering_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -202,16 +203,16 @@ class ProfilePage extends ConsumerWidget {
               },
             ),
             const SizedBox(height: 16),
-            // TODO: substituir por async button
-            GestureDetector(
-              onTap: () {
+            TextAsyncButton(
+              onPressed: () async {
                 if (Form.of(context)!.validate()) {
-                  ref
+                  return ref
                       .read(appUserRepository)
                       .changePassword(passwordController.text)
                       .then((_) => close());
                 }
               },
+              loadingChild: const SizedBox(width: 16, height: 16),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 4),
                 child: Text(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class AsyncButton extends StatefulWidget {
+abstract class AsyncButton extends StatefulWidget {
   const AsyncButton({
     super.key,
     required this.onPressed,
@@ -16,12 +16,9 @@ class AsyncButton extends StatefulWidget {
   final Widget loadingChild;
 
   final AsyncButtonController? controller;
-
-  @override
-  State<AsyncButton> createState() => _AsyncButtonState();
 }
 
-class _AsyncButtonState extends State<AsyncButton> {
+abstract class _AsyncButtonState extends State<AsyncButton> {
   bool _ready = true;
 
   @override
@@ -40,14 +37,6 @@ class _AsyncButtonState extends State<AsyncButton> {
     widget.onPressed().whenComplete(() => setState(() => _ready = true));
     setState(() => _ready = false);
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: _ready ? _onPressedCallback : null,
-      child: _ready ? widget.child : widget.loadingChild,
-    );
-  }
 }
 
 class AsyncButtonController implements Listenable {
@@ -64,4 +53,50 @@ class AsyncButtonController implements Listenable {
 
   @override
   void removeListener(VoidCallback listener) => _callbacks.remove(listener);
+}
+
+class ElevatedAsyncButton extends AsyncButton {
+  const ElevatedAsyncButton({
+    super.key,
+    required super.onPressed,
+    required super.child,
+    required super.loadingChild,
+    super.controller,
+  });
+
+  @override
+  State<AsyncButton> createState() => _ElevatedAsyncButtonState();
+}
+
+class _ElevatedAsyncButtonState extends _AsyncButtonState {
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: _ready ? _onPressedCallback : null,
+      child: _ready ? widget.child : widget.loadingChild,
+    );
+  }
+}
+
+class TextAsyncButton extends AsyncButton {
+  const TextAsyncButton({
+    super.key,
+    required super.onPressed,
+    required super.child,
+    required super.loadingChild,
+    super.controller,
+  });
+
+  @override
+  State<AsyncButton> createState() => _TextAsyncButtonState();
+}
+
+class _TextAsyncButtonState extends _AsyncButtonState {
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: _ready ? _onPressedCallback : null,
+      child: _ready ? widget.child : widget.loadingChild,
+    );
+  }
 }

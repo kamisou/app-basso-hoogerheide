@@ -50,9 +50,20 @@ class _CalendarPageState extends ConsumerState<CalendarPage>
                 );
               },
             ),
-            error: (_, __) => const EmptyCard(
-              icon: Icons.error,
-              message: 'Não foi possível buscar os eventos do calendário',
+            error: (_, __) => RefreshIndicator(
+              onRefresh: () async {
+                ref.refresh(initialCalendarEventsProvider);
+              },
+              child: const SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 32),
+                  child: EmptyCard(
+                    icon: Icons.error,
+                    message: 'Não foi possível buscar os eventos do calendário',
+                  ),
+                ),
+              ),
             ),
             loading: () => Container(
               alignment: Alignment.topCenter,

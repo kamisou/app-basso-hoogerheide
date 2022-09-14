@@ -92,7 +92,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               (value?.isEmpty ?? true) ? 'Informe sua senha' : null,
         ),
         const SizedBox(height: 20),
-        AsyncButton(
+        ElevatedAsyncButton(
           controller: _controller,
           onPressed: () => _signIn(context),
           loadingChild: SizedBox(
