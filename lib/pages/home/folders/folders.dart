@@ -1,4 +1,3 @@
-import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/input/folder/folder.dart';
 import 'package:basso_hoogerheide/models/repository/folders.dart';
 import 'package:basso_hoogerheide/pages/home/folders/folder_card.dart';
