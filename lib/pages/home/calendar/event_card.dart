@@ -20,6 +20,7 @@ class _EventCardState extends State<EventCard> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Card(
           color: widget.event.color,
@@ -83,11 +84,21 @@ class _EventCardState extends State<EventCard> {
                           keyString: 'Horário de Fim',
                           valueString: widget.event.endTime!.format(context),
                         ),
-                      if (widget.event.description != null)
-                        KeyValueText(
-                          keyString: 'Descrição',
-                          valueString: widget.event.description!,
-                        ),
+                      widget.event.description != null
+                          ? KeyValueText(
+                              keyString: 'Descrição',
+                              valueString: widget.event.description!,
+                            )
+                          : Text(
+                              '(Nenhuma informação sobre o evento)',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
+                                  ),
+                            )
                     ],
                   ),
                 )

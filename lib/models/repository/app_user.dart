@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -23,7 +22,7 @@ class AppUserRepository {
     final String response = await ref
         .read(restClientProvider)
         .post('/profile/login', body: body)
-        .then((value) => json.decode(value)['token']);
+        .then((value) => value['token']);
     return ref
         .read(secureStorageProvider)
         .write(SecureStorageKey.authToken.key, response);
@@ -42,7 +41,7 @@ class AppUserRepository {
   Future<AppUser> getMyUser() => ref
       .read(restClientProvider)
       .get('/profile')
-      .then((value) => AppUser.fromJson(json.decode(value)));
+      .then((value) => AppUser.fromJson(value));
 
   // TODO: mudar imagem de perfil
   Future<void> changePicture(File file) async => log('changePicture');

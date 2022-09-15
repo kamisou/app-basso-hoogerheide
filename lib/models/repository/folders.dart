@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:basso_hoogerheide/extensions.dart';
 import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/input/downloadable_file.dart';
 import 'package:basso_hoogerheide/models/input/folder/folder.dart';
@@ -39,9 +38,11 @@ class FoldersRepository {
 
   final Ref ref;
 
-  Future<List<Folder>> getFolders() =>
-      ref.read(restClientProvider).get('/folders').then((value) => json
-          .decodeList<Map<String, dynamic>>(value)
+  Future<List<Folder>> getFolders() => ref
+      .read(restClientProvider)
+      .get('/folders')
+      .then((value) => (value as List? ?? [])
+          .cast<Map<String, dynamic>>()
           .map(Folder.fromJson)
           .toList());
 
@@ -53,7 +54,7 @@ class FoldersRepository {
   Future<List<String>> getNewAnnotationOptions() => ref
       .read(restClientProvider)
       .get('/folders/annotations')
-      .then((value) => json.decodeList<String>(value).toList());
+      .then((value) => value as List<String>);
 
   Future<void> addFolder(Map<String, dynamic> folder) => ref
       .read(restClientProvider)

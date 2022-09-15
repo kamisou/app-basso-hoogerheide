@@ -34,7 +34,7 @@ class RestClient {
 
   final Map<String, Object>? defaultHeaders;
 
-  Future<String> get(
+  Future<dynamic> get(
     String endpoint, {
     Object? body,
     Map<String, Object?>? headers,
@@ -46,7 +46,7 @@ class RestClient {
         headers: headers,
       );
 
-  Future<String> post(
+  Future<dynamic> post(
     String endpoint, {
     Object? body,
     Map<String, Object?>? headers,
@@ -58,7 +58,7 @@ class RestClient {
         headers: headers,
       );
 
-  Future<String> delete(
+  Future<dynamic> delete(
     String endpoint, {
     Object? body,
     Map<String, Object?>? headers,
@@ -70,7 +70,7 @@ class RestClient {
         headers: headers,
       );
 
-  Future<String> _request(
+  Future<dynamic> _request(
     String method,
     Uri url, {
     Object? body,
@@ -111,7 +111,7 @@ class RestClient {
         serverMessage: serverMessage,
       );
     }
-    return response.transform(utf8.decoder).join();
+    return response.transform(utf8.decoder).join().then(json.decode);
   }
 }
 

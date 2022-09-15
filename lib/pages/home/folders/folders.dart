@@ -4,6 +4,7 @@ import 'package:basso_hoogerheide/models/repository/folders.dart';
 import 'package:basso_hoogerheide/pages/home/folders/folder_card.dart';
 import 'package:basso_hoogerheide/widgets/collection.dart';
 import 'package:basso_hoogerheide/widgets/empty_card.dart';
+import 'package:basso_hoogerheide/widgets/radio_group.dart';
 import 'package:basso_hoogerheide/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,15 +25,17 @@ class _FoldersPageState extends ConsumerState<FoldersPage>
       floatingActionButton: FloatingActionButton(
         heroTag: 'folder_fab',
         child: const Icon(Icons.person_add),
-        onPressed: () => ref
-            .read(foldersRepositoryProvider)
-            .getNewFolderId()
-            .then((id) => Navigator.pushNamed(
-                  context,
-                  '/newFolder',
-                  // TODO: pessoa física e jurídica
-                  arguments: {'new_id': id, 'folder_type': 'person'},
-                )),
+        onPressed: () => _selectFolderType().then((value) {
+          if (value == null) return null;
+          return ref
+              .read(foldersRepositoryProvider)
+              .getNewFolderId()
+              .then((id) => Navigator.pushNamed(
+                    context,
+                    '/newFolder',
+                    arguments: {'new_id': id, 'folder_type': value},
+                  ));
+        }),
       ),
       body: Column(
         children: [
@@ -46,31 +49,63 @@ class _FoldersPageState extends ConsumerState<FoldersPage>
           ),
           const SizedBox(height: 32),
           Expanded(
-            child: ref.watch(filteredFoldersProvider).when(
-                  data: (data) => Collection<Folder>(
-                    collection: data,
-                    itemBuilder: (_, item) => FolderCard(
-                      folder: item,
-                      onDeleteFolderFile:
-                          ref.read(foldersRepositoryProvider).deleteFolderFile,
-                    ),
-                    emptyWidget: const EmptyCard(
-                      icon: Icons.folder_off_outlined,
-                      message: 'Nenhuma pasta encontrada',
-                    ),
-                  ),
-                  error: (_, __) => const EmptyCard(
-                    icon: Icons.error,
-                    message: 'Houve um erro ao buscar as pastas',
-                  ),
-                  loading: () => Container(
-                    alignment: Alignment.topCenter,
-                    padding: const EdgeInsets.all(20),
-                    child: const CircularProgressIndicator(),
-                  ),
-                ),
+            child: AsyncCollection<Folder>(
+              asyncCollection: ref.watch(filteredFoldersProvider),
+              itemBuilder: (_, item) => FolderCard(
+                folder: item,
+                onDeleteFolderFile:
+                    ref.read(foldersRepositoryProvider).deleteFolderFile,
+              ),
+              errorWidget: (_) => const EmptyCard(
+                icon: Icons.error,
+                message: 'Houve um erro ao buscar as pastas',
+              ),
+              emptyWidget: const EmptyCard(
+                icon: Icons.folder_off_outlined,
+                message: 'Nenhuma pasta encontrada',
+              ),
+              loadingWidget: Container(
+                alignment: Alignment.topCenter,
+                padding: const EdgeInsets.all(20),
+                child: const CircularProgressIndicator(),
+              ),
+              onRefresh: () async => ref.refresh(foldersProvider),
+            ),
           ),
         ],
+      ),
+    );
+  }
+
+  Future<String?> _selectFolderType() {
+    String? result;
+    return showDialog<String?>(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) => Dialog(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: [
+              Text(
+                'Nova pasta - Tipo:',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              const SizedBox(height: 16),
+              RadioGroup<String>(
+                values: const ['person', 'company'],
+                labels: const ['Pessoa Física', 'Pessoa Jurídica'],
+                style: Theme.of(context).textTheme.labelLarge,
+                onChanged: (value) => result = value,
+              ),
+              const SizedBox(height: 16),
+              TextButton(
+                onPressed: () => Navigator.pop(context, result),
+                child: const Text('Criar'),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

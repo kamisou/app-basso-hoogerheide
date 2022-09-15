@@ -1,17 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 
 extension DateTimeExtension on DateTime {
   DateTime dayOnly() => DateTime(year, month, day);
-}
-
-extension JsonCodecExtension on JsonCodec {
-  List<T> decodeList<T>(String source) =>
-      (decode(source) as List? ?? []).cast<T>();
-
-  Map<String, dynamic> decodeMap(String source) =>
-      (decode(source) as Map<String, dynamic>);
 }
 
 extension TimeOfDayExtension on TimeOfDay {

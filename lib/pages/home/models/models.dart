@@ -21,29 +21,28 @@ class _ModelsPageState extends ConsumerState<ModelsPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return ref.watch(modelsProvider).when(
-          data: (data) => Collection<ModelCategory>(
-            collection: data,
-            itemBuilder: (_, item) => ModelCard(
-              modelCategory: item,
-              onTapUpload: _onTapUpload,
-              onTapDelete: ref.read(modelsRepositoryProvider).deleteModel,
-            ),
-            emptyWidget: const EmptyCard(
-              icon: Icons.file_download_off_outlined,
-              message: 'Nenhum modelo encontrado',
-            ),
-          ),
-          error: (_, __) => const EmptyCard(
-            icon: Icons.error,
-            message: 'Houve um erro ao buscar os modelos',
-          ),
-          loading: () => Container(
-            alignment: Alignment.topCenter,
-            padding: const EdgeInsets.all(20),
-            child: const CircularProgressIndicator(),
-          ),
-        );
+    return AsyncCollection<ModelCategory>(
+      asyncCollection: ref.watch(modelsProvider),
+      itemBuilder: (_, item) => ModelCard(
+        modelCategory: item,
+        onTapUpload: _onTapUpload,
+        onTapDelete: ref.read(modelsRepositoryProvider).deleteModel,
+      ),
+      errorWidget: (_) => const EmptyCard(
+        icon: Icons.error,
+        message: 'Houve um erro ao buscar os modelos',
+      ),
+      emptyWidget: const EmptyCard(
+        icon: Icons.file_download_off_outlined,
+        message: 'Nenhum modelo encontrado',
+      ),
+      loadingWidget: Container(
+        alignment: Alignment.topCenter,
+        padding: const EdgeInsets.all(20),
+        child: const CircularProgressIndicator(),
+      ),
+      onRefresh: () async => ref.refresh(modelsProvider),
+    );
   }
 
   Future<void> _onTapUpload() async {

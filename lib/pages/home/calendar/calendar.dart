@@ -51,9 +51,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage>
               },
             ),
             error: (_, __) => RefreshIndicator(
-              onRefresh: () async {
-                ref.refresh(initialCalendarEventsProvider);
-              },
+              onRefresh: () async => ref.refresh(initialCalendarEventsProvider),
               child: const SingleChildScrollView(
                 physics: AlwaysScrollableScrollPhysics(),
                 child: Padding(

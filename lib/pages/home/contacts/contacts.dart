@@ -42,25 +42,24 @@ class _ContactsPageState extends ConsumerState<ContactsPage>
           ),
           const SizedBox(height: 32),
           Expanded(
-            child: ref.watch(filteredContactsProvider).when(
-                  data: (data) => Collection<Contact>(
-                    collection: data,
-                    itemBuilder: (_, item) => ContactTile(contact: item),
-                    emptyWidget: const EmptyCard(
-                      icon: Icons.no_accounts_outlined,
-                      message: 'Nenhum contato encontrado',
-                    ),
-                  ),
-                  error: (_, __) => const EmptyCard(
-                    icon: Icons.error,
-                    message: 'Houve um erro ao buscar os contatos',
-                  ),
-                  loading: () => Container(
-                    alignment: Alignment.topCenter,
-                    padding: const EdgeInsets.all(20),
-                    child: const CircularProgressIndicator(),
-                  ),
-                ),
+            child: AsyncCollection<Contact>(
+              asyncCollection: ref.watch(filteredContactsProvider),
+              itemBuilder: (_, item) => ContactTile(contact: item),
+              emptyWidget: const EmptyCard(
+                icon: Icons.no_accounts_outlined,
+                message: 'Nenhum contato encontrado',
+              ),
+              errorWidget: (_) => const EmptyCard(
+                icon: Icons.error,
+                message: 'Houve um erro ao buscar os contatos',
+              ),
+              loadingWidget: Container(
+                alignment: Alignment.topCenter,
+                padding: const EdgeInsets.all(20),
+                child: const CircularProgressIndicator(),
+              ),
+              onRefresh: () async => ref.refresh(contactsProvider),
+            ),
           ),
         ],
       ),

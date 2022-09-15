@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:basso_hoogerheide/extensions.dart';
 import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/input/calendar_event.dart';
@@ -63,7 +61,7 @@ class CalendarRepository {
           '?startDate=${dateFormat.format(startDate)}'
           '&endTime=${dateFormat.format(endDate)}',
         )
-        .then((value) => json.decodeMap(value).map(
+        .then((value) => (value as Map? ?? {}).map(
               (key, value) => MapEntry(
                 DateTime.parse(key),
                 (value as List? ?? [])
@@ -74,9 +72,10 @@ class CalendarRepository {
             ));
   }
 
-  Future<List<Color>> getEventColors() =>
-      ref.read(restClientProvider).get('/events/colors').then((value) => json
-          .decodeList<String>(value)
+  Future<List<Color>> getEventColors() => ref
+      .read(restClientProvider)
+      .get('/events/colors')
+      .then((value) => (value as List<String>? ?? [])
           .map((e) => Color(int.parse(e, radix: 16)))
           .toList());
 }

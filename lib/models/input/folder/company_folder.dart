@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:basso_hoogerheide/extensions.dart';
 import 'package:basso_hoogerheide/models/input/downloadable_file.dart';
 import 'package:basso_hoogerheide/models/input/folder/address_info.dart';
 import 'package:basso_hoogerheide/models/input/folder/annotation.dart';
@@ -30,21 +27,21 @@ class CompanyFolder extends Folder {
           annotations: annotations ?? const [],
         );
 
-  CompanyFolder.fromJson(Map<String, dynamic> js)
-      : cnpj = js['cnpj'],
+  CompanyFolder.fromJson(Map<String, dynamic> json)
+      : cnpj = json['cnpj'],
         super(
-          addressInfo: AddressInfo.fromJson(js['address_info']),
-          contactInfo: ContactInfo.fromJson(js['contact_info']),
-          files: json
-              .decodeList<Map<String, dynamic>>(js['files'])
+          addressInfo: AddressInfo.fromJson(json['address_info']),
+          contactInfo: ContactInfo.fromJson(json['contact_info']),
+          files: (json['files'] as List? ?? [])
+              .cast<Map<String, dynamic>>()
               .map(DownloadableFile.fromJson)
               .toList(),
-          id: js['id'],
-          name: js['name'],
-          processInfo: ProcessInfo.fromJson(js['process_info']),
-          writtenOff: js['written_off'],
-          annotations: json
-              .decodeList<Map<String, dynamic>>(js['annotations'])
+          id: json['id'],
+          name: json['name'],
+          processInfo: ProcessInfo.fromJson(json['process_info']),
+          writtenOff: json['written_off'],
+          annotations: (json['annotations'] as List? ?? [])
+              .cast<Map<String, dynamic>>()
               .map(Annotation.fromJson)
               .toList(),
         );

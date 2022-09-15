@@ -1,6 +1,3 @@
-import 'dart:convert';
-
-import 'package:basso_hoogerheide/extensions.dart';
 import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/input/contact.dart';
 import 'package:basso_hoogerheide/models/output/new_contact.dart';
@@ -40,9 +37,11 @@ class ContactsRepository {
         .then((_) => ref.refresh(contactsRepositoryProvider));
   }
 
-  Future<List<Contact>> getContacts() =>
-      ref.read(restClientProvider).get('/contacts').then((value) => json
-          .decodeList<Map<String, dynamic>>(value)
+  Future<List<Contact>> getContacts() => ref
+      .read(restClientProvider)
+      .get('/contacts')
+      .then((value) => (value as List? ?? [])
+          .cast<Map<String, dynamic>>()
           .map(Contact.fromJson)
           .toList());
 }
