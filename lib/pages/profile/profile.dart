@@ -213,15 +213,9 @@ class ProfilePage extends ConsumerWidget {
                 }
               },
               loadingChild: const SizedBox(width: 16, height: 16),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4),
-                child: Text(
-                  'Salvar',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium
-                      ?.copyWith(fontWeight: FontWeight.bold),
-                ),
+              child: const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 4),
+                child: Text('Salvar'),
               ),
             ),
           ],

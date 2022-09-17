@@ -121,6 +121,9 @@ class AppTheme {
         color: Color(0xFFA81818),
         linearTrackColor: Color(0xFF3F3F3F),
       ),
+      radioTheme: RadioThemeData(
+        fillColor: MaterialStateProperty.all(const Color(0xFFA81818)),
+      ),
       scaffoldBackgroundColor: const Color(0xFF101010),
       scrollbarTheme: ScrollbarThemeData(
         thumbColor: MaterialStateProperty.all(
@@ -139,6 +142,21 @@ class AppTheme {
         ),
       ),
       splashColor: const Color(0x08FFFFFF),
+      textButtonTheme: TextButtonThemeData(
+        style: ButtonStyle(
+          foregroundColor: MaterialStateProperty.all(const Color(0xFFF0F0F0)),
+          shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+          ),
+          textStyle: MaterialStateProperty.all(
+            const TextStyle(
+              fontFamily: fontFamily,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
       textTheme: const TextTheme(
         headlineSmall: TextStyle(
           color: Color(0xFFF0F0F0),

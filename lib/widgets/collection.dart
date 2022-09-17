@@ -79,7 +79,7 @@ class AsyncCollection<T> extends StatelessWidget {
                 physics: const AlwaysScrollableScrollPhysics(),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: emptyWidget,
+                  child: Column(children: [emptyWidget]),
                 ),
               ),
       ),
@@ -87,7 +87,7 @@ class AsyncCollection<T> extends StatelessWidget {
         onRefresh: refresh,
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
-          child: errorWidget(error),
+          child: Column(children: [errorWidget(error)]),
         ),
       ),
       loading: () => loadingWidget,

@@ -41,7 +41,10 @@ class _ModelsPageState extends ConsumerState<ModelsPage>
         padding: const EdgeInsets.all(20),
         child: const CircularProgressIndicator(),
       ),
-      onRefresh: () async => ref.refresh(modelsProvider),
+      onRefresh: () {
+        ref.refresh(modelsProvider);
+        return ref.read(modelsProvider.future);
+      },
     );
   }
 

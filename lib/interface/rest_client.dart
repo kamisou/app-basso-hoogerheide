@@ -123,7 +123,8 @@ class RestClient {
         serverMessage: serverMessage,
       );
     }
-    return response.transform(utf8.decoder).join().then(json.decode);
+    final String data = await response.transform(utf8.decoder).join();
+    return data.isEmpty ? null : json.decode(data);
   }
 }
 

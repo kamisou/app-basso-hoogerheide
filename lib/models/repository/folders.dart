@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/input/downloadable_file.dart';
 import 'package:basso_hoogerheide/models/input/folder/folder.dart';
@@ -46,11 +44,6 @@ class FoldersRepository {
           .map(Folder.fromJson)
           .toList());
 
-  Future<int> getNewFolderId() => ref
-      .read(restClientProvider)
-      .get('/folders/new_id')
-      .then((value) => json.decode(value)['new_id']);
-
   Future<List<String>> getNewAnnotationOptions() => ref
       .read(restClientProvider)
       .get('/folders/annotations')
@@ -71,4 +64,9 @@ class FoldersRepository {
   Future<void> deleteFolderFile(DownloadableFile file) => ref
       .read(restClientProvider)
       .delete('/folders/files/delete', body: {'file_id': file.id});
+
+  Future<Map<String, dynamic>> getNewFolderFormData() => ref
+      .read(restClientProvider)
+      .get('/folders/form_data')
+      .then((value) => value as Map<String, dynamic>);
 }

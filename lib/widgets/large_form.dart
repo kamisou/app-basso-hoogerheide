@@ -14,15 +14,6 @@ class LargeForm extends StatefulWidget {
     this.onSaved,
   });
 
-  LargeForm.fromJson({
-    super.key,
-    required dynamic json,
-    required this.filePicker,
-    this.sectionTitleStyle,
-    this.onSaved,
-    bool Function(LargeFormField)? fieldPredicate,
-  }) : sections = _parseJson(json, fieldPredicate);
-
   final List<LargeFormSection> sections;
 
   final FilePicker filePicker;
@@ -30,69 +21,6 @@ class LargeForm extends StatefulWidget {
   final TextStyle? sectionTitleStyle;
 
   final void Function(Map<String, dynamic>)? onSaved;
-
-  static List<LargeFormSection> _parseJson(
-    dynamic json,
-    bool Function(LargeFormField)? fieldPredicate,
-  ) {
-    return (json as List? ?? [])
-        .cast<Map<String, dynamic>>()
-        .map((e) => LargeFormSection(
-              key: e['key'],
-              title: e['title'],
-              fields: (e['fields'] as List? ?? [])
-                  .cast<Map<String, dynamic>>()
-                  .map((e) {
-                    final IconData? icon = e['icon'] != null
-                        ? IconData(int.parse(e['icon'], radix: 16),
-                            fontFamily: 'MaterialIcons')
-                        : null;
-                    final bool required = e['required'] ?? true;
-                    switch (e['type']) {
-                      case 'option':
-                        return LargeFormOptionsField(
-                          key: e['key'],
-                          title: e['title'],
-                          icon: icon,
-                          options: (e['options'] as List? ?? []).cast<String>(),
-                          required: required,
-                        );
-                      case 'date':
-                        return LargeFormDateField(
-                          key: e['key'],
-                          title: e['title'],
-                          icon: icon,
-                          firstDate: DateTime.parse(e['first_date']),
-                          lastDate: DateTime.parse(e['last_date']),
-                          required: required,
-                        );
-                      case 'file':
-                        return LargeFormFileField(
-                          title: e['title'],
-                          key: e['key'],
-                          multiple: e['multiple'] ?? false,
-                          required: required,
-                        );
-                      case LargeFormTextField:
-                      default:
-                        return LargeFormTextField(
-                          key: e['key'],
-                          title: e['title'],
-                          icon: icon,
-                          type: TextInputType.values.firstWhere(
-                            (v) => v.index == e['type'],
-                          ),
-                          mask: e['mask'] ??
-                              (e['masks'] as List?)?.cast<String>(),
-                          required: required,
-                        );
-                    }
-                  })
-                  .where(fieldPredicate ?? (_) => true)
-                  .toList(),
-            ))
-        .toList();
-  }
 
   @override
   State<LargeForm> createState() => _LargeFormState();
@@ -251,8 +179,8 @@ class LargeFormSection {
 
 abstract class LargeFormField {
   const LargeFormField({
-    required this.title,
     required this.key,
+    required this.title,
     this.icon,
     this.required = true,
   });
@@ -268,8 +196,8 @@ abstract class LargeFormField {
 
 class LargeFormTextField extends LargeFormField {
   const LargeFormTextField({
-    required super.title,
     required super.key,
+    required super.title,
     super.icon,
     super.required,
     this.mask,
@@ -283,8 +211,8 @@ class LargeFormTextField extends LargeFormField {
 
 class LargeFormOptionsField extends LargeFormField {
   const LargeFormOptionsField({
-    required super.title,
     required super.key,
+    required super.title,
     required this.options,
     super.icon,
     super.required,
@@ -295,8 +223,8 @@ class LargeFormOptionsField extends LargeFormField {
 
 class LargeFormDateField extends LargeFormField {
   const LargeFormDateField({
-    required super.title,
     required super.key,
+    required super.title,
     required this.firstDate,
     required this.lastDate,
     super.icon,
@@ -310,8 +238,8 @@ class LargeFormDateField extends LargeFormField {
 
 class LargeFormFileField extends LargeFormField {
   const LargeFormFileField({
-    required super.title,
     required super.key,
+    required super.title,
     super.required,
     this.multiple = false,
   });

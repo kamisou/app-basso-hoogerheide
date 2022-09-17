@@ -25,15 +25,15 @@ class _FoldersPageState extends ConsumerState<FoldersPage>
       floatingActionButton: FloatingActionButton(
         heroTag: 'folder_fab',
         child: const Icon(Icons.person_add),
-        onPressed: () => _selectFolderType().then((value) {
-          if (value == null) return null;
+        onPressed: () => _selectFolderType().then((type) {
+          if (type == null) return null;
           return ref
               .read(foldersRepositoryProvider)
-              .getNewFolderId()
-              .then((id) => Navigator.pushNamed(
+              .getNewFolderFormData()
+              .then((data) => Navigator.pushNamed(
                     context,
                     '/newFolder',
-                    arguments: {'new_id': id, 'folder_type': value},
+                    arguments: {'form_data': data, 'folder_type': type},
                   ));
         }),
       ),
@@ -69,7 +69,10 @@ class _FoldersPageState extends ConsumerState<FoldersPage>
                 padding: const EdgeInsets.all(20),
                 child: const CircularProgressIndicator(),
               ),
-              onRefresh: () async => ref.refresh(foldersProvider),
+              onRefresh: () {
+                ref.refresh(foldersProvider);
+                return ref.read(foldersProvider.future);
+              },
             ),
           ),
         ],
@@ -78,7 +81,7 @@ class _FoldersPageState extends ConsumerState<FoldersPage>
   }
 
   Future<String?> _selectFolderType() {
-    String? result;
+    String? result = 'person';
     return showDialog<String?>(
       context: context,
       barrierDismissible: true,
@@ -86,22 +89,32 @@ class _FoldersPageState extends ConsumerState<FoldersPage>
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 'Nova pasta - Tipo:',
-                style: Theme.of(context).textTheme.titleMedium,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
               const SizedBox(height: 16),
               RadioGroup<String>(
                 values: const ['person', 'company'],
                 labels: const ['Pessoa Física', 'Pessoa Jurídica'],
+                initialValue: result,
                 style: Theme.of(context).textTheme.labelLarge,
                 onChanged: (value) => result = value,
               ),
               const SizedBox(height: 16),
-              TextButton(
-                onPressed: () => Navigator.pop(context, result),
-                child: const Text('Criar'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, result),
+                    child: const Text('Criar'),
+                  ),
+                ],
               ),
             ],
           ),

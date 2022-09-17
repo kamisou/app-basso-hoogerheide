@@ -17,7 +17,9 @@ class ProcessInfo {
         color = Color(int.parse(json['color'], radix: 16)),
         attorney = AppUser.fromJson(json['attorney']),
         number = json['number'],
-        protocolDate = DateTime.parse(json['protocol_date']),
+        protocolDate = (json['protocol_date']?.isNotEmpty ?? false)
+            ? DateTime.parse(json['protocol_date'])
+            : null,
         district = json['district'],
         division = json['division'];
 

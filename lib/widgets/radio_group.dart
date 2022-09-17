@@ -17,7 +17,7 @@ class RadioGroup<T> extends StatefulWidget {
 
   final T? initialValue;
 
-  final void Function(T)? onChanged;
+  final void Function(T?)? onChanged;
 
   final Axis? direction;
 
@@ -27,7 +27,7 @@ class RadioGroup<T> extends StatefulWidget {
   State<RadioGroup> createState() => _RadioGroupState<T>();
 }
 
-class _RadioGroupState<T> extends State<RadioGroup> {
+class _RadioGroupState<T> extends State<RadioGroup<T>> {
   T? _groupValue;
 
   @override
@@ -41,6 +41,7 @@ class _RadioGroupState<T> extends State<RadioGroup> {
     return ListView.builder(
       scrollDirection: widget.direction ?? Axis.vertical,
       shrinkWrap: true,
+      itemCount: widget.values.length,
       itemBuilder: (context, index) => GestureDetector(
         onTap: () {
           setState(() => _groupValue = widget.values[index]);
