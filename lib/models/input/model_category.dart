@@ -6,6 +6,13 @@ class ModelCategory {
     this.models = const [],
   });
 
+  ModelCategory.fromJson(Map<String, dynamic> json)
+      : title = json['title'],
+        models = (json['models'] as List? ?? [])
+            .cast<Map<String, dynamic>>()
+            .map(DownloadableFile.fromJson)
+            .toList();
+
   final String title;
 
   final List<DownloadableFile> models;

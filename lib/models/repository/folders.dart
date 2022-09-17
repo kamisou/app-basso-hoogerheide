@@ -41,7 +41,7 @@ class FoldersRepository {
   Future<List<Folder>> getFolders() => ref
       .read(restClientProvider)
       .get('/folders')
-      .then((value) => (value as List? ?? [])
+      .then((value) => (value['folders'] as List? ?? [])
           .cast<Map<String, dynamic>>()
           .map(Folder.fromJson)
           .toList());
@@ -54,7 +54,7 @@ class FoldersRepository {
   Future<List<String>> getNewAnnotationOptions() => ref
       .read(restClientProvider)
       .get('/folders/annotations')
-      .then((value) => value as List<String>);
+      .then((value) => (value['annotations'] as List? ?? []).cast<String>());
 
   Future<void> addFolder(Map<String, dynamic> folder) => ref
       .read(restClientProvider)
@@ -68,6 +68,7 @@ class FoldersRepository {
         .post('/folders/annotations/add', body: annotation);
   }
 
-  Future<void> deleteFolderFile(DownloadableFile file) =>
-      ref.read(restClientProvider).delete('/folders/files/delete');
+  Future<void> deleteFolderFile(DownloadableFile file) => ref
+      .read(restClientProvider)
+      .delete('/folders/files/delete', body: {'file_id': file.id});
 }

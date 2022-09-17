@@ -75,7 +75,8 @@ class CalendarRepository {
   Future<List<Color>> getEventColors() => ref
       .read(restClientProvider)
       .get('/events/colors')
-      .then((value) => (value as List<String>? ?? [])
+      .then((value) => (value['colors'] as List? ?? [])
+          .cast<String>()
           .map((e) => Color(int.parse(e, radix: 16)))
           .toList());
 }

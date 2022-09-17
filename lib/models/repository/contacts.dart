@@ -40,7 +40,7 @@ class ContactsRepository {
   Future<List<Contact>> getContacts() => ref
       .read(restClientProvider)
       .get('/contacts')
-      .then((value) => (value as List? ?? [])
+      .then((value) => (value['contacts'] as List? ?? [])
           .cast<Map<String, dynamic>>()
           .map(Contact.fromJson)
           .toList());

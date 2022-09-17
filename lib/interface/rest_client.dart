@@ -58,6 +58,18 @@ class RestClient {
         headers: headers,
       );
 
+  Future<dynamic> put(
+    String endpoint, {
+    Object? body,
+    Map<String, Object?>? headers,
+  }) =>
+      _request(
+        'PUT',
+        Uri.parse('$host$endpoint'),
+        body: body,
+        headers: headers,
+      );
+
   Future<dynamic> delete(
     String endpoint, {
     Object? body,
