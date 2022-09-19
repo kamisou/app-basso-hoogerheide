@@ -5,6 +5,7 @@ import 'package:basso_hoogerheide/models/input/app_user.dart';
 import 'package:basso_hoogerheide/models/repository/app_user.dart';
 import 'package:basso_hoogerheide/pages/profile/profile_option.dart';
 import 'package:basso_hoogerheide/widgets/async_button.dart';
+import 'package:basso_hoogerheide/widgets/loading_snackbar.dart';
 import 'package:basso_hoogerheide/widgets/shimmering_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,7 +23,12 @@ class ProfilePage extends ConsumerWidget {
         children: [
           Center(
             child: GestureDetector(
-              onTap: () => _onTapProfilePic(ref),
+              onTap: () => LoadingSnackbar(
+                contentBuilder: (context) =>
+                    const Text('Fazendo upload da foto de perfil...'),
+                errorBuilder: (context) =>
+                    const Text('Houve um erro ao atualizar foto de perfil!'),
+              ).show(context, _onTapProfilePic(ref)),
               child: Stack(
                 alignment: Alignment.topRight,
                 clipBehavior: Clip.none,
@@ -162,7 +168,6 @@ class ProfilePage extends ConsumerWidget {
           dialogTitle: 'Selecione uma foto para o perfil:',
         );
     if (result == null) return;
-    // TODO: exibir snackbar
     return ref.read(appUserRepository).changePicture(result.first);
   }
 

@@ -6,6 +6,7 @@ import 'package:basso_hoogerheide/models/repository/models.dart';
 import 'package:basso_hoogerheide/pages/home/models/model_card.dart';
 import 'package:basso_hoogerheide/widgets/collection.dart';
 import 'package:basso_hoogerheide/widgets/empty_card.dart';
+import 'package:basso_hoogerheide/widgets/loading_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -25,7 +26,12 @@ class _ModelsPageState extends ConsumerState<ModelsPage>
       asyncCollection: ref.watch(modelCategoriesProvider),
       itemBuilder: (_, category) => ModelCard(
         modelCategory: category,
-        onTapUpload: () => _onTapUpload(category),
+        onTapUpload: () => LoadingSnackbar(
+          contentBuilder: (context) =>
+              const Text('Fazendo upload do modelo...'),
+          errorBuilder: (context) =>
+              const Text('Houve um erro ao fazer o upload do arquivo!'),
+        ).show(context, _onTapUpload(category)),
         onTapDelete: (file) => ref
             .read(modelsRepositoryProvider)
             .deleteModel(category.id, file.id),
@@ -56,7 +62,6 @@ class _ModelsPageState extends ConsumerState<ModelsPage>
           dialogTitle: 'Selecione um arquivo para o modelo',
         );
     if (result == null) return;
-    // TODO: exibir snackbar
     return ref
         .read(modelsRepositoryProvider)
         .uploadModelFile(category.id, result.first);
