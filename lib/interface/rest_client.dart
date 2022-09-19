@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:basso_hoogerheide/constants/configuration.dart';
 import 'package:basso_hoogerheide/constants/secure_storage_keys.dart';
 import 'package:basso_hoogerheide/interface/secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,7 +12,7 @@ final restClientProvider = Provider.autoDispose<RestClient>(
     final String? authToken = ref.watch(authTokenProvider).value;
     // TODO: apontar para servidor rest real
     return RestClient(
-      host: 'http://10.0.2.2:3000/api',
+      host: Configuration.restServerUrl,
       defaultHeaders: authToken != null
           ? {
               'Authorization': 'Bearer $authToken',

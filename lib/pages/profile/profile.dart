@@ -162,7 +162,7 @@ class ProfilePage extends ConsumerWidget {
           dialogTitle: 'Selecione uma foto para o perfil:',
         );
     if (result == null) return;
-    // TOOD: exibir snackbar
+    // TODO: exibir snackbar
     return ref.read(appUserRepository).changePicture(result.first);
   }
 
