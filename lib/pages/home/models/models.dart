@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:basso_hoogerheide/interface/file_picker.dart';
 import 'package:basso_hoogerheide/models/input/model_category.dart';
 import 'package:basso_hoogerheide/models/repository/models.dart';
@@ -26,12 +24,7 @@ class _ModelsPageState extends ConsumerState<ModelsPage>
       asyncCollection: ref.watch(modelCategoriesProvider),
       itemBuilder: (_, category) => ModelCard(
         modelCategory: category,
-        onTapUpload: () => LoadingSnackbar(
-          contentBuilder: (context) =>
-              const Text('Fazendo upload do modelo...'),
-          errorBuilder: (context) =>
-              const Text('Houve um erro ao fazer o upload do arquivo!'),
-        ).show(context, _onTapUpload(category)),
+        onTapUpload: () => _onTapUpload(context, category),
         onTapDelete: (file) => ref
             .read(modelsRepositoryProvider)
             .deleteModel(category.id, file.id),
@@ -56,15 +49,34 @@ class _ModelsPageState extends ConsumerState<ModelsPage>
     );
   }
 
-  Future<void> _onTapUpload(ModelCategory category) async {
-    final List<File>? result = await ref.read(filePickerProvider).pickFiles(
+  void _onTapUpload(BuildContext context, ModelCategory category) {
+    ref
+        .read(filePickerProvider)
+        .pickFiles(
           allowMultiple: false,
           dialogTitle: 'Selecione um arquivo para o modelo',
-        );
-    if (result == null) return;
-    return ref
-        .read(modelsRepositoryProvider)
-        .uploadModelFile(category.id, result.first);
+        )
+        .then((value) {
+      if (value == null) return;
+
+      final String fileName = value.first.path.split('/').last;
+
+      LoadingSnackbar(
+        contentBuilder: (context) => Text(
+          'Fazendo upload do modelo $fileName',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        errorBuilder: (context) => Text(
+          'Houve um erro ao fazer o upload de $fileName!',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+      ).show(
+        context,
+        ref
+            .read(modelsRepositoryProvider)
+            .uploadModelFile(category.id, value.first),
+      );
+    });
   }
 
   @override
