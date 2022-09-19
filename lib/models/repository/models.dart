@@ -1,15 +1,13 @@
-import 'dart:developer';
 import 'dart:io';
 import 'package:basso_hoogerheide/interface/rest_client.dart';
-import 'package:basso_hoogerheide/models/input/downloadable_file.dart';
 import 'package:basso_hoogerheide/models/input/model_category.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final modelsRepositoryProvider =
     Provider.autoDispose(ModelsRepositoryProvider.new);
 
-final modelsProvider = FutureProvider.autoDispose(
-  (ref) => ref.read(modelsRepositoryProvider).getModels(),
+final modelCategoriesProvider = FutureProvider.autoDispose(
+  (ref) => ref.read(modelsRepositoryProvider).getModelCategories(),
 );
 
 class ModelsRepositoryProvider {
@@ -17,18 +15,19 @@ class ModelsRepositoryProvider {
 
   final Ref ref;
 
-  Future<List<ModelCategory>> getModels() => ref
+  Future<List<ModelCategory>> getModelCategories() => ref
       .read(restClientProvider)
-      .get('/models')
+      .get('/models/categories')
       .then((value) => (value['categories'] as List? ?? [])
           .cast<Map<String, dynamic>>()
           .map(ModelCategory.fromJson)
           .toList());
 
-  Future<void> deleteModel(DownloadableFile file) => ref
+  Future<void> deleteModel(int categoryId, int fileId) => ref
       .read(restClientProvider)
-      .delete('/models/delete', body: {'file_id': file.id});
+      .delete('/models/categories/$categoryId/files/$fileId/delete');
 
-  // TODO: fazer upload real do arquivo
-  Future<void> uploadModelFile(File file) async => log('uploadModelFile');
+  Future<void> uploadModelFile(int categoryId, File file) => ref
+      .read(restClientProvider)
+      .uploadImage('PUT', '/models/categories/$categoryId/files/new', file);
 }

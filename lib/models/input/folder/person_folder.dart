@@ -6,28 +6,6 @@ import 'package:basso_hoogerheide/models/input/folder/folder.dart';
 import 'package:basso_hoogerheide/models/input/folder/process_info.dart';
 
 class PersonFolder extends Folder {
-  const PersonFolder({
-    required int id,
-    required String name,
-    required bool writtenOff,
-    required this.cpf,
-    required ContactInfo contactInfo,
-    required AddressInfo addressInfo,
-    required ProcessInfo processInfo,
-    required List<DownloadableFile> files,
-    List<Annotation>? annotations,
-    this.rg,
-  }) : super(
-          id: id,
-          name: name,
-          writtenOff: writtenOff,
-          contactInfo: contactInfo,
-          addressInfo: addressInfo,
-          processInfo: processInfo,
-          files: files,
-          annotations: annotations ?? const [],
-        );
-
   PersonFolder.fromJson(Map<String, dynamic> json)
       : cpf = json['cpf'],
         rg = json['rg'],

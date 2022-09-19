@@ -22,11 +22,13 @@ class _ModelsPageState extends ConsumerState<ModelsPage>
   Widget build(BuildContext context) {
     super.build(context);
     return AsyncCollection<ModelCategory>(
-      asyncCollection: ref.watch(modelsProvider),
-      itemBuilder: (_, item) => ModelCard(
-        modelCategory: item,
-        onTapUpload: _onTapUpload,
-        onTapDelete: ref.read(modelsRepositoryProvider).deleteModel,
+      asyncCollection: ref.watch(modelCategoriesProvider),
+      itemBuilder: (_, category) => ModelCard(
+        modelCategory: category,
+        onTapUpload: () => _onTapUpload(category),
+        onTapDelete: (file) => ref
+            .read(modelsRepositoryProvider)
+            .deleteModel(category.id, file.id),
       ),
       errorWidget: (_) => const EmptyCard(
         icon: Icons.error,
@@ -42,20 +44,22 @@ class _ModelsPageState extends ConsumerState<ModelsPage>
         child: const CircularProgressIndicator(),
       ),
       onRefresh: () {
-        ref.refresh(modelsProvider);
-        return ref.read(modelsProvider.future);
+        ref.refresh(modelCategoriesProvider);
+        return ref.read(modelCategoriesProvider.future);
       },
     );
   }
 
-  Future<void> _onTapUpload() async {
+  Future<void> _onTapUpload(ModelCategory category) async {
     final List<File>? result = await ref.read(filePickerProvider).pickFiles(
           allowMultiple: false,
           dialogTitle: 'Selecione um arquivo para o modelo',
         );
     if (result == null) return;
     // TODO: exibir snackbar
-    return ref.read(modelsRepositoryProvider).uploadModelFile(result.first);
+    return ref
+        .read(modelsRepositoryProvider)
+        .uploadModelFile(category.id, result.first);
   }
 
   @override

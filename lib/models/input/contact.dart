@@ -1,13 +1,4 @@
 class Contact {
-  const Contact({
-    required this.name,
-    this.telephone,
-    this.cellphone,
-    this.email,
-    this.fax,
-    this.address,
-  });
-
   Contact.fromJson(Map<String, dynamic> json)
       : name = json['name'],
         telephone = json['telephone'],

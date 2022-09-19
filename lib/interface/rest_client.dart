@@ -7,17 +7,14 @@ import 'package:basso_hoogerheide/constants/secure_storage_keys.dart';
 import 'package:basso_hoogerheide/interface/secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final restClientProvider = Provider.autoDispose<RestClient>(
+final restClientProvider = Provider.autoDispose(
   (ref) {
     final String? authToken = ref.watch(authTokenProvider).value;
-    // TODO: apontar para servidor rest real
+    final Map<String, String>? headers =
+        authToken != null ? {'Authorization': 'Bearer $authToken'} : null;
     return RestClient(
       host: Configuration.restServerUrl,
-      defaultHeaders: authToken != null
-          ? {
-              'Authorization': 'Bearer $authToken',
-            }
-          : null,
+      defaultHeaders: headers,
     );
   },
 );
@@ -82,6 +79,28 @@ class RestClient {
         body: body,
         headers: headers,
       );
+
+  Future<dynamic> uploadImage(
+    String method,
+    String endpoint,
+    File file,
+  ) async {
+    final String fileExtension =
+        file.path.substring(file.path.lastIndexOf('.') + 1);
+
+    final Stream<List<int>> fileStream = file.openRead();
+
+    return _request(
+      method,
+      Uri.parse('$host$endpoint'),
+      body: await fileStream.transform(gzip.encoder).single,
+      headers: {
+        'Content-Type': 'image/$fileExtension',
+        'Content-Length': file.statSync().size,
+        'Content-Encoding': 'gzip',
+      },
+    );
+  }
 
   Future<dynamic> _request(
     String method,

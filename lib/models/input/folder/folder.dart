@@ -7,6 +7,17 @@ import 'package:basso_hoogerheide/models/input/folder/person_folder.dart';
 import 'package:basso_hoogerheide/models/input/folder/process_info.dart';
 
 abstract class Folder {
+  const Folder({
+    required this.id,
+    required this.name,
+    required this.writtenOff,
+    required this.contactInfo,
+    required this.addressInfo,
+    required this.processInfo,
+    required this.files,
+    this.annotations = const [],
+  });
+
   final int id;
 
   final String name;
@@ -22,17 +33,6 @@ abstract class Folder {
   final List<DownloadableFile> files;
 
   final List<Annotation> annotations;
-
-  const Folder({
-    required this.id,
-    required this.name,
-    required this.writtenOff,
-    required this.contactInfo,
-    required this.addressInfo,
-    required this.processInfo,
-    required this.files,
-    this.annotations = const [],
-  });
 
   factory Folder.fromJson(Map<String, dynamic> json) {
     switch (json['folder_type']) {

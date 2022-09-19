@@ -3,8 +3,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart' as fp;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final filePickerProvider =
-    Provider.autoDispose<FilePicker>((ref) => const FilePicker());
+final filePickerProvider = Provider.autoDispose((ref) => const FilePicker());
 
 class FilePicker {
   const FilePicker();

@@ -1,12 +1,4 @@
 class AddressInfo {
-  const AddressInfo({
-    required this.street,
-    required this.district,
-    required this.city,
-    required this.state,
-    this.cep,
-  });
-
   AddressInfo.fromJson(Map<String, dynamic> json)
       : street = json['street'],
         district = json['district'],

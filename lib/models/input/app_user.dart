@@ -1,11 +1,4 @@
 class AppUser {
-  const AppUser({
-    required this.name,
-    required this.email,
-    required this.division,
-    this.avatarUrl,
-  });
-
   AppUser.fromJson(Map<String, dynamic> json)
       : name = json['name'],
         email = json['email'],

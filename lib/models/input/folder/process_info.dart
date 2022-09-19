@@ -2,16 +2,6 @@ import 'package:basso_hoogerheide/models/input/app_user.dart';
 import 'package:flutter/material.dart';
 
 class ProcessInfo {
-  const ProcessInfo({
-    required this.nature,
-    required this.color,
-    required this.attorney,
-    this.number,
-    this.protocolDate,
-    this.district,
-    this.division,
-  });
-
   ProcessInfo.fromJson(Map<String, dynamic> json)
       : nature = json['nature'],
         color = Color(int.parse(json['color'], radix: 16)),

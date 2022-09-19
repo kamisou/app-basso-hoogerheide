@@ -1,10 +1,4 @@
 class ContactInfo {
-  const ContactInfo({
-    this.email,
-    this.telephone,
-    this.cellphone,
-  });
-
   ContactInfo.fromJson(Map<String, dynamic> json)
       : email = json['email'],
         telephone = json['telephone'],
