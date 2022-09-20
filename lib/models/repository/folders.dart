@@ -54,16 +54,21 @@ class FoldersRepository {
       .post('/folders/add', body: folder)
       .then((_) => ref.refresh(foldersProvider));
 
-  Future<void> addAnnotation(Map<String, dynamic>? annotation) async {
+  Future<void> addAnnotation(
+    int folderId,
+    Map<String, dynamic>? annotation,
+  ) async {
     if (annotation == null) return;
     await ref
         .read(restClientProvider)
-        .post('/folders/annotations/add', body: annotation);
+        .post('/folders/$folderId/annotations/add', body: annotation)
+        .then((_) => ref.refresh(foldersProvider));
   }
 
-  Future<void> deleteFolderFile(DownloadableFile file) => ref
+  Future<void> deleteFolderFile(int folderId, int fileId) => ref
       .read(restClientProvider)
-      .delete('/folders/files/delete', body: {'file_id': file.id});
+      .delete('/folders/$folderId/files/$fileId/delete')
+      .then((_) => ref.refresh(foldersProvider));
 
   Future<Map<String, dynamic>> getNewFolderFormData() => ref
       .read(restClientProvider)

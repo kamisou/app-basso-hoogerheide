@@ -51,10 +51,11 @@ class _FoldersPageState extends ConsumerState<FoldersPage>
           Expanded(
             child: AsyncCollection<Folder>(
               asyncCollection: ref.watch(filteredFoldersProvider),
-              itemBuilder: (_, item) => FolderCard(
-                folder: item,
-                onDeleteFolderFile:
-                    ref.read(foldersRepositoryProvider).deleteFolderFile,
+              itemBuilder: (_, folder) => FolderCard(
+                folder: folder,
+                onDeleteFolderFile: (file) => ref
+                    .read(foldersRepositoryProvider)
+                    .deleteFolderFile(folder.id, file.id),
               ),
               errorWidget: (_) => const EmptyCard(
                 icon: Icons.error,

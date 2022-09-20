@@ -61,7 +61,7 @@ class CalendarRepository {
           '?startDate=${dateFormat.format(startDate)}'
           '&endTime=${dateFormat.format(endDate)}',
         )
-        .then((value) => (value as Map? ?? {}).map(
+        .then((value) => (value['events'] as Map? ?? {}).map(
               (key, value) => MapEntry(
                 DateTime.parse(key),
                 (value as List? ?? [])

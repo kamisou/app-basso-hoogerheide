@@ -66,10 +66,7 @@ class _AddAnnotationDialogState extends ConsumerState<AddAnnotationDialog> {
                             if (Form.of(context)!.validate()) {
                               Navigator.pop(
                                 context,
-                                {
-                                  'folder_id': args['folder_id'],
-                                  'annotation': _annotation,
-                                },
+                                {'annotation': _annotation},
                               );
                             }
                           },
