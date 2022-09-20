@@ -13,7 +13,7 @@ final restClientProvider = Provider.autoDispose(
     final Map<String, String>? headers =
         authToken != null ? {'Authorization': 'Bearer $authToken'} : null;
     return RestClient(
-      host: Configuration.restServerUrl,
+      host: ref.watch(configurationProvider).restServerUrl,
       defaultHeaders: headers,
     );
   },
