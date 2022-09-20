@@ -1,5 +1,4 @@
 import 'package:basso_hoogerheide/interface/rest_client.dart';
-import 'package:basso_hoogerheide/models/input/downloadable_file.dart';
 import 'package:basso_hoogerheide/models/input/folder/folder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
