@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-class ErrorSnackbar<E extends Object> {
+class ErrorSnackbar {
   const ErrorSnackbar({
-    required this.content,
+    required this.contents,
   });
 
-  final Widget Function(BuildContext, E) content;
+  final Map<Type, Widget Function(BuildContext, Object)> contents;
 
   void show(BuildContext context, Object error) {
-    if (error is! E) throw error;
+    if (!contents.containsKey(error.runtimeType)) throw error;
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: content(context, error)),
+      SnackBar(content: contents[error.runtimeType]!(context, error)),
     );
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/repository/app_user.dart';
 import 'package:basso_hoogerheide/widgets/async_button.dart';
@@ -126,21 +128,35 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         'password': _passwordController.text,
       }).then(
         (_) => Navigator.pushReplacementNamed(context, '/home'),
-        onError: (e) => ErrorSnackbar<RestException>(
-          content: (context, error) => Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                error.serverMessage ?? 'Ocorreu um erro inesperado',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              Icon(
-                Icons.wifi_off,
-                color: Theme.of(context).colorScheme.error,
-              ),
-            ],
-          ),
-        ).show(context, e),
+        onError: (e) {
+          Widget content(String title) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  title,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                Icon(
+                  Icons.wifi_off,
+                  color: Theme.of(context).colorScheme.error,
+                ),
+              ],
+            );
+          }
+
+          ErrorSnackbar(
+            contents: {
+              RestException: (context, error) => content(
+                    (error as RestException).serverMessage ??
+                        'Ocorreu um erro inesperado',
+                  ),
+              SocketException: (context, error) => content(
+                    'Não foi possível conectar com o servidor',
+                  ),
+            },
+          ).show(context, e);
+        },
       );
     }
   }
