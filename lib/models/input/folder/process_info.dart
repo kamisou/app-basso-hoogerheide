@@ -1,13 +1,12 @@
-import 'package:basso_hoogerheide/models/input/app_user.dart';
 import 'package:flutter/material.dart';
 
 class ProcessInfo {
   ProcessInfo.fromJson(Map<String, dynamic> json)
       : nature = json['nature'],
         color = Color(int.parse(json['color'], radix: 16)),
-        attorney = AppUser.fromJson(json['attorney']),
+        attorney = json['attorney'],
         number = json['number'],
-        protocolDate = (json['protocol_date']?.isNotEmpty ?? false)
+        protocolDate = ((json['protocol_date'] as String?)?.isNotEmpty ?? false)
             ? DateTime.parse(json['protocol_date'])
             : null,
         district = json['district'],
@@ -17,7 +16,7 @@ class ProcessInfo {
 
   final Color color;
 
-  final AppUser attorney;
+  final String attorney;
 
   final int? number;
 

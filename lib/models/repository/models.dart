@@ -25,9 +25,11 @@ class ModelsRepositoryProvider {
 
   Future<void> deleteModel(int categoryId, int fileId) => ref
       .read(restClientProvider)
-      .delete('/models/categories/$categoryId/files/$fileId/delete');
+      .delete('/models/categories/$categoryId/files/$fileId/delete')
+      .then((_) => ref.refresh(modelsRepositoryProvider));
 
   Future<void> uploadModelFile(int categoryId, File file) => ref
       .read(restClientProvider)
-      .uploadImage('PUT', '/models/categories/$categoryId/files/new', file);
+      .uploadImage('PUT', '/models/categories/$categoryId/files/new', file)
+      .then((_) => ref.refresh(modelCategoriesProvider));
 }

@@ -1,5 +1,4 @@
 name: basso_hoogerheide
-description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
@@ -31,7 +30,6 @@ flutter:
 
   assets:
     - assets/images/logo.png
-    - assets/new_folder_form_data.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

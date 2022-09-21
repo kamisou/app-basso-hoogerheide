@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
 class LoadingSnackbar {
-  LoadingSnackbar({
+  const LoadingSnackbar({
     required this.contentBuilder,
     this.errorBuilder,
     this.finishedBuilder,
@@ -14,10 +14,8 @@ class LoadingSnackbar {
 
   final WidgetBuilder? finishedBuilder;
 
-  ScaffoldFeatureController? _scaffoldFeatureController;
-
   void show(BuildContext context, Future future) {
-    _scaffoldFeatureController = ScaffoldMessenger.of(context).showSnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         duration: const Duration(minutes: 5),
         dismissDirection: DismissDirection.none,
@@ -26,7 +24,7 @@ class LoadingSnackbar {
           future: future,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
-              _scaffoldFeatureController?.close();
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
               if (snapshot.hasError) {
                 if (errorBuilder != null) {
                   SchedulerBinding.instance.addPostFrameCallback(

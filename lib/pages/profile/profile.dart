@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:basso_hoogerheide/interface/file_picker.dart';
 import 'package:basso_hoogerheide/models/input/app_user.dart';
 import 'package:basso_hoogerheide/models/repository/profile.dart';
@@ -23,12 +21,7 @@ class ProfilePage extends ConsumerWidget {
         children: [
           Center(
             child: GestureDetector(
-              onTap: () => LoadingSnackbar(
-                contentBuilder: (context) =>
-                    const Text('Fazendo upload da foto de perfil...'),
-                errorBuilder: (context) =>
-                    const Text('Houve um erro ao atualizar foto de perfil!'),
-              ).show(context, _onTapProfilePic(ref)),
+              onTap: () => _onTapProfilePic(context, ref),
               child: Stack(
                 alignment: Alignment.topRight,
                 clipBehavior: Clip.none,
@@ -162,13 +155,25 @@ class ProfilePage extends ConsumerWidget {
     );
   }
 
-  Future<void> _onTapProfilePic(WidgetRef ref) async {
-    final List<File>? result = await ref.read(filePickerProvider).pickFiles(
+  Future<void> _onTapProfilePic(BuildContext context, WidgetRef ref) async {
+    ref
+        .read(filePickerProvider)
+        .pickFiles(
           allowMultiple: false,
           dialogTitle: 'Selecione uma foto para o perfil:',
-        );
-    if (result == null) return;
-    return ref.read(profileRepository).changePicture(result.first);
+        )
+        .then((value) {
+      if (value == null) return;
+      LoadingSnackbar(
+        contentBuilder: (context) =>
+            const Text('Fazendo upload da foto de perfil...'),
+        errorBuilder: (context) =>
+            const Text('Houve um erro ao atualizar foto de perfil!'),
+      ).show(
+        context,
+        ref.read(profileRepository).changePicture(value.first),
+      );
+    });
   }
 
   Widget _changePasswordFormBuilder(

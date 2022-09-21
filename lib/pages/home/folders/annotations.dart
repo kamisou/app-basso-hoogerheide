@@ -21,10 +21,10 @@ class AnnotationsPage extends ConsumerWidget {
               (value) => showDialog<Map<String, dynamic>?>(
                 context: context,
                 builder: (context) => const AddAnnotationDialog(),
-                routeSettings: RouteSettings(
-                  arguments: {'folder_id': folder.id, 'options': value},
-                ),
-              ).then(ref.read(foldersRepositoryProvider).addAnnotation),
+                routeSettings: RouteSettings(arguments: {'options': value}),
+              ).then((annotation) => ref
+                  .read(foldersRepositoryProvider)
+                  .addAnnotation(folder.id, annotation)),
             ),
       ),
       body: Padding(
