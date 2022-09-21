@@ -1,5 +1,5 @@
 import 'package:basso_hoogerheide/interface/rest_client.dart';
-import 'package:basso_hoogerheide/models/repository/app_user.dart';
+import 'package:basso_hoogerheide/models/repository/profile.dart';
 import 'package:basso_hoogerheide/widgets/async_button.dart';
 import 'package:basso_hoogerheide/widgets/error_snackbar.dart';
 import 'package:flutter/material.dart';
@@ -107,7 +107,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         const SizedBox(height: 18),
         Center(
           child: GestureDetector(
-            onTap: ref.read(appUserRepository).recoverPassword,
+            onTap: ref.read(profileRepository).recoverPassword,
             child: Text(
               'Esqueceu sua senha?',
               style: Theme.of(context).textTheme.labelLarge,
@@ -121,7 +121,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   Future<void> _signIn(BuildContext context) async {
     if (Form.of(context)!.validate()) {
       FocusManager.instance.primaryFocus?.unfocus();
-      return ref.read(appUserRepository).signIn({
+      return ref.read(profileRepository).signIn({
         'email': _emailController.text,
         'password': _passwordController.text,
       }).then(

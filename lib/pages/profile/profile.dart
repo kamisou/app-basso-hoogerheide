@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:basso_hoogerheide/interface/file_picker.dart';
 import 'package:basso_hoogerheide/models/input/app_user.dart';
-import 'package:basso_hoogerheide/models/repository/app_user.dart';
+import 'package:basso_hoogerheide/models/repository/profile.dart';
 import 'package:basso_hoogerheide/pages/profile/profile_option.dart';
 import 'package:basso_hoogerheide/widgets/async_button.dart';
 import 'package:basso_hoogerheide/widgets/loading_snackbar.dart';
@@ -144,7 +144,7 @@ class ProfilePage extends ConsumerWidget {
                 Navigator.pushReplacementNamed(context, '/login');
                 Future.delayed(
                   const Duration(milliseconds: 500),
-                  ref.read(appUserRepository).signOut,
+                  ref.read(profileRepository).signOut,
                 );
               },
               child: Text(
@@ -168,7 +168,7 @@ class ProfilePage extends ConsumerWidget {
           dialogTitle: 'Selecione uma foto para o perfil:',
         );
     if (result == null) return;
-    return ref.read(appUserRepository).changePicture(result.first);
+    return ref.read(profileRepository).changePicture(result.first);
   }
 
   Widget _changePasswordFormBuilder(
@@ -212,7 +212,7 @@ class ProfilePage extends ConsumerWidget {
               onPressed: () async {
                 if (Form.of(context)!.validate()) {
                   return ref
-                      .read(appUserRepository)
+                      .read(profileRepository)
                       .changePassword(passwordController.text)
                       .then((_) => close());
                 }

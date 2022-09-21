@@ -1,4 +1,4 @@
-import 'package:basso_hoogerheide/models/repository/app_user.dart';
+import 'package:basso_hoogerheide/models/repository/profile.dart';
 import 'package:basso_hoogerheide/widgets/avatar_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -136,7 +136,7 @@ class _HomeAppBarState extends ConsumerState<HomeAppBar> {
               Navigator.pushReplacementNamed(context, '/login');
               Future.delayed(
                 const Duration(milliseconds: 500),
-                ref.read(appUserRepository).signOut,
+                ref.read(profileRepository).signOut,
               );
             },
             child: const Icon(Icons.exit_to_app),

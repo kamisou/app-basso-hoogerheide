@@ -7,14 +7,14 @@ import 'package:basso_hoogerheide/interface/secure_storage.dart';
 import 'package:basso_hoogerheide/models/input/app_user.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final appUserRepository = Provider.autoDispose(AppUserRepository.new);
+final profileRepository = Provider.autoDispose(ProfileRepository.new);
 
 final appUserProvider = FutureProvider.autoDispose(
-  (ref) => ref.read(appUserRepository).getMyUser(),
+  (ref) => ref.read(profileRepository).getMyUser(),
 );
 
-class AppUserRepository {
-  const AppUserRepository(this.ref);
+class ProfileRepository {
+  const ProfileRepository(this.ref);
 
   final Ref ref;
 
