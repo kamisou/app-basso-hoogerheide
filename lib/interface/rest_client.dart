@@ -34,7 +34,7 @@ class RestClient {
 
   Future<dynamic> get(
     String endpoint, {
-    Object? body,
+    Map<String, dynamic>? body,
     Map<String, Object?>? headers,
   }) =>
       _request(
@@ -46,7 +46,7 @@ class RestClient {
 
   Future<dynamic> post(
     String endpoint, {
-    Object? body,
+    Map<String, dynamic>? body,
     Map<String, Object?>? headers,
   }) =>
       _request(
@@ -58,7 +58,7 @@ class RestClient {
 
   Future<dynamic> put(
     String endpoint, {
-    Object? body,
+    Map<String, dynamic>? body,
     Map<String, Object?>? headers,
   }) =>
       _request(
@@ -70,7 +70,7 @@ class RestClient {
 
   Future<dynamic> delete(
     String endpoint, {
-    Object? body,
+    Map<String, dynamic>? body,
     Map<String, Object?>? headers,
   }) =>
       _request(
@@ -109,6 +109,8 @@ class RestClient {
     Map<String, Object?>? headers,
   }) async {
     final HttpClient client = HttpClient();
+    client.connectionTimeout = const Duration(seconds: 10);
+
     final HttpClientRequest request = await client.openUrl(method, url);
 
     defaultHeaders?.forEach((key, value) {
@@ -120,7 +122,14 @@ class RestClient {
       }
     });
 
-    if (body != null) request.write(body);
+    if (body != null) {
+      if (body is Map<String, dynamic>) {
+        request.headers.add('Content-Type', 'application/json');
+        request.write(json.encode(body));
+      } else {
+        request.write(body);
+      }
+    }
 
     log('$method ${url.path}');
     final HttpClientResponse response = await request.close();

@@ -4,6 +4,7 @@ import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/repository/profile.dart';
 import 'package:basso_hoogerheide/widgets/async_button.dart';
 import 'package:basso_hoogerheide/widgets/error_snackbar.dart';
+import 'package:basso_hoogerheide/widgets/text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -81,12 +82,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 ? 'Informe seu endereço de e-mail'
                 : null),
         const SizedBox(height: 18),
-        TextFormField(
+        CustomTextFormField(
           controller: _passwordController,
-          decoration: const InputDecoration(
-            prefixIcon: Icon(Icons.lock_outline),
-            hintText: 'Sua senha',
-          ),
+          prefixIcon: Icons.lock_outline,
+          hintText: 'Sua senha',
           keyboardType: TextInputType.visiblePassword,
           obscureText: true,
           onEditingComplete: _controller.press,
@@ -133,9 +132,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             return Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.titleMedium,
+                Expanded(
+                  child: Text(
+                    title,
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
                 ),
                 Icon(
                   Icons.wifi_off,
