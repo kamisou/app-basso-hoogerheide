@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:basso_hoogerheide/constants/secure_storage_keys.dart';
@@ -25,7 +24,8 @@ class ProfileRepository {
         .then((value) => value['token']);
     return ref
         .read(secureStorageProvider)
-        .write(SecureStorageKey.authToken.key, response);
+        .write(SecureStorageKey.authToken.key, response)
+        .then((_) => ref.watch(authTokenProvider.future));
   }
 
   Future<void> signOut() => Future.wait([

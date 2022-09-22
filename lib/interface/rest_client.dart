@@ -21,7 +21,7 @@ final restClientProvider = Provider.autoDispose(
 );
 
 final authTokenProvider = FutureProvider((ref) =>
-    ref.watch(secureStorageProvider).read(SecureStorageKey.authToken.key));
+    ref.read(secureStorageProvider).read(SecureStorageKey.authToken.key));
 
 class RestClient {
   const RestClient({
