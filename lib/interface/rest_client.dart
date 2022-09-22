@@ -6,6 +6,7 @@ import 'package:basso_hoogerheide/constants/configuration.dart';
 import 'package:basso_hoogerheide/constants/secure_storage_keys.dart';
 import 'package:basso_hoogerheide/interface/secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
 
 final restClientProvider = Provider.autoDispose(
   (ref) {
@@ -30,12 +31,12 @@ class RestClient {
 
   final String host;
 
-  final Map<String, Object>? defaultHeaders;
+  final Map<String, String>? defaultHeaders;
 
   Future<dynamic> get(
     String endpoint, {
     Map<String, dynamic>? body,
-    Map<String, Object?>? headers,
+    Map<String, String>? headers,
   }) =>
       _request(
         'GET',
@@ -47,7 +48,7 @@ class RestClient {
   Future<dynamic> post(
     String endpoint, {
     Map<String, dynamic>? body,
-    Map<String, Object?>? headers,
+    Map<String, String>? headers,
   }) =>
       _request(
         'POST',
@@ -59,7 +60,7 @@ class RestClient {
   Future<dynamic> put(
     String endpoint, {
     Map<String, dynamic>? body,
-    Map<String, Object?>? headers,
+    Map<String, String>? headers,
   }) =>
       _request(
         'PUT',
@@ -71,7 +72,7 @@ class RestClient {
   Future<dynamic> delete(
     String endpoint, {
     Map<String, dynamic>? body,
-    Map<String, Object?>? headers,
+    Map<String, String>? headers,
   }) =>
       _request(
         'DELETE',
@@ -82,62 +83,44 @@ class RestClient {
 
   Future<dynamic> uploadImage(
     String method,
-    String endpoint,
-    File file,
-  ) async {
-    final String fileExtension =
-        file.path.substring(file.path.lastIndexOf('.') + 1);
-
-    final Stream<List<int>> fileStream = file.openRead();
-
-    return _request(
-      method,
-      Uri.parse('$host$endpoint'),
-      body: await fileStream.transform(gzip.encoder).single,
-      headers: {
-        'Content-Type': 'image/$fileExtension',
-        'Content-Length': file.statSync().size,
-        'Content-Encoding': 'gzip',
-      },
-    );
+    String endpoint, {
+    required String field,
+    required File file,
+  }) async {
+    final request = http.MultipartRequest(method, Uri.parse('$host$endpoint'));
+    request.files.add(await http.MultipartFile.fromPath(field, file.path));
+    return request.send().then(_handleResponse);
   }
 
   Future<dynamic> _request(
     String method,
     Uri url, {
-    Object? body,
-    Map<String, Object?>? headers,
+    Map<String, dynamic>? body,
+    Map<String, String>? headers,
   }) async {
-    final HttpClient client = HttpClient();
-    client.connectionTimeout = const Duration(seconds: 10);
+    final request = http.Request(method, url);
 
-    final HttpClientRequest request = await client.openUrl(method, url);
-
-    defaultHeaders?.forEach((key, value) {
-      request.headers.add(key, value);
-    });
-    headers?.forEach((key, value) {
-      if (value != null) {
-        request.headers.add(key, value);
-      }
-    });
-
-    if (body != null) {
-      if (body is Map<String, dynamic>) {
-        request.headers.add('Content-Type', 'application/json');
-        request.write(json.encode(body));
-      } else {
-        request.write(body);
-      }
+    if (defaultHeaders != null) {
+      request.headers.addAll(defaultHeaders!);
+    }
+    if (headers != null) {
+      request.headers.addAll(headers);
     }
 
-    log('$method ${url.path}');
-    final HttpClientResponse response = await request.close();
+    if (body != null) {
+      request.headers['Content-Type'] = 'application/json';
+      request.body = json.encode(body);
+    }
 
+    log('$method ${url.path} ${request.headers['Authorization']}');
+    return request.send().then(_handleResponse);
+  }
+
+  Future<dynamic> _handleResponse(http.StreamedResponse response) async {
     if (response.statusCode > 399) {
       String? serverMessage;
       try {
-        serverMessage = await response
+        serverMessage = await response.stream
             .transform(utf8.decoder)
             .join()
             .then(json.decode)
@@ -152,7 +135,7 @@ class RestClient {
         serverMessage: serverMessage,
       );
     }
-    final String data = await response.transform(utf8.decoder).join();
+    final String data = await response.stream.transform(utf8.decoder).join();
     return data.isEmpty ? null : json.decode(data);
   }
 }
@@ -166,7 +149,7 @@ class RestException {
 
   final int statusCode;
 
-  final String reasonPhrase;
+  final String? reasonPhrase;
 
   final String? serverMessage;
 }

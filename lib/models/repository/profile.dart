@@ -43,7 +43,8 @@ class ProfileRepository {
 
   Future<void> changePicture(File file) => ref
       .read(restClientProvider)
-      .uploadImage('PUT', '/profile/change_picture', file)
+      .uploadImage('PUT', '/profile/change_picture',
+          field: 'profile_picture', file: file)
       .then((_) => ref.refresh(appUserProvider));
 
   Future<void> changePassword(String password) =>

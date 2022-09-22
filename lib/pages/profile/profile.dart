@@ -165,10 +165,14 @@ class ProfilePage extends ConsumerWidget {
         .then((value) {
       if (value == null) return;
       LoadingSnackbar(
-        contentBuilder: (context) =>
-            const Text('Fazendo upload da foto de perfil...'),
-        errorBuilder: (context) =>
-            const Text('Houve um erro ao atualizar foto de perfil!'),
+        contentBuilder: (context) => Text(
+          'Fazendo upload da foto de perfil...',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        errorBuilder: (context) => Text(
+          'Houve um erro ao atualizar foto de perfil.',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
       ).show(
         context,
         ref.read(profileRepository).changePicture(value.first),

@@ -71,7 +71,28 @@ class _HomeAppBarState extends ConsumerState<HomeAppBar> {
                     initials: data.initials,
                   ),
                 ),
-                error: (_, __) => const SizedBox.shrink(),
+                error: (_, __) => GestureDetector(
+                  onTap: () =>
+                      Navigator.pushReplacementNamed(context, '/login'),
+                  child: Container(
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Theme.of(context).colorScheme.error,
+                      ),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    width: 40,
+                    height: 40,
+                    child: Text(
+                      '!',
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.error,
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                  ),
+                ),
                 loading: () => Shimmer.fromColors(
                   baseColor: Theme.of(context).colorScheme.surface,
                   highlightColor:
