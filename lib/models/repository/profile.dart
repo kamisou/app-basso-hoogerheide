@@ -28,15 +28,13 @@ class ProfileRepository {
         .write(SecureStorageKey.authToken.key, response);
   }
 
-  Future<void> signOut() {
-    log('signOut');
-    return ref
-        .read(secureStorageProvider)
-        .delete(SecureStorageKey.authToken.key);
-  }
+  Future<void> signOut() => Future.wait([
+        ref.read(restClientProvider).put('/profile/sign_out'),
+        ref.read(secureStorageProvider).delete(SecureStorageKey.authToken.key),
+      ]);
 
-  Future<void> recoverPassword() =>
-      ref.read(restClientProvider).get('/profile/recover_password');
+  // Future<void> recoverPassword(Map<String, dynamic> body) =>
+  //     ref.read(restClientProvider).put('/profile/recover_password', body: body);
 
   Future<AppUser> getMyUser() => ref
       .read(restClientProvider)
