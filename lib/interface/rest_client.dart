@@ -5,7 +5,6 @@ import 'dart:io';
 import 'package:basso_hoogerheide/constants/configuration.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
-import 'package:http_parser/http_parser.dart' as http_parser;
 
 final authTokenProvider = StateProvider<String?>((ref) => null);
 
