@@ -1,6 +1,5 @@
 import 'package:basso_hoogerheide/interface/file_picker.dart';
 import 'package:basso_hoogerheide/interface/rest_client.dart';
-import 'package:basso_hoogerheide/models/input/app_user.dart';
 import 'package:basso_hoogerheide/models/repository/profile.dart';
 import 'package:basso_hoogerheide/pages/profile/profile_option.dart';
 import 'package:basso_hoogerheide/widgets/async_button.dart';
@@ -14,82 +13,92 @@ class ProfilePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final appUser = ModalRoute.of(context)!.settings.arguments as AppUser;
     return Scaffold(
       appBar: AppBar(title: const Text('Perfil')),
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 48),
         children: [
-          Center(
-            child: GestureDetector(
-              onTap: () => _onTapProfilePic(context, ref),
-              child: Stack(
-                alignment: Alignment.topRight,
-                clipBehavior: Clip.none,
-                children: [
-                  Container(
-                    alignment: Alignment.center,
-                    clipBehavior: Clip.antiAlias,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      color: Theme.of(context).colorScheme.surface,
-                    ),
-                    height: 100,
-                    width: 100,
-                    child: ShimmeringImage(
-                      url: appUser.avatarUrl,
-                      errorBuilder: (context) => Text(
-                        appUser.initials,
-                        style:
-                            Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                  fontWeight: FontWeight.bold,
+          ref.watch(appUserProvider).when(
+                data: (data) => Column(
+                  children: [
+                    Center(
+                      child: GestureDetector(
+                        onTap: () => _onTapProfilePic(context, ref),
+                        child: Stack(
+                          alignment: Alignment.topRight,
+                          clipBehavior: Clip.none,
+                          children: [
+                            Container(
+                              alignment: Alignment.center,
+                              clipBehavior: Clip.antiAlias,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50),
+                                color: Theme.of(context).colorScheme.surface,
+                              ),
+                              height: 100,
+                              width: 100,
+                              child: ShimmeringImage(
+                                url: data.avatarUrl,
+                                errorBuilder: (context) => Text(
+                                  data.initials,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineSmall
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                 ),
+                              ),
+                            ),
+                            Positioned(
+                              top: -4,
+                              right: -4,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      blurRadius: 8,
+                                      spreadRadius: -4,
+                                      offset: Offset(-2, 2),
+                                    ),
+                                  ],
+                                  color: Theme.of(context).colorScheme.surface,
+                                ),
+                                width: 32,
+                                height: 32,
+                                child: Icon(
+                                  Icons.edit_outlined,
+                                  color: Theme.of(context).colorScheme.primary,
+                                  size: 16,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  Positioned(
-                    top: -4,
-                    right: -4,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: const [
-                          BoxShadow(
-                            blurRadius: 8,
-                            spreadRadius: -4,
-                            offset: Offset(-2, 2),
-                          ),
-                        ],
-                        color: Theme.of(context).colorScheme.surface,
-                      ),
-                      width: 32,
-                      height: 32,
-                      child: Icon(
-                        Icons.edit_outlined,
-                        color: Theme.of(context).colorScheme.primary,
-                        size: 16,
-                      ),
+                    const SizedBox(height: 32),
+                    Text(
+                      data.name,
+                      style:
+                          Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
                     ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 32),
-          Text(
-            appUser.name,
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
+                    Text(
+                      data.division,
+                      style: Theme.of(context).textTheme.titleMedium,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
                 ),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            textAlign: TextAlign.center,
-          ),
-          Text(
-            appUser.division,
-            style: Theme.of(context).textTheme.titleMedium,
-            textAlign: TextAlign.center,
-          ),
+                error: (_, __) => const SizedBox.shrink(),
+                loading: () => const CircularProgressIndicator(),
+              ),
           const SizedBox(height: 40),
           ProfileOption(
             title: Text(

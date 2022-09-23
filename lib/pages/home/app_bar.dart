@@ -61,11 +61,7 @@ class _HomeAppBarState extends ConsumerState<HomeAppBar> {
         children: [
           ref.watch(appUserProvider).when(
                 data: (data) => GestureDetector(
-                  onTap: () => Navigator.pushNamed(
-                    context,
-                    '/profile',
-                    arguments: data,
-                  ),
+                  onTap: () => Navigator.pushNamed(context, '/profile'),
                   child: AvatarCircle(
                     avatarUrl: data.avatarUrl,
                     initials: data.initials,
