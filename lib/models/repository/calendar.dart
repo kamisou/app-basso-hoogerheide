@@ -58,8 +58,8 @@ class CalendarRepository {
         .read(restClientProvider)
         .get(
           '/events'
-          '?startDate=${dateFormat.format(startDate)}'
-          '&endTime=${dateFormat.format(endDate)}',
+          '?start_date=${dateFormat.format(startDate)}'
+          '&end_date=${dateFormat.format(endDate)}',
         )
         .then((value) => (value['events'] as Map? ?? {}).map(
               (key, value) => MapEntry(

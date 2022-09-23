@@ -120,7 +120,15 @@ class RestClient {
     }
 
     log('$method ${url.path} ${request.headers['Authorization']}');
-    return request.send().then(_handleResponse);
+
+    final http.StreamedResponse response;
+    try {
+      response = await request.send();
+    } on Exception {
+      throw const SocketException('Falha ao realizar pedido HTTP');
+    }
+
+    return _handleResponse(response);
   }
 
   Future<dynamic> _handleResponse(http.StreamedResponse response) async {

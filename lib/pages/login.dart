@@ -128,9 +128,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         'email': _emailController.text,
         'password': _passwordController.text,
       }).then(
-        (_) {
-          Navigator.pushReplacementNamed(context, '/home');
-        },
+        (_) => Navigator.pushReplacementNamed(context, '/home').ignore(),
         onError: (e) {
           Widget content(String title) {
             return Row(
