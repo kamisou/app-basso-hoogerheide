@@ -198,7 +198,7 @@ class ProfilePage extends ConsumerWidget {
             ],
           );
         },
-      ).show(context, ref.read(profileRepository).changePicture(value.first));
+      ).show(context, ref.read(profileRepository).changeAvatar(value.first));
     });
   }
 

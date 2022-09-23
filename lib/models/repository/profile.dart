@@ -41,10 +41,10 @@ class ProfileRepository {
       .get('/profile')
       .then((value) => AppUser.fromJson(value));
 
-  Future<void> changePicture(File file) => ref
+  Future<void> changeAvatar(File file) => ref
       .read(restClientProvider)
-      .uploadImage('POST', '/profile/change_picture',
-          field: 'profile_picture', file: file)
+      .uploadImage('POST', '/profile/change_avatar',
+          field: 'avatar', file: file)
       .then((_) => ref.refresh(appUserProvider));
 
   Future<void> changePassword(String password) =>
