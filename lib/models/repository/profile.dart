@@ -28,8 +28,8 @@ class ProfileRepository {
         .write(SecureStorageKey.authToken.key, response);
   }
 
-  Future<void> signOut() => Future.wait([
-        ref.read(restClientProvider).post('/sign_out'),
+  Future<void> logout() => Future.wait([
+        ref.read(restClientProvider).post('/logout'),
         ref.read(secureStorageProvider).delete(SecureStorageKey.authToken.key),
       ]).then((_) => ref.refresh(authTokenProvider));
 

@@ -147,7 +147,7 @@ class ProfilePage extends ConsumerWidget {
                 Navigator.pushReplacementNamed(context, '/login');
                 Future.delayed(
                   const Duration(milliseconds: 500),
-                  ref.read(profileRepository).signOut,
+                  ref.read(profileRepository).logout,
                 );
               },
               child: Text(

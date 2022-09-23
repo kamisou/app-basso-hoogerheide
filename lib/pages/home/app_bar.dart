@@ -69,7 +69,7 @@ class _HomeAppBarState extends ConsumerState<HomeAppBar> {
                 ),
                 error: (_, __) => GestureDetector(
                   onTap: () {
-                    ref.read(profileRepository).signOut();
+                    ref.read(profileRepository).logout();
                     Navigator.pushReplacementNamed(context, '/login');
                   },
                   child: Container(
@@ -155,7 +155,7 @@ class _HomeAppBarState extends ConsumerState<HomeAppBar> {
               Navigator.pushReplacementNamed(context, '/login');
               Future.delayed(
                 const Duration(milliseconds: 500),
-                ref.read(profileRepository).signOut,
+                ref.read(profileRepository).logout,
               );
             },
             child: const Icon(Icons.exit_to_app),
