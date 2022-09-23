@@ -173,10 +173,7 @@ class ProfilePage extends ConsumerWidget {
           'Houve um erro ao atualizar foto de perfil.',
           style: Theme.of(context).textTheme.titleMedium,
         ),
-      ).show(
-        context,
-        ref.read(profileRepository).changePicture(value.first),
-      );
+      ).show(context, ref.read(profileRepository).changePicture(value.first));
     });
   }
 

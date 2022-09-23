@@ -85,7 +85,12 @@ class RestClient {
     required File file,
   }) async {
     final request = http.MultipartRequest(method, Uri.parse('$host$endpoint'));
-    request.files.add(await http.MultipartFile.fromPath(field, file.path));
+    request.files.add(
+      http.MultipartFile.fromBytes(field, file.readAsBytesSync()),
+    );
+    if (defaultHeaders != null) {
+      request.headers.addAll(defaultHeaders!);
+    }
     return request.send().then(_handleResponse);
   }
 
