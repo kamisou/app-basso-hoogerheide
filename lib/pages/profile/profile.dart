@@ -1,4 +1,5 @@
 import 'package:basso_hoogerheide/interface/file_picker.dart';
+import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/input/app_user.dart';
 import 'package:basso_hoogerheide/models/repository/profile.dart';
 import 'package:basso_hoogerheide/pages/profile/profile_option.dart';
@@ -169,20 +170,25 @@ class ProfilePage extends ConsumerWidget {
           'Fazendo upload da foto de perfil...',
           style: Theme.of(context).textTheme.titleMedium,
         ),
-        errorBuilder: (context) => Row(
-          children: [
-            Expanded(
-              child: Text(
-                'Houve um erro ao atualizar a foto de perfil.',
-                style: Theme.of(context).textTheme.titleMedium,
+        errorBuilder: (context, error) {
+          String? errorMessage =
+              error is RestException ? error.serverMessage : null;
+          return Row(
+            children: [
+              Expanded(
+                child: Text(
+                  errorMessage ??
+                      'Ocorreu um erro inesperado ao fazer upload da imagem.',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
               ),
-            ),
-            Icon(
-              Icons.error_outline,
-              color: Theme.of(context).colorScheme.error,
-            ),
-          ],
-        ),
+              Icon(
+                Icons.error_outline,
+                color: Theme.of(context).colorScheme.error,
+              ),
+            ],
+          );
+        },
       ).show(context, ref.read(profileRepository).changePicture(value.first));
     });
   }

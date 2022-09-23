@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:basso_hoogerheide/constants/configuration.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart' as http_parser;
 
 final authTokenProvider = StateProvider<String?>((ref) => null);
 
@@ -84,9 +85,17 @@ class RestClient {
     required String field,
     required File file,
   }) async {
+    final String extension =
+        file.path.substring(file.path.lastIndexOf('.') + 1);
+
     final request = http.MultipartRequest(method, Uri.parse('$host$endpoint'));
     request.files.add(
-      http.MultipartFile.fromBytes(field, file.readAsBytesSync()),
+      http.MultipartFile.fromBytes(
+        field,
+        file.readAsBytesSync(),
+        filename: file.path.substring(file.path.lastIndexOf('/') + 1),
+        contentType: http_parser.MediaType('image', extension),
+      ),
     );
     if (defaultHeaders != null) {
       request.headers.addAll(defaultHeaders!);

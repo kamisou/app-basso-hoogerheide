@@ -70,7 +70,7 @@ class _ModelsPageState extends ConsumerState<ModelsPage>
           'Fazendo upload do modelo $fileName',
           style: Theme.of(context).textTheme.titleMedium,
         ),
-        errorBuilder: (context) => Text(
+        errorBuilder: (context, _) => Text(
           'Houve um erro ao fazer o upload de $fileName!',
           style: Theme.of(context).textTheme.titleMedium,
         ),

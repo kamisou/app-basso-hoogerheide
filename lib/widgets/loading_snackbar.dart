@@ -9,7 +9,7 @@ class LoadingSnackbar {
 
   final WidgetBuilder contentBuilder;
 
-  final WidgetBuilder? errorBuilder;
+  final Function(BuildContext, Object)? errorBuilder;
 
   final WidgetBuilder? finishedBuilder;
 
@@ -44,21 +44,18 @@ class LoadingSnackbar {
       ),
     );
     future.then(
-      finishedBuilder != null
-          ? (_) {
-              ScaffoldMessenger.of(context).hideCurrentSnackBar();
-              return ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: finishedBuilder!(context)),
-              );
-            }
-          : (_) {},
+      (_) {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        if (finishedBuilder != null) {
+          return ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: finishedBuilder!(context)),
+          );
+        }
+      },
       onError: errorBuilder != null
-          ? (_) {
-              ScaffoldMessenger.of(context).hideCurrentSnackBar();
-              return ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: errorBuilder!(context)),
-              );
-            }
+          ? (error) => ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: errorBuilder!(context, error)),
+              )
           : null,
     );
   }
