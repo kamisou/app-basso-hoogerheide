@@ -11,11 +11,12 @@ final authTokenProvider = StateProvider<String?>((ref) => null);
 final restClientProvider = Provider.autoDispose(
   (ref) {
     final String? authToken = ref.watch(authTokenProvider);
-    final Map<String, String>? headers =
-        authToken != null ? {'Authorization': 'Bearer $authToken'} : null;
     return RestClient(
       host: ref.watch(configurationProvider).restServerUrl,
-      defaultHeaders: headers,
+      defaultHeaders: {
+        'Accept': 'application/json',
+        if (authToken != null) 'Authorization': 'Bearer $authToken'
+      },
     );
   },
 );

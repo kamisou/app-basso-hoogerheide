@@ -29,7 +29,7 @@ class ProfileRepository {
   }
 
   Future<void> signOut() => Future.wait([
-        ref.read(restClientProvider).put('/profile/sign_out'),
+        ref.read(restClientProvider).post('/profile/sign_out'),
         ref.read(secureStorageProvider).delete(SecureStorageKey.authToken.key),
       ]).then((_) => ref.refresh(authTokenProvider));
 
@@ -48,8 +48,8 @@ class ProfileRepository {
       .then((_) => ref.refresh(appUserProvider));
 
   Future<void> changePassword(String password) =>
-      ref.read(restClientProvider).get(
+      ref.read(restClientProvider).post(
         '/profile/change_password',
-        body: {'password': password},
+        body: {'new_password': password},
       );
 }
