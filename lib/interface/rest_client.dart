@@ -84,16 +84,12 @@ class RestClient {
     required String field,
     required File file,
   }) async {
-    final String extension =
-        file.path.substring(file.path.lastIndexOf('.') + 1);
-
     final request = http.MultipartRequest(method, Uri.parse('$host$endpoint'));
     request.files.add(
       http.MultipartFile.fromBytes(
         field,
         file.readAsBytesSync(),
         filename: file.path.substring(file.path.lastIndexOf('/') + 1),
-        contentType: http_parser.MediaType('image', extension),
       ),
     );
     if (defaultHeaders != null) {
