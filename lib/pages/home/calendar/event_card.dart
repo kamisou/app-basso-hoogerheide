@@ -17,6 +17,8 @@ class EventCard extends StatefulWidget {
 class _EventCardState extends State<EventCard> {
   bool _expanded = false;
 
+  TapDownDetails? _tapDetails;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -34,6 +36,29 @@ class _EventCardState extends State<EventCard> {
               : null,
           child: InkWell(
             onTap: () => setState(() => _expanded = !_expanded),
+            onTapDown: (details) => _tapDetails = details,
+            onLongPress: () {
+              if (_tapDetails == null) return;
+              final double dx = _tapDetails!.globalPosition.dx;
+              final double dy = _tapDetails!.globalPosition.dy;
+              showMenu<String?>(
+                context: context,
+                position: RelativeRect.fromLTRB(dx, dy, dx, dy),
+                items: [
+                  const PopupMenuItem(
+                    value: 'edit',
+                    child: Text('Editar evento'),
+                  ),
+                  PopupMenuItem(
+                    textStyle: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          color: Theme.of(context).colorScheme.error,
+                        ),
+                    value: 'delete',
+                    child: const Text('Deletar evento'),
+                  ),
+                ],
+              );
+            },
             child: Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 10,

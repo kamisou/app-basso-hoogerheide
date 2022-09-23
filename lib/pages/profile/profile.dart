@@ -133,7 +133,7 @@ class ProfilePage extends ConsumerWidget {
           const SizedBox(height: 40),
           Center(
             child: GestureDetector(
-              onTap: () => () {
+              onTap: () {
                 Navigator.pushReplacementNamed(context, '/login');
                 Future.delayed(
                   const Duration(milliseconds: 500),

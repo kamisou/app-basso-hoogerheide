@@ -3,14 +3,14 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:basso_hoogerheide/constants/configuration.dart';
-import 'package:basso_hoogerheide/constants/secure_storage_keys.dart';
-import 'package:basso_hoogerheide/interface/secure_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 
+final authTokenProvider = StateProvider<String?>((ref) => null);
+
 final restClientProvider = Provider.autoDispose(
   (ref) {
-    final String? authToken = ref.watch(authTokenProvider).value;
+    final String? authToken = ref.watch(authTokenProvider);
     final Map<String, String>? headers =
         authToken != null ? {'Authorization': 'Bearer $authToken'} : null;
     return RestClient(
@@ -19,9 +19,6 @@ final restClientProvider = Provider.autoDispose(
     );
   },
 );
-
-final authTokenProvider = FutureProvider((ref) =>
-    ref.read(secureStorageProvider).read(SecureStorageKey.authToken.key));
 
 class RestClient {
   const RestClient({

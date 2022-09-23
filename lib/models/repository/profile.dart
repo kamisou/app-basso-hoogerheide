@@ -22,16 +22,16 @@ class ProfileRepository {
         .read(restClientProvider)
         .post('/profile/login', body: body)
         .then((value) => value['token']);
+    ref.read(authTokenProvider.notifier).state = response;
     return ref
         .read(secureStorageProvider)
-        .write(SecureStorageKey.authToken.key, response)
-        .then((_) => ref.watch(authTokenProvider.future));
+        .write(SecureStorageKey.authToken.key, response);
   }
 
   Future<void> signOut() => Future.wait([
         ref.read(restClientProvider).put('/profile/sign_out'),
         ref.read(secureStorageProvider).delete(SecureStorageKey.authToken.key),
-      ]);
+      ]).then((_) => ref.refresh(authTokenProvider));
 
   // Future<void> recoverPassword(Map<String, dynamic> body) =>
   //     ref.read(restClientProvider).put('/profile/recover_password', body: body);

@@ -17,7 +17,7 @@ class AnnotationsPage extends ConsumerWidget {
       appBar: AppBar(title: Text('${folder.id} - ${folder.name}')),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.note_add),
-        onPressed: () => ref.watch(annotationOptionsProvider).then(
+        onPressed: () => ref.read(annotationOptionsProvider).then(
               (value) => showDialog<Map<String, dynamic>?>(
                 context: context,
                 builder: (context) => const AddAnnotationDialog(),

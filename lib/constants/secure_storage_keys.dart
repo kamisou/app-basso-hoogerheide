@@ -1,7 +1,7 @@
 class SecureStorageKey {
-  const SecureStorageKey(this.key);
+  const SecureStorageKey._(this.key);
 
   final String key;
 
-  static const SecureStorageKey authToken = SecureStorageKey('auth_token');
+  static const SecureStorageKey authToken = SecureStorageKey._('auth_token');
 }

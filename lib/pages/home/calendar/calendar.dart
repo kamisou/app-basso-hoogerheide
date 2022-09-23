@@ -25,7 +25,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage>
       floatingActionButton: FloatingActionButton(
         heroTag: 'calendar_fab',
         child: const Icon(Icons.edit_calendar),
-        onPressed: () => ref.watch(calendarEventColorsProvider).then(
+        onPressed: () => ref.read(calendarEventColorsProvider).then(
               (value) => showDialog<NewCalendarEvent>(
                 context: context,
                 builder: (_) => const AddEventDialog(),
