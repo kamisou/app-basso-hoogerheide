@@ -169,9 +169,19 @@ class ProfilePage extends ConsumerWidget {
           'Fazendo upload da foto de perfil...',
           style: Theme.of(context).textTheme.titleMedium,
         ),
-        errorBuilder: (context) => Text(
-          'Houve um erro ao atualizar foto de perfil.',
-          style: Theme.of(context).textTheme.titleMedium,
+        errorBuilder: (context) => Row(
+          children: [
+            Expanded(
+              child: Text(
+                'Houve um erro ao atualizar a foto de perfil.',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+            ),
+            Icon(
+              Icons.error_outline,
+              color: Theme.of(context).colorScheme.error,
+            ),
+          ],
         ),
       ).show(context, ref.read(profileRepository).changePicture(value.first));
     });

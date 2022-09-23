@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 
 class LoadingSnackbar {
   const LoadingSnackbar({
@@ -20,54 +19,47 @@ class LoadingSnackbar {
         duration: const Duration(minutes: 5),
         dismissDirection: DismissDirection.none,
         padding: EdgeInsets.zero,
-        content: FutureBuilder(
-          future: future,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              ScaffoldMessenger.of(context).hideCurrentSnackBar();
-              if (snapshot.hasError) {
-                if (errorBuilder != null) {
-                  SchedulerBinding.instance.addPostFrameCallback(
-                    (_) => ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: errorBuilder!(context)),
-                    ),
-                  );
-                }
-              } else {
-                if (finishedBuilder != null) {
-                  SchedulerBinding.instance.addPostFrameCallback(
-                    (_) => ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: finishedBuilder!(context)),
-                    ),
-                  );
-                }
-              }
-            }
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 10,
-                  ),
-                  child: contentBuilder(context),
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 10,
+              ),
+              child: contentBuilder(context),
+            ),
+            Container(
+              clipBehavior: Clip.antiAlias,
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.vertical(
+                  bottom: Radius.circular(4),
                 ),
-                Container(
-                  clipBehavior: Clip.antiAlias,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.vertical(
-                      bottom: Radius.circular(4),
-                    ),
-                  ),
-                  child: const LinearProgressIndicator(),
-                ),
-              ],
-            );
-          },
+              ),
+              child: const LinearProgressIndicator(),
+            ),
+          ],
         ),
       ),
+    );
+    future.then(
+      finishedBuilder != null
+          ? (_) {
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              return ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: finishedBuilder!(context)),
+              );
+            }
+          : (_) {},
+      onError: errorBuilder != null
+          ? (_) {
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              return ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: errorBuilder!(context)),
+              );
+            }
+          : null,
     );
   }
 }
