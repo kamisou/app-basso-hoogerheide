@@ -20,7 +20,7 @@ class ProfileRepository {
   Future<void> signIn(Map<String, dynamic> body) async {
     final String response = await ref
         .read(restClientProvider)
-        .post('/profile/login', body: body)
+        .post('/login', body: body)
         .then((value) => value['token']);
     ref.read(authTokenProvider.notifier).state = response;
     return ref
@@ -29,7 +29,7 @@ class ProfileRepository {
   }
 
   Future<void> signOut() => Future.wait([
-        ref.read(restClientProvider).post('/profile/sign_out'),
+        ref.read(restClientProvider).post('/sign_out'),
         ref.read(secureStorageProvider).delete(SecureStorageKey.authToken.key),
       ]).then((_) => ref.refresh(authTokenProvider));
 
