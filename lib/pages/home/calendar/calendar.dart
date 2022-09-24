@@ -1,8 +1,12 @@
+import 'dart:io';
+
+import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/output/new_calendar_event.dart';
 import 'package:basso_hoogerheide/models/repository/calendar.dart';
 import 'package:basso_hoogerheide/pages/home/calendar/add_event_dialog.dart';
 import 'package:basso_hoogerheide/pages/home/calendar/day.dart';
 import 'package:basso_hoogerheide/widgets/empty_card.dart';
+import 'package:basso_hoogerheide/widgets/error_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:infinite_listview/infinite_listview.dart';
@@ -25,13 +29,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage>
       floatingActionButton: FloatingActionButton(
         heroTag: 'calendar_fab',
         child: const Icon(Icons.edit_calendar),
-        onPressed: () => ref.read(calendarEventColorsProvider).then(
-              (value) => showDialog<NewCalendarEvent>(
-                context: context,
-                builder: (_) => const AddEventDialog(),
-                routeSettings: RouteSettings(arguments: value),
-              ).then(ref.read(calendarRepositoryProvider).addEvent),
-            ),
+        onPressed: () => _onAddEvent(context, ref),
       ),
       body: ref.watch(initialCalendarEventsProvider).when(
             data: (data) => InfiniteListView.builder(
@@ -70,6 +68,40 @@ class _CalendarPageState extends ConsumerState<CalendarPage>
             ),
           ),
     );
+  }
+
+  void _onAddEvent(BuildContext context, WidgetRef ref) {
+    ref.read(calendarEventColorsProvider).then(
+          (value) => showDialog<NewCalendarEvent>(
+            context: context,
+            builder: (_) => const AddEventDialog(),
+            routeSettings: RouteSettings(arguments: value),
+          ).then((event) {
+            if (event == null) return;
+            ref
+                .read(calendarRepositoryProvider)
+                .addEvent(event)
+                .onError((error, _) => ErrorSnackbar(
+                      contents: {
+                        RestException: (context, error) => Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    'Não foi possível adicionar o evento',
+                                    style:
+                                        Theme.of(context).textTheme.titleMedium,
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.error_outline,
+                                  color: Theme.of(context).colorScheme.error,
+                                ),
+                              ],
+                            )
+                      },
+                    ).show(context, error!));
+          }),
+        );
   }
 
   @override

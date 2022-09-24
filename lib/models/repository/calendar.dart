@@ -44,13 +44,10 @@ class CalendarRepository {
 
   final Ref ref;
 
-  Future<void> addEvent(NewCalendarEvent? event) async {
-    if (event == null) return;
-    return ref
-        .read(restClientProvider)
-        .post('/events/add', body: event.toJson())
-        .then((_) => ref.refresh(initialCalendarEventsProvider));
-  }
+  Future<void> addEvent(NewCalendarEvent event) => ref
+      .read(restClientProvider)
+      .post('/events/add', body: event.toJson())
+      .then((_) => ref.refresh(initialCalendarEventsProvider));
 
   Future<CalendarEvents> getEvents(DateTime startDate, DateTime endDate) {
     final DateFormat dateFormat = DateFormat('dd-MM-yyyy');

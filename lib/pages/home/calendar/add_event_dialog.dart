@@ -16,7 +16,9 @@ class _AddEventDialogState extends ConsumerState<AddEventDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Color> colors = ModalRoute.of(context)!.settings.arguments as List<Color>;
+    final List<Color> colors =
+        ModalRoute.of(context)!.settings.arguments as List<Color>;
+    _event.setColor(colors.first);
     return Dialog(
       insetPadding: const EdgeInsets.all(16),
       child: Padding(
@@ -54,6 +56,7 @@ class _AddEventDialogState extends ConsumerState<AddEventDialog> {
                                   .titleMedium
                                   ?.copyWith(fontWeight: FontWeight.bold),
                             ),
+                            initialValue: _event.color,
                             onChanged: _event.setColor,
                           ),
                         ],
@@ -66,20 +69,22 @@ class _AddEventDialogState extends ConsumerState<AddEventDialog> {
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 4, bottom: 24),
+                    padding: const EdgeInsets.only(top: 4, bottom: 16),
                     child: TextFormField(
                       onChanged: _event.setTitle,
                       validator: (value) => (value?.isEmpty ?? true)
-                          ? 'Informe um título para o evento'
+                          ? 'Informe um título para o evento.'
                           : null,
                     ),
                   ),
+                  // TODO: adicionar seletor de data
                   Row(
                     children: [
                       Expanded(
                         child: TimePicker(
                           labelText: 'Início:',
-                          onChanged: _event.setStartTime,
+                          onChanged: (value) =>
+                              setState(() => _event.setStartTime(value)),
                         ),
                       ),
                       Container(
@@ -96,13 +101,12 @@ class _AddEventDialogState extends ConsumerState<AddEventDialog> {
                           labelText: 'Fim:',
                           initialTime: _event.startTime,
                           enabled: _event.startTime != null,
-                          onChanged: (value) =>
-                              setState(() => _event.setEndTime(value)),
+                          onChanged: _event.setEndTime,
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 16),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     mainAxisSize: MainAxisSize.min,

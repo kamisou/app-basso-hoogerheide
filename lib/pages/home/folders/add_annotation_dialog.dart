@@ -46,7 +46,7 @@ class _AddAnnotationDialogState extends ConsumerState<AddAnnotationDialog> {
                       options: args['options'],
                       onChanged: (value) => _annotation = value,
                       validator: (value) => (value?.isEmpty ?? true)
-                          ? 'Insira um assunto para a anotação'
+                          ? 'Insira um assunto para a anotação.'
                           : null,
                     ),
                     const SizedBox(height: 24),
