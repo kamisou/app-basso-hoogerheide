@@ -1,9 +1,10 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
 import 'package:basso_hoogerheide/constants/configuration.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
 
 final authTokenProvider = StateProvider<String?>((ref) => null);
 
@@ -11,7 +12,7 @@ final restClientProvider = Provider.autoDispose(
   (ref) {
     final String? authToken = ref.watch(authTokenProvider);
     return RestClient(
-      baseUrl: ref.watch(configurationProvider).restServerUrl,
+      host: ref.watch(configurationProvider).restServerUrl,
       defaultHeaders: {
         'Accept': 'application/json',
         if (authToken != null) 'Authorization': 'Bearer $authToken'
@@ -21,47 +22,24 @@ final restClientProvider = Provider.autoDispose(
 );
 
 class RestClient {
-  RestClient({
-    required String baseUrl,
-    Map<String, dynamic>? defaultHeaders,
-  }) : _dio = Dio(
-          BaseOptions(
-            baseUrl: baseUrl,
-            headers: defaultHeaders,
-          ),
-        )..interceptors.add(
-            InterceptorsWrapper(
-              onRequest: (requestOptions, handler) {
-                log(
-                  '${requestOptions.method} ${requestOptions.path}\n'
-                  'Query ${requestOptions.queryParameters}\n',
-                );
-                return handler.next(requestOptions);
-              },
-              onResponse: (response, handler) {
-                log('${response.realUri} ${response.statusCode} ${response.statusMessage}\n');
-                return handler.next(response);
-              },
-              onError: (dioError, handler) {
-                log('${dioError.requestOptions.path} ${dioError.type}: ${dioError.message}');
-                return handler.next(dioError);
-              },
-            ),
-          );
+  const RestClient({
+    required this.host,
+    this.defaultHeaders,
+  });
 
-  final Dio _dio;
+  final String host;
+
+  final Map<String, String>? defaultHeaders;
 
   Future<dynamic> get(
     String endpoint, {
-    Map<String, dynamic>? query,
     Map<String, dynamic>? body,
     Map<String, String>? headers,
   }) =>
       _request(
         'GET',
-        endpoint,
+        Uri.parse('$host$endpoint'),
         body: body,
-        query: query,
         headers: headers,
       );
 
@@ -72,7 +50,7 @@ class RestClient {
   }) =>
       _request(
         'POST',
-        endpoint,
+        Uri.parse('$host$endpoint'),
         body: body,
         headers: headers,
       );
@@ -84,7 +62,7 @@ class RestClient {
   }) =>
       _request(
         'PUT',
-        endpoint,
+        Uri.parse('$host$endpoint'),
         body: body,
         headers: headers,
       );
@@ -96,7 +74,7 @@ class RestClient {
   }) =>
       _request(
         'DELETE',
-        endpoint,
+        Uri.parse('$host$endpoint'),
         body: body,
         headers: headers,
       );
@@ -107,63 +85,73 @@ class RestClient {
     required String field,
     required File file,
   }) async {
-    final FormData formData = FormData.fromMap({
-      field: MultipartFile.fromBytes(
+    final request = http.MultipartRequest(method, Uri.parse('$host$endpoint'));
+    request.files.add(
+      http.MultipartFile.fromBytes(
+        field,
         file.readAsBytesSync(),
         filename: file.path.substring(file.path.lastIndexOf('/') + 1),
-      )
-    });
-    try {
-      final Response response = await _dio.request(
-        endpoint,
-        data: formData,
-        options: Options(method: method),
-      );
-      return _handleResponse(response);
-    } on Exception {
-      throw const SocketException('Falha ao realizar pedido HTTP');
+      ),
+    );
+    if (defaultHeaders != null) {
+      request.headers.addAll(defaultHeaders!);
     }
+    return request.send().then(_handleResponse);
   }
 
   Future<dynamic> _request(
     String method,
-    String endpoint, {
-    Map<String, dynamic>? query,
+    Uri url, {
     Map<String, dynamic>? body,
     Map<String, String>? headers,
   }) async {
+    final request = http.Request(method, url);
+
+    if (defaultHeaders != null) {
+      request.headers.addAll(defaultHeaders!);
+    }
+    if (headers != null) {
+      request.headers.addAll(headers);
+    }
+
+    if (body != null) {
+      request.headers['Content-Type'] = 'application/json';
+      request.body = json.encode(body);
+    }
+
+    log('$method ${url.path} ${request.headers['Authorization']}');
+
+    final http.StreamedResponse response;
     try {
-      final Response response = await _dio.request(
-        endpoint,
-        queryParameters: query,
-        data: body,
-        options: Options(
-          method: method,
-          headers: headers,
-          contentType: 'application/json',
-        ),
-      );
-      return _handleResponse(response);
+      response = await request.send();
     } on Exception {
       throw const SocketException('Falha ao realizar pedido HTTP');
     }
+
+    return _handleResponse(response);
   }
 
-  Future<dynamic> _handleResponse(Response response) async {
-    if (response.statusCode! > 399) {
+  Future<dynamic> _handleResponse(http.StreamedResponse response) async {
+    if (response.statusCode > 399) {
       String? serverMessage;
       try {
-        serverMessage = await response.data['message'];
+        serverMessage = await response.stream
+            .transform(utf8.decoder)
+            .join()
+            .then(json.decode)
+            .then((value) => value['message']);
       } on Object {
         serverMessage = null;
       }
+
       throw RestException(
-        statusCode: response.statusCode!,
-        reasonPhrase: response.statusMessage,
+        statusCode: response.statusCode,
+        reasonPhrase: response.reasonPhrase,
         serverMessage: serverMessage,
       );
     }
-    return response.data;
+    final String data = await response.stream.transform(utf8.decoder).join();
+    return data.isEmpty ? null : json.decode(data);
   }
 }
 

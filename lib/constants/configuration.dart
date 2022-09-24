@@ -7,5 +7,5 @@ class Configuration {
   const Configuration();
 
   // TODO: apontar para servidor REST real
-  final String restServerUrl = 'http://192.168.0.1:80/api';
+  final String restServerUrl = 'http://192.168.0.222:80/api';
 }

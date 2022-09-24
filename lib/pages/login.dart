@@ -152,10 +152,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             contents: {
               RestException: (context, error) => content(
                     (error as RestException).serverMessage ??
-                        'Ocorreu um erro inesperado',
+                        'Ocorreu um erro inesperado.',
                   ),
               SocketException: (context, error) => content(
-                    'Não foi possível conectar com o servidor',
+                    'Não foi possível conectar-se ao servidor.',
                   ),
             },
           ).show(context, e);

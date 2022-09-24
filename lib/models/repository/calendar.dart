@@ -54,18 +54,22 @@ class CalendarRepository {
 
   Future<CalendarEvents> getEvents(DateTime startDate, DateTime endDate) {
     final DateFormat dateFormat = DateFormat('dd-MM-yyyy');
-    return ref.read(restClientProvider).get('/events', query: {
-      'start_date': dateFormat.format(startDate),
-      'end_date': dateFormat.format(endDate),
-    },).then((value) => (value['events'] as Map? ?? {}).map(
-          (key, value) => MapEntry(
-            DateTime.parse(key),
-            (value as List? ?? [])
-                .cast<Map<String, dynamic>>()
-                .map(CalendarEvent.fromJson)
-                .toList(),
-          ),
-        ));
+    return ref
+        .read(restClientProvider)
+        .get(
+          '/events'
+          '?start_date=${dateFormat.format(startDate)}'
+          '&end_date=${dateFormat.format(endDate)}',
+        )
+        .then((value) => (value['events'] as Map? ?? {}).map(
+              (key, value) => MapEntry(
+                DateTime.parse(key),
+                (value as List? ?? [])
+                    .cast<Map<String, dynamic>>()
+                    .map(CalendarEvent.fromJson)
+                    .toList(),
+              ),
+            ));
   }
 
   Future<List<Color>> getEventColors() => ref
