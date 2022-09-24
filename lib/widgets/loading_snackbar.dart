@@ -52,11 +52,14 @@ class LoadingSnackbar {
           );
         }
       },
-      onError: errorBuilder != null
-          ? (error) => ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: errorBuilder!(context, error)),
-              )
-          : null,
+      onError: (error) {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        if (errorBuilder != null) {
+          return ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: errorBuilder!(context, error)),
+          );
+        }
+      },
     );
   }
 }
