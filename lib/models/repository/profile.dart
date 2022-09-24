@@ -17,6 +17,11 @@ class ProfileRepository {
 
   final Ref ref;
 
+  Future<bool> validateToken() => ref
+      .read(restClientProvider)
+      .get('/profile/validate_token')
+      .then((value) => value['valid'], onError: (_) => false);
+
   Future<void> signIn(Map<String, dynamic> body) async {
     final String response = await ref
         .read(restClientProvider)
