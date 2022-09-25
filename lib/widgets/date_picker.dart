@@ -81,17 +81,30 @@ class _DatePickerState extends State<DatePicker> {
       key: _key,
       validator: widget.validator,
       builder: (state) {
-        return GestureDetector(
-          onTap: _showDatePicker,
-          child: TextFormField(
-            validator: (_) => state.errorText,
-            controller: _controller,
-            decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.calendar_today_outlined),
-              labelText: widget.labelText,
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            GestureDetector(
+              onTap: _showDatePicker,
+              child: TextFormField(
+                controller: _controller,
+                decoration: InputDecoration(
+                  prefixIcon: const Icon(Icons.calendar_today_outlined),
+                  labelText: widget.labelText,
+                ),
+                focusNode: _focusNode,
+              ),
             ),
-            focusNode: _focusNode,
-          ),
+            if (state.errorText != null)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: Text(
+                  state.errorText!,
+                  style: Theme.of(context).inputDecorationTheme.errorStyle,
+                ),
+              ),
+          ],
         );
       },
     );

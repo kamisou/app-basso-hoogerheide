@@ -53,7 +53,7 @@ class _AddContactDialogState extends ConsumerState<AddContactDialog> {
                         textInputAction: TextInputAction.next,
                         onChanged: _contact.setName,
                         validator: (value) => (value?.isEmpty ?? true)
-                            ? 'Insira um nome para o contato.'
+                            ? 'Insira um nome para o contato'
                             : null,
                       ),
                     ),

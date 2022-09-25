@@ -221,7 +221,7 @@ class ProfilePage extends ConsumerWidget {
               obscureText: true,
               textInputAction: TextInputAction.next,
               validator: (value) =>
-                  (value?.isEmpty ?? true) ? 'Informe a nova senha.' : null,
+                  (value?.isEmpty ?? true) ? 'Informe a nova senha' : null,
             ),
             const SizedBox(height: 10),
             TextFormField(
@@ -233,7 +233,7 @@ class ProfilePage extends ConsumerWidget {
                 if (value?.isEmpty ?? true) {
                   return 'Repita a nova senha';
                 } else if (passwordController.text != value) {
-                  return 'As senhas não coincidem.';
+                  return 'As senhas não coincidem';
                 }
                 return null;
               },

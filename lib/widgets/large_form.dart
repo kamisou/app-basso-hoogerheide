@@ -154,7 +154,7 @@ class _LargeFormState extends State<LargeForm> {
 
   String? _validator(bool required, Object? value) {
     if (required && (value == null || (value is String && value.isEmpty))) {
-      return 'Insira um valor.';
+      return 'Insira um valor';
     }
     return null;
   }

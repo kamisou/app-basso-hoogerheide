@@ -79,7 +79,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.next,
             validator: (value) => (value?.isEmpty ?? true)
-                ? 'Informe seu endereço de e-mail.'
+                ? 'Informe seu endereço de e-mail'
                 : null),
         const SizedBox(height: 18),
         CustomTextFormField(
@@ -90,7 +90,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           obscureText: true,
           onEditingComplete: _controller.press,
           validator: (value) =>
-              (value?.isEmpty ?? true) ? 'Informe sua senha.' : null,
+              (value?.isEmpty ?? true) ? 'Informe sua senha' : null,
         ),
         const SizedBox(height: 20),
         ElevatedAsyncButton(
