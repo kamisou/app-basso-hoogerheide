@@ -7,7 +7,6 @@ class ColorPicker extends StatefulWidget {
     required this.dialogTitle,
     this.initialValue,
     this.onChanged,
-    this.radius = 40,
   }) : assert(colors.isNotEmpty, "'colors' cannot be empty!");
 
   final List<Color> colors;
@@ -17,8 +16,6 @@ class ColorPicker extends StatefulWidget {
   final Color? initialValue;
 
   final void Function(Color?)? onChanged;
-
-  final double radius;
 
   @override
   State<ColorPicker> createState() => _ColorPickerState();
@@ -85,11 +82,11 @@ class _ColorPickerState extends State<ColorPicker> {
       },
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(widget.radius / 2),
+          borderRadius: BorderRadius.circular(16),
           color: _color,
         ),
-        height: widget.radius,
-        width: widget.radius,
+        height: 32,
+        width: 32,
       ),
     );
   }

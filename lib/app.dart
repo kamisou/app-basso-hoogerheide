@@ -4,7 +4,6 @@ import 'package:basso_hoogerheide/constants/secure_storage_keys.dart';
 import 'package:basso_hoogerheide/constants/theme_data.dart';
 import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/interface/secure_storage.dart';
-import 'package:basso_hoogerheide/pages/home/calendar/new_event.dart';
 import 'package:basso_hoogerheide/pages/home/folders/annotations.dart';
 import 'package:basso_hoogerheide/pages/home/folders/new_folder.dart';
 import 'package:basso_hoogerheide/pages/home/home.dart';
@@ -38,7 +37,6 @@ class App extends ConsumerWidget {
       routes: {
         '/login': (_) => const LoginPage(),
         '/home': (_) => const HomePage(),
-        '/newEvent': (_) => const NewEventPage(),
         '/newFolder': (_) => const NewFolderPage(),
         '/annotations': (_) => const AnnotationsPage(),
         '/profile': (_) => const ProfilePage(),
