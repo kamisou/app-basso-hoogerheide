@@ -35,7 +35,7 @@ final calendarEventsRepositoryProvider = Provider(
   },
 );
 
-final calendarEventColorsProvider = Provider.autoDispose(
+final calendarEventColorsProvider = FutureProvider.autoDispose(
   (ref) => ref.read(calendarRepositoryProvider).getEventColors(),
 );
 

@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 class NewCalendarEvent {
   NewCalendarEvent.empty();
 
-  DateTime? date;
+  DateTime? startDate;
 
-  TimeOfDay? startTime;
-
-  TimeOfDay? endTime;
+  DateTime? endDate;
 
   String? title;
 
@@ -15,11 +13,9 @@ class NewCalendarEvent {
 
   Color? color;
 
-  void setDate(DateTime? value) => date = value;
+  void setStartDate(DateTime? value) => startDate = value;
 
-  void setStartTime(TimeOfDay? value) => startTime = value;
-
-  void setEndTime(TimeOfDay? value) => endTime = value;
+  void setEndDate(DateTime? value) => endDate = value;
 
   void setTitle(String? value) => title = value;
 
@@ -30,9 +26,8 @@ class NewCalendarEvent {
   Map<String, dynamic> toJson() => {
         'title': title,
         'description': description,
-        'date': date,
-        'start_time': '${startTime?.hour}${startTime?.minute}',
-        'end_time': '${endTime?.hour}${endTime?.minute}',
+        'start_date': startDate?.toIso8601String(),
+        'end_date': endDate?.toIso8601String(),
         'color': color?.value,
       };
 }

@@ -1,5 +1,4 @@
 import 'package:basso_hoogerheide/interface/file_picker.dart';
-import 'package:basso_hoogerheide/widgets/date_picker.dart';
 import 'package:basso_hoogerheide/widgets/file_picker_field.dart';
 import 'package:basso_hoogerheide/widgets/searchbar.dart';
 import 'package:easy_mask/easy_mask.dart';
@@ -103,13 +102,14 @@ class _LargeFormState extends State<LargeForm> {
   ) {
     switch (field.runtimeType) {
       case LargeFormDateField:
-        return DatePicker(
+        return InputDatePickerFormField(
           firstDate: (field as LargeFormDateField).firstDate,
           lastDate: field.lastDate,
-          labelText: _fieldLabel(field),
-          onChanged: (value) =>
-              _data[section.key]![field.key] = value?.toIso8601String(),
-          validator: (value) => _validator(field.required, value),
+          fieldLabelText: _fieldLabel(field),
+          onDateSubmitted: (value) =>
+              _data[section.key]![field.key] = value.toIso8601String(),
+          errorInvalidText: 'Insira um valor válido.',
+          errorFormatText: 'Insira um valor válido.',
         );
       case LargeFormOptionsField:
         return SearchBar(
@@ -154,7 +154,7 @@ class _LargeFormState extends State<LargeForm> {
 
   String? _validator(bool required, Object? value) {
     if (required && (value == null || (value is String && value.isEmpty))) {
-      return 'Insira um valor.';
+      return 'Insira um valor válido.';
     }
     return null;
   }

@@ -67,6 +67,7 @@ class _DatePickerState extends State<DatePicker> {
       lastDate: widget.lastDate,
       initialDate: widget.initialDate ?? DateTime.now(),
     ).then((value) {
+      if (value == null) return;
       final FormFieldState? currentState = _key.currentState;
       widget.onChanged?.call(value);
       currentState?.didChange(value);
@@ -79,6 +80,7 @@ class _DatePickerState extends State<DatePicker> {
   Widget build(BuildContext context) {
     return FormField<DateTime>(
       key: _key,
+      initialValue: widget.initialDate,
       validator: widget.validator,
       builder: (state) {
         return GestureDetector(
