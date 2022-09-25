@@ -1,5 +1,7 @@
 import 'package:basso_hoogerheide/models/output/new_calendar_event.dart';
+import 'package:basso_hoogerheide/models/repository/calendar.dart';
 import 'package:basso_hoogerheide/widgets/color_picker.dart';
+import 'package:basso_hoogerheide/widgets/date_picker.dart';
 import 'package:basso_hoogerheide/widgets/time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,7 +18,9 @@ class _AddEventDialogState extends ConsumerState<AddEventDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Color> colors = ModalRoute.of(context)!.settings.arguments as List<Color>;
+    final List<Color> colors =
+        ModalRoute.of(context)!.settings.arguments as List<Color>;
+    final DateTime today = ref.watch(initialDateRepositoryProvider);
     return Dialog(
       insetPadding: const EdgeInsets.all(16),
       child: Padding(
@@ -54,6 +58,7 @@ class _AddEventDialogState extends ConsumerState<AddEventDialog> {
                                   .titleMedium
                                   ?.copyWith(fontWeight: FontWeight.bold),
                             ),
+                            initialValue: _event.color,
                             onChanged: _event.setColor,
                           ),
                         ],
@@ -65,26 +70,43 @@ class _AddEventDialogState extends ConsumerState<AddEventDialog> {
                     '* Título:',
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4, bottom: 24),
-                    child: TextFormField(
-                      onChanged: _event.setTitle,
-                      validator: (value) => (value?.isEmpty ?? true)
-                          ? 'Informe um título para o evento'
-                          : null,
-                    ),
+                  const SizedBox(height: 4),
+                  TextFormField(
+                    onChanged: _event.setTitle,
+                    validator: (value) => (value?.isEmpty ?? true)
+                        ? 'Informe um título para o evento'
+                        : null,
                   ),
+                  const SizedBox(height: 16),
+                  Text(
+                    '* Data:',
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
+                  const SizedBox(height: 4),
+                  DatePicker(
+                    firstDate: today.subtract(const Duration(days: 3650)),
+                    lastDate: today.add(const Duration(days: 3650)),
+                    initialDate: today,
+                    onChanged: _event.setDate,
+                    validator: (value) =>
+                        value == null ? 'Insira a data do evento.' : null,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    '* Período:',
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
+                  const SizedBox(height: 4),
                   Row(
                     children: [
                       Expanded(
                         child: TimePicker(
-                          labelText: 'Início:',
-                          onChanged: _event.setStartTime,
+                          onChanged: (value) =>
+                              setState(() => _event.setStartTime(value)),
                         ),
                       ),
                       Container(
-                        alignment: const Alignment(0, .75),
-                        height: 50,
+                        alignment: Alignment.center,
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                         child: Text(
                           '-',
@@ -93,11 +115,9 @@ class _AddEventDialogState extends ConsumerState<AddEventDialog> {
                       ),
                       Expanded(
                         child: TimePicker(
-                          labelText: 'Fim:',
                           initialTime: _event.startTime,
                           enabled: _event.startTime != null,
-                          onChanged: (value) =>
-                              setState(() => _event.setEndTime(value)),
+                          onChanged: _event.setEndTime,
                         ),
                       ),
                     ],

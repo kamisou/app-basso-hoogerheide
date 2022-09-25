@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbols.dart';
 
-class TimePicker extends StatelessWidget {
+class TimePicker extends StatefulWidget {
   const TimePicker({
     super.key,
-    this.labelText,
     this.initialTime,
+    this.labelText,
     this.onChanged,
     this.validator,
     this.enabled = true,
@@ -21,57 +22,80 @@ class TimePicker extends StatelessWidget {
   final bool enabled;
 
   @override
+  State<TimePicker> createState() => _TimePickerState();
+}
+
+class _TimePickerState extends State<TimePicker> {
+  final TextEditingController _controller = TextEditingController();
+
+  final GlobalKey<FormFieldState> _key = GlobalKey<FormFieldState>();
+
+  final FocusNode _focusNode = FocusNode();
+
+  bool _opened = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.text = _valueString(context, widget.initialTime) ?? '';
+    if (widget.initialTime != null) widget.onChanged?.call(widget.initialTime);
+    _focusNode.addListener(() {
+      if (!_opened) {
+        _focusNode.unfocus();
+        _showTimePicker();
+        _opened = true;
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _focusNode.removeListener(_showTimePicker);
+  }
+
+  void _showTimePicker() {
+    showTimePicker(
+      context: context,
+      helpText: widget.labelText,
+      initialTime: widget.initialTime ?? TimeOfDay.fromDateTime(DateTime.now()),
+    ).then((value) {
+      final FormFieldState? currentState = _key.currentState;
+      widget.onChanged?.call(value);
+      currentState?.didChange(value);
+      _controller.text = _valueString(context, value) ?? '';
+      _opened = false;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FormField<TimeOfDay>(
-      validator: validator,
-      builder: (state) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (labelText != null)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 4),
-                child: Text(
-                  labelText!,
-                  style: Theme.of(context).textTheme.labelLarge,
-                ),
-              ),
-            GestureDetector(
-              onTap: (enabled)
-                  ? () {
-                      showTimePicker(
-                        context: context,
-                        initialTime:
-                            initialTime ?? const TimeOfDay(hour: 0, minute: 0),
-                      ).then((value) {
-                        onChanged?.call(value);
-                        state.didChange(value);
-                      });
-                    }
-                  : null,
-              child: TextFormField(
-                decoration: InputDecoration(
-                  prefixIcon: Icon(
-                    Icons.calendar_today_outlined,
-                    color: enabled ? null : Theme.of(context).disabledColor,
-                  ),
-                  hintText: state.value?.format(context),
-                ),
-                enabled: false,
-              ),
+      key: _key,
+      validator: widget.validator,
+      initialValue: widget.initialTime,
+      builder: (state) => GestureDetector(
+        onTap: widget.enabled ? _showTimePicker : null,
+        child: TextFormField(
+          controller: _controller,
+          decoration: InputDecoration(
+            prefixIcon: Icon(
+              Icons.calendar_today_outlined,
+              color: widget.enabled
+                  ? Theme.of(context).inputDecorationTheme.prefixIconColor
+                  : Theme.of(context).disabledColor,
             ),
-            if (state.errorText != null)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 4),
-                child: Text(
-                  state.errorText!,
-                  style: Theme.of(context).inputDecorationTheme.errorStyle,
-                ),
-              ),
-          ],
-        );
-      },
+            labelText: widget.labelText,
+          ),
+          enabled: false,
+          validator: (_) => state.errorText,
+          focusNode: _focusNode,
+        ),
+      ),
     );
   }
+
+  String? _valueString(BuildContext context, TimeOfDay? value) => value != null
+      ? '${value.hour.toString().padLeft(2, '0')}:${value.minute.toString().padLeft(2, '0')}'
+      : null;
 }

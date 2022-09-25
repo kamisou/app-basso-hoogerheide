@@ -44,6 +44,7 @@ class _DatePickerState extends State<DatePicker> {
   void initState() {
     super.initState();
     _controller.text = _valueString(context, widget.initialDate) ?? '';
+    if (widget.initialDate != null) widget.onChanged?.call(widget.initialDate);
     _focusNode.addListener(() {
       if (!_opened) {
         _focusNode.unfocus();
@@ -80,33 +81,19 @@ class _DatePickerState extends State<DatePicker> {
     return FormField<DateTime>(
       key: _key,
       validator: widget.validator,
-      builder: (state) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            GestureDetector(
-              onTap: _showDatePicker,
-              child: TextFormField(
-                controller: _controller,
-                decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.calendar_today_outlined),
-                  labelText: widget.labelText,
-                ),
-                focusNode: _focusNode,
-              ),
-            ),
-            if (state.errorText != null)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 4),
-                child: Text(
-                  state.errorText!,
-                  style: Theme.of(context).inputDecorationTheme.errorStyle,
-                ),
-              ),
-          ],
-        );
-      },
+      initialValue: widget.initialDate,
+      builder: (state) => GestureDetector(
+        onTap: _showDatePicker,
+        child: TextFormField(
+          controller: _controller,
+          decoration: InputDecoration(
+            prefixIcon: const Icon(Icons.calendar_today_outlined),
+            labelText: widget.labelText,
+          ),
+          validator: (_) => state.errorText,
+          focusNode: _focusNode,
+        ),
+      ),
     );
   }
 

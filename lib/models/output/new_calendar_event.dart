@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 
 class NewCalendarEvent {
-  NewCalendarEvent.empty()
-      : startTime = null,
-        endTime = null,
-        title = null,
-        description = null,
-        color = null;
+  NewCalendarEvent.empty();
+
+  DateTime? date;
 
   TimeOfDay? startTime;
 
@@ -17,6 +14,8 @@ class NewCalendarEvent {
   String? description;
 
   Color? color;
+  
+  void setDate(DateTime? value) => date = value;
 
   void setStartTime(TimeOfDay? value) => startTime = value;
 
