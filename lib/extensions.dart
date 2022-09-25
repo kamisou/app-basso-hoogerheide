@@ -11,4 +11,7 @@ extension TimeOfDayExtension on TimeOfDay {
         ? TimeOfDay(hour: int.parse(start.first), minute: int.parse(start.last))
         : null;
   }
+
+  static String format(TimeOfDay timeOfDay) =>
+      '${timeOfDay.hour.toString().padLeft(2, '0')}:${timeOfDay.minute.toString().padLeft(2, '0')}';
 }

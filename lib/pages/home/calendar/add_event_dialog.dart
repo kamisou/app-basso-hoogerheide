@@ -23,14 +23,14 @@ class _AddEventDialogState extends ConsumerState<AddEventDialog> {
     final DateTime today = ref.watch(initialDateRepositoryProvider);
     return Dialog(
       insetPadding: const EdgeInsets.all(16),
-      child: Padding(
+      child: Container(
+        height: 400,
         padding: const EdgeInsets.all(16),
         child: Form(
           child: Builder(
             builder: (context) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisSize: MainAxisSize.min,
+              return ListView(
+                shrinkWrap: true,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
