@@ -124,8 +124,8 @@ class RestClient {
     final http.StreamedResponse response;
     try {
       response = await request.send();
-    } on Exception {
-      throw const SocketException('Falha ao realizar pedido HTTP');
+    } on SocketException {
+      rethrow;
     }
 
     return _handleResponse(response);

@@ -155,7 +155,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         'Ocorreu um erro inesperado.',
                   ),
               SocketException: (context, error) => content(
-                    'Não foi possível conectar-se ao servidor.',
+                    'Não foi possível estabelecer conexão com o servidor.',
                   ),
             },
           ).show(context, e);
