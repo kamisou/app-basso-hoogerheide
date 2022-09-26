@@ -95,8 +95,8 @@ class CalendarRepository {
 }
 
 class CalendarEventsRepository {
-  static const Duration prefetchDays = Duration(days: 150);
-  static const int _prefetchTriggerDays = 120;
+  static const Duration prefetchDays = Duration(days: 90);
+  static const int _prefetchTriggerDays = 45;
 
   CalendarEventsRepository({
     required CalendarRepository repository,
