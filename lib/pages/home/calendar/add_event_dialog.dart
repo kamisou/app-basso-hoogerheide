@@ -14,12 +14,28 @@ class AddEventDialog extends ConsumerStatefulWidget {
 }
 
 class _AddEventDialogState extends ConsumerState<AddEventDialog> {
-  final NewCalendarEvent _event = NewCalendarEvent.empty();
+  late NewCalendarEvent _event;
+
+  late List<Color> _colors;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final Map<String, dynamic> args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+
+    _colors = args['colors'];
+
+    _event = args['event'] != null
+        ? NewCalendarEvent.fromCalendarEvent(args['event'])
+        : NewCalendarEvent.empty();
+
+    _event.color ??= _colors.first;
+  }
 
   @override
   Widget build(BuildContext context) {
-    final List<Color> colors =
-        ModalRoute.of(context)!.settings.arguments as List<Color>;
     final DateTime today = ref.watch(initialDateRepositoryProvider);
     return Dialog(
       insetPadding: const EdgeInsets.all(16),
@@ -50,7 +66,7 @@ class _AddEventDialogState extends ConsumerState<AddEventDialog> {
                           ),
                           const SizedBox(width: 8),
                           ColorPicker(
-                            colors: colors,
+                            colors: _colors,
                             dialogTitle: Text(
                               'Escolha uma cor:',
                               style: Theme.of(context)
@@ -72,6 +88,7 @@ class _AddEventDialogState extends ConsumerState<AddEventDialog> {
                   ),
                   const SizedBox(height: 4),
                   TextFormField(
+                    initialValue: _event.title,
                     onChanged: _event.setTitle,
                     validator: (value) => (value?.isEmpty ?? true)
                         ? 'Informe um título para o evento'
@@ -86,7 +103,7 @@ class _AddEventDialogState extends ConsumerState<AddEventDialog> {
                   DatePicker(
                     firstDate: today.subtract(const Duration(days: 3650)),
                     lastDate: today.add(const Duration(days: 3650)),
-                    initialDate: today,
+                    initialDate: _event.date,
                     onChanged: _event.setDate,
                     validator: (value) =>
                         value == null ? 'Insira a data do evento.' : null,
@@ -101,6 +118,7 @@ class _AddEventDialogState extends ConsumerState<AddEventDialog> {
                     children: [
                       Expanded(
                         child: TimePicker(
+                          initialTime: _event.startTime,
                           onChanged: (value) =>
                               setState(() => _event.setStartTime(value)),
                         ),
@@ -115,7 +133,7 @@ class _AddEventDialogState extends ConsumerState<AddEventDialog> {
                       ),
                       Expanded(
                         child: TimePicker(
-                          initialTime: _event.startTime,
+                          initialTime: _event.endTime,
                           enabled: _event.startTime != null,
                           onChanged: _event.setEndTime,
                         ),
@@ -134,6 +152,7 @@ class _AddEventDialogState extends ConsumerState<AddEventDialog> {
                       Padding(
                         padding: const EdgeInsets.only(top: 4, bottom: 24),
                         child: TextFormField(
+                          initialValue: _event.description,
                           maxLines: 4,
                           onChanged: _event.setDescription,
                         ),

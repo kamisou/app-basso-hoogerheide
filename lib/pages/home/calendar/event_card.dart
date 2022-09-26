@@ -1,8 +1,12 @@
 import 'package:basso_hoogerheide/models/input/calendar_event.dart';
+import 'package:basso_hoogerheide/models/output/new_calendar_event.dart';
+import 'package:basso_hoogerheide/models/repository/calendar.dart';
+import 'package:basso_hoogerheide/pages/home/calendar/add_event_dialog.dart';
 import 'package:basso_hoogerheide/widgets/key_value_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class EventCard extends StatefulWidget {
+class EventCard extends ConsumerStatefulWidget {
   const EventCard({
     super.key,
     required this.event,
@@ -11,10 +15,10 @@ class EventCard extends StatefulWidget {
   final CalendarEvent event;
 
   @override
-  State<EventCard> createState() => _EventCardState();
+  ConsumerState<EventCard> createState() => _EventCardState();
 }
 
-class _EventCardState extends State<EventCard> {
+class _EventCardState extends ConsumerState<EventCard> {
   bool _expanded = false;
 
   TapDownDetails? _tapDetails;
@@ -37,28 +41,7 @@ class _EventCardState extends State<EventCard> {
           child: InkWell(
             onTap: () => setState(() => _expanded = !_expanded),
             onTapDown: (details) => _tapDetails = details,
-            onLongPress: () {
-              if (_tapDetails == null) return;
-              final double dx = _tapDetails!.globalPosition.dx;
-              final double dy = _tapDetails!.globalPosition.dy;
-              showMenu<String?>(
-                context: context,
-                position: RelativeRect.fromLTRB(dx, dy, dx, dy),
-                items: [
-                  const PopupMenuItem(
-                    value: 'edit',
-                    child: Text('Editar evento'),
-                  ),
-                  PopupMenuItem(
-                    textStyle: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: Theme.of(context).colorScheme.error,
-                        ),
-                    value: 'delete',
-                    child: const Text('Deletar evento'),
-                  ),
-                ],
-              );
-            },
+            onLongPress: _onLongPress,
             child: Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 10,
@@ -134,5 +117,40 @@ class _EventCardState extends State<EventCard> {
         ),
       ],
     );
+  }
+
+  Future<void> _onLongPress() async {
+    if (_tapDetails == null) return;
+    final double dx = _tapDetails!.globalPosition.dx;
+    final double dy = _tapDetails!.globalPosition.dy;
+    final String? result = await showMenu<String?>(
+      context: context,
+      position: RelativeRect.fromLTRB(dx, dy, dx, dy),
+      items: [
+        const PopupMenuItem(value: 'edit', child: Text('Editar evento')),
+        PopupMenuItem(
+          textStyle: Theme.of(context)
+              .textTheme
+              .titleMedium
+              ?.copyWith(color: Theme.of(context).colorScheme.error),
+          value: 'delete',
+          child: const Text('Deletar evento'),
+        ),
+      ],
+    );
+    switch (result) {
+      case 'edit':
+        return ref.read(calendarEventColorsProvider).then(
+              (value) => showDialog<NewCalendarEvent>(
+                context: context,
+                builder: (_) => const AddEventDialog(),
+                routeSettings: RouteSettings(
+                  arguments: {'colors': value, 'event': widget.event},
+                ),
+              ).then(ref.read(calendarRepositoryProvider).editEvent),
+            );
+      case 'delete':
+        return ref.read(calendarRepositoryProvider).deleteEvent(widget.event);
+    }
   }
 }

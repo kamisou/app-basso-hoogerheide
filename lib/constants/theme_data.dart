@@ -117,6 +117,17 @@ class AppTheme {
                 ),
         ),
       ),
+      popupMenuTheme: PopupMenuThemeData(
+        color: const Color(0xFF1A1A1A),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(4),
+        ),
+        textStyle: const TextStyle(
+          color: Color(0xFFF0F0F0),
+          fontFamily: fontFamily,
+          fontSize: 16,
+        ),
+      ),
       progressIndicatorTheme: const ProgressIndicatorThemeData(
         color: Color(0xFFA81818),
         linearTrackColor: Color(0xFF3F3F3F),

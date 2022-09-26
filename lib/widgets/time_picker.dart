@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/date_symbols.dart';
 
 class TimePicker extends StatefulWidget {
   const TimePicker({
@@ -38,7 +37,6 @@ class _TimePickerState extends State<TimePicker> {
   void initState() {
     super.initState();
     _controller.text = _valueString(context, widget.initialTime) ?? '';
-    if (widget.initialTime != null) widget.onChanged?.call(widget.initialTime);
     _focusNode.addListener(() {
       if (!_opened) {
         _focusNode.unfocus();

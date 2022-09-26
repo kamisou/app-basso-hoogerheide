@@ -44,7 +44,6 @@ class _DatePickerState extends State<DatePicker> {
   void initState() {
     super.initState();
     _controller.text = _valueString(context, widget.initialDate) ?? '';
-    if (widget.initialDate != null) widget.onChanged?.call(widget.initialDate);
     _focusNode.addListener(() {
       if (!_opened) {
         _focusNode.unfocus();

@@ -29,7 +29,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage>
               (value) => showDialog<NewCalendarEvent>(
                 context: context,
                 builder: (_) => const AddEventDialog(),
-                routeSettings: RouteSettings(arguments: value),
+                routeSettings: RouteSettings(arguments: {'colors': value}),
               ).then(ref.read(calendarRepositoryProvider).addEvent),
             ),
       ),

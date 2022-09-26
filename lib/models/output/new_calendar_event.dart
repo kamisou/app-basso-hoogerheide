@@ -1,9 +1,21 @@
 import 'package:basso_hoogerheide/extensions.dart';
+import 'package:basso_hoogerheide/models/input/calendar_event.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class NewCalendarEvent {
-  NewCalendarEvent.empty();
+  NewCalendarEvent.empty() : id = null;
+
+  NewCalendarEvent.fromCalendarEvent(CalendarEvent event)
+      : id = event.id,
+        date = event.date,
+        startTime = event.startTime,
+        endTime = event.endTime,
+        title = event.title,
+        description = event.description,
+        color = event.color;
+
+  final int? id;
 
   DateTime? date;
 
@@ -30,6 +42,7 @@ class NewCalendarEvent {
   void setColor(Color? value) => color = value;
 
   Map<String, dynamic> toJson() => {
+        'id': id,
         'date': date != null ? DateFormat('yyyy-MM-dd').format(date!) : null,
         'start_time':
             startTime != null ? TimeOfDayExtension.format(startTime!) : null,

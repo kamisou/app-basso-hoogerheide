@@ -52,6 +52,19 @@ class CalendarRepository {
         .then((_) => ref.refresh(initialCalendarEventsProvider));
   }
 
+  Future<void> editEvent(NewCalendarEvent? event) async {
+    if (event == null) return;
+    return ref
+        .read(restClientProvider)
+        .put('/events/edit', body: event.toJson())
+        .then((_) => ref.refresh(initialCalendarEventsProvider));
+  }
+
+  Future<void> deleteEvent(CalendarEvent event) => ref
+      .read(restClientProvider)
+      .delete('/events/delete', body: {'id': event.id})
+      .then((_) => ref.refresh(initialCalendarEventsProvider));
+
   Future<CalendarEvents> getEvents(DateTime startDate, DateTime endDate) {
     final DateFormat dateFormat = DateFormat('dd-MM-yyyy');
     return ref
