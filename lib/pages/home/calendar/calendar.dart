@@ -34,22 +34,23 @@ class _CalendarPageState extends ConsumerState<CalendarPage>
             ),
       ),
       body: ref.watch(initialCalendarEventsProvider).when(
-            data: (data) => InfiniteListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              itemBuilder: (_, index) {
-                final DateTime thisDate = today.add(Duration(days: index));
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 32),
-                  child: DayWidget(
-                    date: thisDate,
-                    today: today,
-                    events: ref
-                        .read(calendarEventsRepositoryProvider)
-                        .getDayEvents(thisDate),
-                  ),
-                );
-              },
-            ),
+            data: (data) {
+              final calendarEvents = ref.read(calendarEventsRepositoryProvider);
+              return InfiniteListView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                itemBuilder: (_, index) {
+                  final DateTime thisDate = today.add(Duration(days: index));
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 32),
+                    child: DayWidget(
+                      date: thisDate,
+                      today: today,
+                      events: calendarEvents.getDayEvents(thisDate),
+                    ),
+                  );
+                },
+              );
+            },
             error: (_, __) => RefreshIndicator(
               onRefresh: () async => ref.refresh(initialCalendarEventsProvider),
               child: const SingleChildScrollView(
