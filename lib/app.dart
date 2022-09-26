@@ -11,8 +11,8 @@ import 'package:basso_hoogerheide/pages/login.dart';
 import 'package:basso_hoogerheide/pages/profile/profile.dart';
 import 'package:basso_hoogerheide/pages/splash.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
 class App extends ConsumerWidget {
@@ -28,11 +28,20 @@ class App extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       home: SplashPage(
         initialWork: () async {
-          await _initializeLocale();
+          Intl.defaultLocale = PlatformDispatcher.instance.locale.toLanguageTag();
           final bool tokenAvailable = await _retrieveToken(ref);
           return tokenAvailable ? '/home' : '/login';
         },
       ),
+      supportedLocales: const [
+        Locale('en', 'US'),
+        Locale('pt', 'BR'),
+      ],
+      localizationsDelegates: const [
+        GlobalWidgetsLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       restorationScopeId: 'basso_hoogerheide',
       routes: {
         '/login': (_) => const LoginPage(),
@@ -44,12 +53,6 @@ class App extends ConsumerWidget {
       themeMode: ThemeMode.dark,
       title: 'Basso Hoogerheide',
     );
-  }
-
-  Future<void> _initializeLocale() {
-    final String localeTag = PlatformDispatcher.instance.locale.toLanguageTag();
-    Intl.defaultLocale = localeTag;
-    return initializeDateFormatting(localeTag);
   }
 
   Future<bool> _retrieveToken(WidgetRef ref) async {
