@@ -67,7 +67,10 @@ class DayWidget extends StatelessWidget {
         const SizedBox(height: 24),
         if (events != null)
           ListView.separated(
-            itemBuilder: (_, index) => EventCard(event: events![index]),
+            itemBuilder: (_, index) => EventCard(
+              key: ValueKey(events![index].id),
+              event: events![index],
+            ),
             separatorBuilder: (_, __) => const SizedBox(height: 10),
             itemCount: events!.length,
             padding: EdgeInsets.zero,
