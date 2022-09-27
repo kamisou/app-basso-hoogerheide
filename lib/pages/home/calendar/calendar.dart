@@ -15,23 +15,51 @@ class CalendarPage extends ConsumerStatefulWidget {
 
 class _CalendarPageState extends ConsumerState<CalendarPage>
     with AutomaticKeepAliveClientMixin {
+  final InfiniteScrollController _controller = InfiniteScrollController();
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
 
+    final DateTime today = DateTime.now().dayOnly();
     final DateTime initialDate = ref.watch(initialDateRepositoryProvider);
+
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        heroTag: 'calendar_fab',
-        child: const Icon(Icons.edit_calendar),
-        onPressed: () => Navigator.pushNamed(context, '/newEvent'),
+      floatingActionButton: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FloatingActionButton.small(
+            heroTag: 'calendar_today_fab',
+            child: const Icon(Icons.today_outlined),
+            onPressed: () {
+              final initialDate =
+                  ref.read(initialDateRepositoryProvider.notifier);
+              if (initialDate.state != today) {
+                initialDate.state = today;
+              } else {
+                _controller.animateTo(
+                  0,
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.decelerate,
+                );
+              }
+            },
+          ),
+          const SizedBox(height: 8),
+          FloatingActionButton(
+            heroTag: 'calendar_fab',
+            child: const Icon(Icons.edit_calendar),
+            onPressed: () => Navigator.pushNamed(context, '/newEvent'),
+          ),
+        ],
       ),
       body: ref.watch(initialCalendarEventsProvider).when(
             data: (data) {
-              final DateTime today = DateTime.now().dayOnly();
               final CalendarEventsRepository calendarEvents =
                   ref.read(calendarEventsRepositoryProvider);
               return InfiniteListView.builder(
+                controller: _controller,
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 itemBuilder: (_, index) {
                   final DateTime thisDate =
