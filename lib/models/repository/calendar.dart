@@ -13,7 +13,7 @@ final calendarRepositoryProvider = Provider.autoDispose(CalendarRepository.new);
 final initialDateRepositoryProvider =
     Provider.autoDispose((ref) => DateTime.now().dayOnly());
 
-final initialCalendarEventsProvider = FutureProvider(
+final initialCalendarEventsProvider = FutureProvider.autoDispose(
   (ref) {
     final initialDate = ref.read(initialDateRepositoryProvider);
     return ref.read(calendarRepositoryProvider).getEvents(
@@ -23,7 +23,7 @@ final initialCalendarEventsProvider = FutureProvider(
   },
 );
 
-final calendarEventsRepositoryProvider = Provider(
+final calendarEventsRepositoryProvider = Provider.autoDispose(
   (ref) {
     final initialDate = ref.read(initialDateRepositoryProvider);
     final initialData = ref.watch(initialCalendarEventsProvider);

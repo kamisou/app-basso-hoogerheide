@@ -144,11 +144,8 @@ class ProfilePage extends ConsumerWidget {
           Center(
             child: GestureDetector(
               onTap: () {
+                ref.read(profileRepository).logout();
                 Navigator.pushReplacementNamed(context, '/login');
-                Future.delayed(
-                  const Duration(milliseconds: 500),
-                  ref.read(profileRepository).logout,
-                );
               },
               child: Text(
                 'Sair',
@@ -159,7 +156,7 @@ class ProfilePage extends ConsumerWidget {
                     ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );

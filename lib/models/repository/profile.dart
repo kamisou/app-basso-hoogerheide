@@ -23,6 +23,7 @@ class ProfileRepository {
         .post('/login', body: body)
         .then((value) => value['token']);
     ref.read(authTokenProvider.notifier).state = response;
+    ref.refresh(appUserProvider);
     return ref
         .read(secureStorageProvider)
         .write(SecureStorageKey.authToken.key, response);
