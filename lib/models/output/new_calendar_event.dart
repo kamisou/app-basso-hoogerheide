@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:basso_hoogerheide/extensions.dart';
 import 'package:basso_hoogerheide/models/input/calendar_event.dart';
 import 'package:flutter/material.dart';
