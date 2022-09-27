@@ -1,7 +1,9 @@
+import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/input/calendar_event.dart';
 import 'package:basso_hoogerheide/models/output/new_calendar_event.dart';
 import 'package:basso_hoogerheide/models/repository/calendar.dart';
 import 'package:basso_hoogerheide/pages/home/calendar/add_event_dialog.dart';
+import 'package:basso_hoogerheide/widgets/error_snackbar.dart';
 import 'package:basso_hoogerheide/widgets/key_value_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -41,7 +43,7 @@ class _EventCardState extends ConsumerState<EventCard> {
           child: InkWell(
             onTap: () => setState(() => _expanded = !_expanded),
             onTapDown: (details) => _tapDetails = details,
-            onLongPress: _onLongPress,
+            onLongPress: () => _onLongPress(context),
             child: Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 10,
@@ -119,7 +121,7 @@ class _EventCardState extends ConsumerState<EventCard> {
     );
   }
 
-  Future<void> _onLongPress() async {
+  void _onLongPress(BuildContext context) async {
     if (_tapDetails == null) return;
     final double dx = _tapDetails!.globalPosition.dx;
     final double dy = _tapDetails!.globalPosition.dy;
@@ -138,19 +140,31 @@ class _EventCardState extends ConsumerState<EventCard> {
         ),
       ],
     );
-    switch (result) {
-      case 'edit':
-        return ref.read(calendarEventColorsProvider.future).then(
-              (value) => showDialog<NewCalendarEvent>(
-                context: context,
-                builder: (_) => const AddEventDialog(),
-                routeSettings: RouteSettings(
-                  arguments: {'colors': value, 'event': widget.event},
-                ),
-              ).then(ref.read(calendarRepositoryProvider).editEvent),
-            );
-      case 'delete':
-        return ref.read(calendarRepositoryProvider).deleteEvent(widget.event);
+    if (result == 'edit') {
+      ref.read(calendarEventColorsProvider.future).then(
+            (value) => showDialog<NewCalendarEvent>(
+              context: context,
+              builder: (_) => const AddEventDialog(),
+              routeSettings: RouteSettings(
+                arguments: {'colors': value, 'event': widget.event},
+              ),
+            ).then(ref.read(calendarRepositoryProvider).editEvent),
+            onError: (e) => ErrorSnackbar(
+              context: context,
+              error: e,
+            ).on<RestException>(
+              content: (error) => ErrorContent(message: error.serverMessage),
+            ),
+          );
+    } else if (result == 'delete') {
+      ref.read(calendarRepositoryProvider).deleteEvent(widget.event).catchError(
+            (e) => ErrorSnackbar(
+              context: context,
+              error: e,
+            ).on<RestException>(
+              content: (error) => ErrorContent(message: error.serverMessage),
+            ),
+          );
     }
   }
 }

@@ -109,10 +109,7 @@ class _HomeAppBarState extends ConsumerState<HomeAppBar> {
           Expanded(
             child: ShaderMask(
               shaderCallback: (bounds) => const LinearGradient(
-                colors: [
-                  Color(0xFFFFFFFF),
-                  Color(0x00FFFFFF),
-                ],
+                colors: [Color(0xFFFFFFFF), Color(0x00FFFFFF)],
                 begin: Alignment(-.5, 0),
               ).createShader(bounds),
               child: ListView(

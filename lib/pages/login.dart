@@ -129,37 +129,16 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         'password': _passwordController.text,
       }).then(
         (_) => Navigator.pushReplacementNamed(context, '/home').ignore(),
-        onError: (e) {
-          Widget content(String title) {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Text(
-                    title,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                ),
-                Icon(
-                  Icons.wifi_off,
-                  color: Theme.of(context).colorScheme.error,
-                ),
-              ],
-            );
-          }
-
-          ErrorSnackbar(
-            contents: {
-              RestException: (context, error) => content(
-                    (error as RestException).serverMessage ??
-                        'Ocorreu um erro inesperado.',
-                  ),
-              SocketException: (context, error) => content(
-                    'Não foi possível estabelecer conexão com o servidor.',
-                  ),
-            },
-          ).show(context, e);
-        },
+        onError: (e) => ErrorSnackbar(context: context, error: e)
+          ..on<RestException>(
+            content: (error) => ErrorContent(message: error.serverMessage),
+          )
+          ..on<SocketException>(
+            content: (error) => const ErrorContent(
+              message: 'Não foi possível estabelecer conexão com o servidor.',
+              icon: Icons.wifi_off_outlined,
+            ),
+          ),
       );
     }
   }

@@ -1,6 +1,4 @@
-import 'package:basso_hoogerheide/extensions.dart';
 import 'package:basso_hoogerheide/models/output/new_calendar_event.dart';
-import 'package:basso_hoogerheide/models/repository/calendar.dart';
 import 'package:basso_hoogerheide/widgets/color_picker.dart';
 import 'package:basso_hoogerheide/widgets/date_picker.dart';
 import 'package:basso_hoogerheide/widgets/time_picker.dart';

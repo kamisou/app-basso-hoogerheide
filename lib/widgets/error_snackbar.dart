@@ -2,15 +2,45 @@ import 'package:flutter/material.dart';
 
 class ErrorSnackbar {
   const ErrorSnackbar({
-    required this.contents,
+    required this.context,
+    required this.error,
   });
 
-  final Map<Type, Widget Function(BuildContext, Object)> contents;
+  final BuildContext context;
 
-  void show(BuildContext context, Object error) {
-    if (!contents.containsKey(error.runtimeType)) throw error;
+  final Object error;
+
+  void on<E>({required ErrorContent Function(E) content}) {
+    if (error is! E) throw error;
+    final ErrorContent errorContent = content(error as E);
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: contents[error.runtimeType]!(context, error)),
+      SnackBar(
+        content: Row(
+          children: [
+            Expanded(
+              child: Text(
+                errorContent.message ?? 'Ocorreu um erro inesperado.',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+            ),
+            Icon(
+              errorContent.icon,
+              color: Theme.of(context).colorScheme.error,
+            ),
+          ],
+        ),
+      ),
     );
   }
+}
+
+class ErrorContent<E> {
+  const ErrorContent({
+    this.message,
+    this.icon = Icons.error_outlined,
+  });
+
+  final String? message;
+
+  final IconData icon;
 }

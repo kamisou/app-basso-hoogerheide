@@ -1,9 +1,12 @@
 import 'package:basso_hoogerheide/extensions.dart';
+import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/output/new_calendar_event.dart';
 import 'package:basso_hoogerheide/models/repository/calendar.dart';
 import 'package:basso_hoogerheide/pages/home/calendar/add_event_dialog.dart';
 import 'package:basso_hoogerheide/pages/home/calendar/day.dart';
 import 'package:basso_hoogerheide/widgets/empty_card.dart';
+import 'package:basso_hoogerheide/widgets/error_snackbar.dart';
+import 'package:basso_hoogerheide/widgets/loading_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:infinite_listview/infinite_listview.dart';
@@ -32,6 +35,12 @@ class _CalendarPageState extends ConsumerState<CalendarPage>
                 builder: (_) => const AddEventDialog(),
                 routeSettings: RouteSettings(arguments: {'colors': value}),
               ).then(ref.read(calendarRepositoryProvider).addEvent),
+              onError: (e) => ErrorSnackbar(
+                context: context,
+                error: e,
+              ).on<RestException>(
+                content: (error) => ErrorContent(message: error.serverMessage),
+              ),
             ),
       ),
       body: ref.watch(initialCalendarEventsProvider).when(
