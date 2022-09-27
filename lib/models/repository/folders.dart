@@ -26,7 +26,7 @@ final filteredFoldersProvider = FutureProvider.autoDispose((ref) {
   });
 });
 
-final annotationOptionsProvider = Provider.autoDispose(
+final annotationOptionsProvider = FutureProvider.autoDispose(
   (ref) => ref.read(foldersRepositoryProvider).getNewAnnotationOptions(),
 );
 

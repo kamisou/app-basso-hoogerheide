@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:basso_hoogerheide/models/output/new_calendar_event.dart';
 import 'package:basso_hoogerheide/models/repository/calendar.dart';
 import 'package:basso_hoogerheide/pages/home/calendar/add_event_dialog.dart';
@@ -25,7 +27,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage>
       floatingActionButton: FloatingActionButton(
         heroTag: 'calendar_fab',
         child: const Icon(Icons.edit_calendar),
-        onPressed: () => ref.read(calendarEventColorsProvider).then(
+        onPressed: () => ref.read(calendarEventColorsProvider.future).then(
               (value) => showDialog<NewCalendarEvent>(
                 context: context,
                 builder: (_) => const AddEventDialog(),

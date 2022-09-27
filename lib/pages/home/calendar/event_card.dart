@@ -140,7 +140,7 @@ class _EventCardState extends ConsumerState<EventCard> {
     );
     switch (result) {
       case 'edit':
-        return ref.read(calendarEventColorsProvider).then(
+        return ref.read(calendarEventColorsProvider.future).then(
               (value) => showDialog<NewCalendarEvent>(
                 context: context,
                 builder: (_) => const AddEventDialog(),
