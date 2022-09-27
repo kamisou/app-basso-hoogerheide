@@ -6,7 +6,7 @@ final foldersRepositoryProvider = Provider.autoDispose(FoldersRepository.new);
 
 final foldersFilterProvider = StateProvider.autoDispose<String?>((ref) => null);
 
-final foldersProvider = FutureProvider(
+final foldersProvider = FutureProvider.autoDispose(
   (ref) => ref.read(foldersRepositoryProvider).getFolders(),
 );
 
@@ -26,7 +26,7 @@ final filteredFoldersProvider = FutureProvider.autoDispose((ref) {
   });
 });
 
-final annotationOptionsProvider = FutureProvider.autoDispose(
+final annotationOptionsProvider = FutureProvider(
   (ref) => ref.read(foldersRepositoryProvider).getNewAnnotationOptions(),
 );
 

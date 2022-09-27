@@ -35,7 +35,7 @@ final calendarEventsRepositoryProvider = Provider(
   },
 );
 
-final calendarEventColorsProvider = FutureProvider.autoDispose(
+final calendarEventColorsProvider = FutureProvider(
   (ref) => ref.read(calendarRepositoryProvider).getEventColors(),
 );
 
@@ -62,8 +62,8 @@ class CalendarRepository {
 
   Future<void> deleteEvent(CalendarEvent event) => ref
       .read(restClientProvider)
-      .delete('/events/delete', body: {'id': event.id})
-      .then((_) => ref.refresh(initialCalendarEventsProvider));
+      .delete('/events/delete', body: {'id': event.id}).then(
+          (_) => ref.refresh(initialCalendarEventsProvider));
 
   Future<CalendarEvents> getEvents(DateTime startDate, DateTime endDate) {
     final DateFormat dateFormat = DateFormat('dd-MM-yyyy');
