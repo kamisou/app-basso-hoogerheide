@@ -6,7 +6,6 @@ import 'package:basso_hoogerheide/pages/home/calendar/add_event_dialog.dart';
 import 'package:basso_hoogerheide/pages/home/calendar/day.dart';
 import 'package:basso_hoogerheide/widgets/empty_card.dart';
 import 'package:basso_hoogerheide/widgets/error_snackbar.dart';
-import 'package:basso_hoogerheide/widgets/loading_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:infinite_listview/infinite_listview.dart';
