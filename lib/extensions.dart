@@ -12,6 +12,16 @@ extension TimeOfDayExtension on TimeOfDay {
         : null;
   }
 
-  static String format(TimeOfDay timeOfDay) =>
-      '${timeOfDay.hour.toString().padLeft(2, '0')}:${timeOfDay.minute.toString().padLeft(2, '0')}';
+  String fmt([bool twentyFourHours = true]) {
+    final int h = twentyFourHours ? hour : hour % 12;
+    final String ampm = twentyFourHours ? '' : ' ${hour >= 12 ? 'PM' : 'AM'}';
+    return '${h.toString().padLeft(2, '0')}:'
+        '${minute.toString().padLeft(2, '0')}$ampm';
+  }
+
+  bool isAfter(TimeOfDay other) =>
+      (hour * 60 + minute) < (other.hour * 60 + other.minute);
+
+  bool isBefore(TimeOfDay other) =>
+      (hour * 60 + minute) < (other.hour * 60 + other.minute);
 }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:basso_hoogerheide/extensions.dart';
 import 'package:basso_hoogerheide/models/input/calendar_event.dart';
 import 'package:flutter/material.dart';
@@ -31,9 +33,29 @@ class NewCalendarEvent {
 
   void setDate(DateTime? value) => date = value;
 
-  void setStartTime(TimeOfDay? value) => startTime = value;
+  void setStartTime(TimeOfDay? value) {
+    startTime = value;
+    if (startTime == null) {
+      endTime = null;
+    } else {
+      if (endTime == null) {
+        endTime = value;
+      } else if (startTime!.isAfter(endTime!)) {
+        endTime = startTime;
+      }
+    }
+  }
 
-  void setEndTime(TimeOfDay? value) => endTime = value;
+  void setEndTime(TimeOfDay? value) {
+    endTime = value;
+    if (endTime == null) {
+      startTime = null;
+    } else {
+      if (endTime!.isBefore(startTime!)) {
+        startTime = endTime;
+      }
+    }
+  }
 
   void setTitle(String? value) => title = value;
 
@@ -44,10 +66,8 @@ class NewCalendarEvent {
   Map<String, dynamic> toJson() => {
         'id': id,
         'date': date != null ? DateFormat('yyyy-MM-dd').format(date!) : null,
-        'start_time':
-            startTime != null ? TimeOfDayExtension.format(startTime!) : null,
-        'end_time':
-            endTime != null ? TimeOfDayExtension.format(endTime!) : null,
+        'start_time': startTime?.fmt(),
+        'end_time': endTime?.fmt(),
         'title': title,
         'description': description,
         'color': color!.value.toRadixString(16),

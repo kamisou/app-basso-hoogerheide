@@ -2,7 +2,6 @@ import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/input/calendar_event.dart';
 import 'package:basso_hoogerheide/models/output/new_calendar_event.dart';
 import 'package:basso_hoogerheide/models/repository/calendar.dart';
-import 'package:basso_hoogerheide/pages/home/calendar/add_event_dialog.dart';
 import 'package:basso_hoogerheide/widgets/error_snackbar.dart';
 import 'package:basso_hoogerheide/widgets/key_value_text.dart';
 import 'package:flutter/material.dart';
@@ -125,7 +124,7 @@ class _EventCardState extends ConsumerState<EventCard> {
     if (_tapDetails == null) return;
     final double dx = _tapDetails!.globalPosition.dx;
     final double dy = _tapDetails!.globalPosition.dy;
-    final String? result = await showMenu<String?>(
+    showMenu<String?>(
       context: context,
       position: RelativeRect.fromLTRB(dx, dy, dx, dy),
       items: [
@@ -139,32 +138,22 @@ class _EventCardState extends ConsumerState<EventCard> {
           child: const Text('Deletar evento'),
         ),
       ],
-    );
-    if (result == 'edit') {
-      ref.read(calendarEventColorsProvider.future).then(
-            (value) => showDialog<NewCalendarEvent>(
-              context: context,
-              builder: (_) => const AddEventDialog(),
-              routeSettings: RouteSettings(
-                arguments: {'colors': value, 'event': widget.event},
+    ).then((value) {
+      if (value == 'edit') {
+        Navigator.pushNamed(context, '/newEvent', arguments: widget.event);
+      } else if (value == 'delete') {
+        ref
+            .read(calendarRepositoryProvider)
+            .deleteEvent(widget.event)
+            .catchError(
+              (e) => ErrorSnackbar(
+                context: context,
+                error: e,
+              ).on<RestException>(
+                content: (error) => ErrorContent(message: error.serverMessage),
               ),
-            ).then(ref.read(calendarRepositoryProvider).editEvent),
-            onError: (e) => ErrorSnackbar(
-              context: context,
-              error: e,
-            ).on<RestException>(
-              content: (error) => ErrorContent(message: error.serverMessage),
-            ),
-          );
-    } else if (result == 'delete') {
-      ref.read(calendarRepositoryProvider).deleteEvent(widget.event).catchError(
-            (e) => ErrorSnackbar(
-              context: context,
-              error: e,
-            ).on<RestException>(
-              content: (error) => ErrorContent(message: error.serverMessage),
-            ),
-          );
-    }
+            );
+      }
+    });
   }
 }
