@@ -1,3 +1,4 @@
+import 'package:basso_hoogerheide/extensions.dart';
 import 'package:basso_hoogerheide/models/output/new_calendar_event.dart';
 import 'package:basso_hoogerheide/models/repository/calendar.dart';
 import 'package:basso_hoogerheide/pages/home/calendar/add_event_dialog.dart';
@@ -20,7 +21,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage>
   Widget build(BuildContext context) {
     super.build(context);
 
-    final DateTime today = ref.watch(initialDateRepositoryProvider);
+    final DateTime initialDate = ref.watch(initialDateRepositoryProvider);
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         heroTag: 'calendar_fab',
@@ -35,11 +36,14 @@ class _CalendarPageState extends ConsumerState<CalendarPage>
       ),
       body: ref.watch(initialCalendarEventsProvider).when(
             data: (data) {
-              final calendarEvents = ref.read(calendarEventsRepositoryProvider);
+              final DateTime today = DateTime.now().dayOnly();
+              final CalendarEventsRepository calendarEvents =
+                  ref.read(calendarEventsRepositoryProvider);
               return InfiniteListView.builder(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 itemBuilder: (_, index) {
-                  final DateTime thisDate = today.add(Duration(days: index));
+                  final DateTime thisDate =
+                      initialDate.add(Duration(days: index));
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 32),
                     child: DayWidget(

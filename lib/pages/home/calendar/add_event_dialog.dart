@@ -1,3 +1,4 @@
+import 'package:basso_hoogerheide/extensions.dart';
 import 'package:basso_hoogerheide/models/output/new_calendar_event.dart';
 import 'package:basso_hoogerheide/models/repository/calendar.dart';
 import 'package:basso_hoogerheide/widgets/color_picker.dart';
@@ -36,7 +37,7 @@ class _AddEventDialogState extends ConsumerState<AddEventDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final DateTime today = ref.watch(initialDateRepositoryProvider);
+    final DateTime today = DateTime.now();
     return Dialog(
       insetPadding: const EdgeInsets.all(16),
       child: Container(

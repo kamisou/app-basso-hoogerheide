@@ -11,7 +11,7 @@ typedef CalendarEvents = Map<DateTime, List<CalendarEvent>>;
 final calendarRepositoryProvider = Provider.autoDispose(CalendarRepository.new);
 
 final initialDateRepositoryProvider =
-    Provider.autoDispose((ref) => DateTime.now().dayOnly());
+    StateProvider.autoDispose((ref) => DateTime.now().dayOnly());
 
 final initialCalendarEventsProvider = FutureProvider.autoDispose(
   (ref) {
@@ -49,7 +49,10 @@ class CalendarRepository {
     return ref
         .read(restClientProvider)
         .post('/events/add', body: event.toJson())
-        .then((_) => ref.refresh(initialCalendarEventsProvider));
+        .then((_) {
+      ref.read(initialDateRepositoryProvider.notifier).state = event.date!;
+      return ref.refresh(initialCalendarEventsProvider);
+    });
   }
 
   Future<void> editEvent(NewCalendarEvent? event) async {
@@ -57,13 +60,18 @@ class CalendarRepository {
     return ref
         .read(restClientProvider)
         .put('/events/edit', body: event.toJson())
-        .then((_) => ref.refresh(initialCalendarEventsProvider));
+        .then((_) {
+      ref.read(initialDateRepositoryProvider.notifier).state = event.date!;
+      return ref.refresh(initialCalendarEventsProvider);
+    });
   }
 
   Future<void> deleteEvent(CalendarEvent event) => ref
-      .read(restClientProvider)
-      .delete('/events/delete', body: {'id': event.id}).then(
-          (_) => ref.refresh(initialCalendarEventsProvider));
+          .read(restClientProvider)
+          .delete('/events/delete', body: {'id': event.id}).then((_) {
+        ref.read(initialDateRepositoryProvider.notifier).state = event.date;
+        return ref.refresh(initialCalendarEventsProvider);
+      });
 
   Future<CalendarEvents> getEvents(DateTime startDate, DateTime endDate) {
     final DateFormat dateFormat = DateFormat('dd-MM-yyyy');
