@@ -8,7 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final profileRepository = Provider.autoDispose(ProfileRepository.new);
 
-final appUserProvider = FutureProvider.autoDispose(
+final appUserProvider = FutureProvider(
   (ref) => ref.read(profileRepository).getMyUser(),
 );
 
@@ -29,10 +29,12 @@ class ProfileRepository {
         .write(SecureStorageKey.authToken.key, response);
   }
 
-  Future<void> logout() => Future.wait([
-        ref.read(restClientProvider).post('/logout'),
-        ref.read(secureStorageProvider).delete(SecureStorageKey.authToken.key),
-      ]).then((_) => ref.refresh(authTokenProvider));
+  Future<void> logout() {
+    return Future.wait([
+      ref.read(restClientProvider).post('/logout'),
+      ref.read(secureStorageProvider).delete(SecureStorageKey.authToken.key),
+    ]).then((_) => ref.refresh(authTokenProvider));
+  }
 
   // Future<void> recoverPassword(Map<String, dynamic> body) =>
   //     ref.read(restClientProvider).put('/profile/recover_password', body: body);

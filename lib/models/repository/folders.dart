@@ -34,7 +34,7 @@ final filteredFoldersProvider =
   );
 });
 
-final annotationOptionsProvider = FutureProvider(
+final annotationOptionsProvider = FutureProvider.autoDispose(
   (ref) => ref.read(foldersRepositoryProvider).getNewAnnotationOptions(),
 );
 

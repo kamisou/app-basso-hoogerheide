@@ -4,6 +4,7 @@ import 'package:basso_hoogerheide/constants/secure_storage_keys.dart';
 import 'package:basso_hoogerheide/constants/theme_data.dart';
 import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/interface/secure_storage.dart';
+import 'package:basso_hoogerheide/models/repository/profile.dart';
 import 'package:basso_hoogerheide/pages/home/calendar/new_event.dart';
 import 'package:basso_hoogerheide/pages/home/folders/annotations.dart';
 import 'package:basso_hoogerheide/pages/home/folders/new_folder.dart';
@@ -29,9 +30,10 @@ class App extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       home: SplashPage(
         initialWork: () async {
-          Intl.defaultLocale = PlatformDispatcher.instance.locale.toLanguageTag();
-          final bool tokenAvailable = await _retrieveToken(ref);
-          return tokenAvailable ? '/home' : '/login';
+          Intl.defaultLocale =
+              PlatformDispatcher.instance.locale.toLanguageTag();
+          final bool isTokenValid = await _validateToken(ref);
+          return isTokenValid ? '/home' : '/login';
         },
       ),
       supportedLocales: const [
@@ -57,11 +59,16 @@ class App extends ConsumerWidget {
     );
   }
 
-  Future<bool> _retrieveToken(WidgetRef ref) async {
+  Future<bool> _validateToken(WidgetRef ref) async {
     final String? authToken = await ref
         .read(secureStorageProvider)
         .read(SecureStorageKey.authToken.key);
     ref.read(authTokenProvider.notifier).state = authToken;
-    return authToken != null;
+    try {
+      await ref.read(appUserProvider.future);
+      return authToken != null;
+    } on RestException {
+      return false;
+    }
   }
 }

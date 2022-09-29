@@ -3,15 +3,14 @@ import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/input/model_category.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final modelsRepositoryProvider =
-    Provider.autoDispose(ModelsRepositoryProvider.new);
+final modelsRepositoryProvider = Provider.autoDispose(ModelsRepository.new);
 
 final modelCategoriesProvider = FutureProvider.autoDispose(
   (ref) => ref.read(modelsRepositoryProvider).getModelCategories(),
 );
 
-class ModelsRepositoryProvider {
-  const ModelsRepositoryProvider(this.ref);
+class ModelsRepository {
+  const ModelsRepository(this.ref);
 
   final Ref ref;
 
