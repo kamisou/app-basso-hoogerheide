@@ -12,16 +12,21 @@ final contactsProvider = FutureProvider.autoDispose(
   (ref) => ref.read(contactsRepositoryProvider).getContacts(),
 );
 
-final filteredContactsProvider = FutureProvider.autoDispose((ref) {
+final filteredContactsProvider =
+    Provider.autoDispose<AsyncValue<List<Contact>>>((ref) {
   final String? filter = ref.watch(contactsFilterProvider);
-  final Future<List<Contact>> contacts = ref.watch(contactsProvider.future);
-  return contacts.then((value) {
-    if (filter?.isNotEmpty ?? false) {
-      final regex = RegExp(filter!, caseSensitive: false);
-      return value.where((e) => e.name.contains(regex)).toList();
-    }
-    return value;
-  });
+  final AsyncValue<List<Contact>> contacts = ref.watch(contactsProvider);
+  return contacts.when(
+    data: (data) {
+      if (filter?.isNotEmpty ?? false) {
+        final regex = RegExp(filter!, caseSensitive: false);
+        return AsyncData(data.where((e) => e.name.contains(regex)).toList());
+      }
+      return AsyncData(data);
+    },
+    error: (error, stackTrace) => AsyncError(error, stackTrace: stackTrace),
+    loading: () => const AsyncLoading(),
+  );
 });
 
 class ContactsRepository {
