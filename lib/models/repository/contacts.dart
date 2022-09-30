@@ -37,7 +37,7 @@ class ContactsRepository {
 
   Future<void> editContact(NewContact contact) => ref
       .read(restClientProvider)
-      .post('/contacts/edit', body: contact.toJson())
+      .put('/contacts/edit', body: contact.toJson())
       .then((_) => ref.refresh(contactsProvider));
 
   Future<void> deleteContact(Contact contact) =>
