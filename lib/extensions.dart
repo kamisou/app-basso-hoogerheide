@@ -20,7 +20,7 @@ extension TimeOfDayExtension on TimeOfDay {
   }
 
   bool isAfter(TimeOfDay other) =>
-      (hour * 60 + minute) < (other.hour * 60 + other.minute);
+      (hour * 60 + minute) > (other.hour * 60 + other.minute);
 
   bool isBefore(TimeOfDay other) =>
       (hour * 60 + minute) < (other.hour * 60 + other.minute);

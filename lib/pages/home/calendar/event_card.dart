@@ -89,7 +89,7 @@ class _EventCardState extends ConsumerState<EventCard> {
                         ),
                       if (widget.event.endTime != null)
                         KeyValueText(
-                          keyString: 'Horário de Fim',
+                          keyString: 'Horário de Término',
                           valueString: widget.event.endTime!.format(context),
                         ),
                       widget.event.description != null

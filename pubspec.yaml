@@ -2,8 +2,8 @@ name: basso_hoogerheide
 version: 1.0.0+1
 
 environment:
-  flutter: ">=3.3.2 <4.0.0"
-  sdk: ">=2.17.6 <3.0.0"
+  flutter: ">=3.3.3 <4.0.0"
+  sdk: ">=2.18.2 <3.0.0"
 
 dependencies:
   flutter:

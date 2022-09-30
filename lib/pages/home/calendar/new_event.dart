@@ -1,3 +1,4 @@
+import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/input/calendar_event.dart';
 import 'package:basso_hoogerheide/models/output/new_calendar_event.dart';
 import 'package:basso_hoogerheide/models/repository/calendar.dart';
@@ -5,7 +6,7 @@ import 'package:basso_hoogerheide/widgets/async_button.dart';
 import 'package:basso_hoogerheide/widgets/color_picker.dart';
 import 'package:basso_hoogerheide/widgets/date_picker.dart';
 import 'package:basso_hoogerheide/widgets/empty_card.dart';
-import 'package:basso_hoogerheide/widgets/time_picker.dart';
+import 'package:basso_hoogerheide/widgets/error_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -41,8 +42,6 @@ class _NewEventPageState extends ConsumerState<NewEventPage> {
               final DateTime today = DateTime.now();
               _event.date ??= today;
               _event.color ??= data.first;
-              _event.startTime ??= TimeOfDay.fromDateTime(today);
-              _event.endTime ??= TimeOfDay.fromDateTime(today);
               return Form(
                 child: Builder(
                   builder: (context) {
@@ -94,35 +93,6 @@ class _NewEventPageState extends ConsumerState<NewEventPage> {
                               : null,
                         ),
                         const SizedBox(height: 16),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: TimePicker(
-                                initialTime: _event.startTime,
-                                onChanged: (value) =>
-                                    setState(() => _event.setStartTime(value)),
-                              ),
-                            ),
-                            Container(
-                              alignment: Alignment.center,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8),
-                              child: Text(
-                                '-',
-                                style: Theme.of(context).textTheme.labelLarge,
-                              ),
-                            ),
-                            Expanded(
-                              child: TimePicker(
-                                initialTime: _event.endTime,
-                                enabled: _event.startTime != null,
-                                onChanged: (value) =>
-                                    setState(() => _event.setEndTime(value)),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
                         Padding(
                           padding: const EdgeInsets.only(
                             top: 4,
@@ -130,6 +100,7 @@ class _NewEventPageState extends ConsumerState<NewEventPage> {
                           ),
                           child: TextFormField(
                             decoration: const InputDecoration(
+                              alignLabelWithHint: true,
                               labelText: 'Descrição',
                             ),
                             initialValue: _event.description,
@@ -159,7 +130,11 @@ class _NewEventPageState extends ConsumerState<NewEventPage> {
               icon: Icons.error_outline,
               message: 'Não foi possível buscar dados para novo evento.',
             ),
-            loading: () => const CircularProgressIndicator(),
+            loading: () => Container(
+              alignment: Alignment.topCenter,
+              padding: const EdgeInsets.all(20),
+              child: const CircularProgressIndicator(),
+            ),
           ),
     );
   }
@@ -172,7 +147,15 @@ class _NewEventPageState extends ConsumerState<NewEventPage> {
       return (_argEvent == null
               ? calendarRepository.addEvent(_event)
               : calendarRepository.editEvent(_event))
-          .then((_) => Navigator.pop(context));
+          .then(
+        (_) => Navigator.pop(context),
+        onError: (e) => ErrorSnackbar(
+          context: context,
+          error: e,
+        ).on<RestException>(
+          content: (error) => ErrorContent(message: error.serverMessage),
+        ),
+      );
     }
   }
 }
