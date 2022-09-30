@@ -1,11 +1,25 @@
+import 'package:basso_hoogerheide/models/input/contact.dart';
+
 class NewContact {
   NewContact.empty()
-      : name = null,
+      : id = null,
+        name = null,
         telephone = null,
         cellphone = null,
         email = null,
         fax = null,
         address = null;
+
+  NewContact.fromContact(Contact contact)
+      : id = contact.id,
+        name = contact.name,
+        telephone = contact.telephone,
+        cellphone = contact.cellphone,
+        email = contact.email,
+        fax = contact.fax,
+        address = contact.address;
+
+  final int? id;
 
   String? name;
 

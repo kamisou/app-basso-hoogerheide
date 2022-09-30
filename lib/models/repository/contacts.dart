@@ -2,7 +2,6 @@ import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/input/contact.dart';
 import 'package:basso_hoogerheide/models/output/new_contact.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart';
 
 final contactsRepositoryProvider = Provider.autoDispose(ContactsRepository.new);
 
@@ -35,6 +34,11 @@ class ContactsRepository {
         .post('/contacts/add', body: contact.toJson())
         .then((_) => ref.refresh(contactsProvider));
   }
+
+  Future<void> editContact(NewContact contact) => ref
+      .read(restClientProvider)
+      .post('/contacts/edit', body: contact.toJson())
+      .then((_) => ref.refresh(contactsProvider));
 
   Future<void> deleteContact(Contact contact) =>
       ref.read(restClientProvider).delete(

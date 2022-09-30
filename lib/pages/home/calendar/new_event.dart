@@ -18,17 +18,15 @@ class NewEventPage extends ConsumerStatefulWidget {
 }
 
 class _NewEventPageState extends ConsumerState<NewEventPage> {
-  late CalendarEvent? _argEvent;
-
   late NewCalendarEvent _event;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _argEvent = ModalRoute.of(context)!.settings.arguments as CalendarEvent?;
-    _event = _argEvent == null
+    final event = ModalRoute.of(context)!.settings.arguments as CalendarEvent?;
+    _event = event == null
         ? NewCalendarEvent.empty()
-        : NewCalendarEvent.fromCalendarEvent(_argEvent!);
+        : NewCalendarEvent.fromCalendarEvent(event);
   }
 
   @override
@@ -144,7 +142,7 @@ class _NewEventPageState extends ConsumerState<NewEventPage> {
       final CalendarRepository calendarRepository =
           ref.read(calendarRepositoryProvider);
 
-      return (_argEvent == null
+      return (_event.id == null
               ? calendarRepository.addEvent(_event)
               : calendarRepository.editEvent(_event))
           .then(

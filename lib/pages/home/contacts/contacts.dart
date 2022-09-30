@@ -1,12 +1,8 @@
-import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/input/contact.dart';
-import 'package:basso_hoogerheide/models/output/new_contact.dart';
 import 'package:basso_hoogerheide/models/repository/contacts.dart';
-import 'package:basso_hoogerheide/pages/home/contacts/add_contact_dialog.dart';
 import 'package:basso_hoogerheide/pages/home/contacts/contact_tile.dart';
 import 'package:basso_hoogerheide/widgets/collection.dart';
 import 'package:basso_hoogerheide/widgets/empty_card.dart';
-import 'package:basso_hoogerheide/widgets/error_snackbar.dart';
 import 'package:basso_hoogerheide/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -27,17 +23,7 @@ class _ContactsPageState extends ConsumerState<ContactsPage>
       floatingActionButton: FloatingActionButton(
         heroTag: 'contacts_fab',
         child: const Icon(Icons.person_add),
-        onPressed: () => showDialog<NewContact>(
-          context: context,
-          builder: (context) => const AddContactDialog(),
-        ).then(ref.read(contactsRepositoryProvider).addContact).catchError(
-              (e) => ErrorSnackbar(
-                context: context,
-                error: e,
-              ).on<RestException>(
-                content: (error) => ErrorContent(message: error.serverMessage),
-              ),
-            ),
+        onPressed: () => Navigator.pushNamed(context, '/newContact'),
       ),
       body: Column(
         children: [
