@@ -124,9 +124,12 @@ class _NewEventPageState extends ConsumerState<NewEventPage> {
                 ),
               );
             },
-            error: (_, __) => const EmptyCard(
-              icon: Icons.error_outline,
-              message: 'Não foi possível buscar dados para novo evento.',
+            error: (_, __) => const Padding(
+              padding: EdgeInsets.all(20),
+              child: EmptyCard(
+                icon: Icons.error_outline,
+                message: 'Não foi possível buscar dados para novo evento.',
+              ),
             ),
             loading: () => Container(
               alignment: Alignment.topCenter,
