@@ -6,6 +6,5 @@ final configurationProvider =
 class Configuration {
   const Configuration();
 
-  // TODO: apontar para servidor REST real
-  final String restServerUrl = 'http://179.211.57.56:8080/api';
+  final String restServerUrl = 'https://www.bassoadvogados.adv.br/api';
 }

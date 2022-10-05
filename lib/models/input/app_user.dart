@@ -2,8 +2,8 @@ class AppUser {
   AppUser.fromJson(Map<String, dynamic> json)
       : name = json['name'],
         email = json['email'],
-        division = json['division'],
-        avatarUrl = json['avatar_url'];
+        division = json['funcao'],
+        avatarUrl = json['foto'];
 
   final String name;
 
