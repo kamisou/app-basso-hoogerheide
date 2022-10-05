@@ -3,6 +3,7 @@ import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/repository/profile.dart';
 import 'package:basso_hoogerheide/pages/profile/profile_option.dart';
 import 'package:basso_hoogerheide/widgets/async_button.dart';
+import 'package:basso_hoogerheide/widgets/error_snackbar.dart';
 import 'package:basso_hoogerheide/widgets/loading_snackbar.dart';
 import 'package:basso_hoogerheide/widgets/shimmering_image.dart';
 import 'package:flutter/material.dart';
@@ -242,10 +243,22 @@ class ProfilePage extends ConsumerWidget {
                   return ref
                       .read(profileRepository)
                       .changePassword(passwordController.text)
-                      .then((_) => close());
+                      .then(
+                        (_) => close(),
+                        onError: (e) =>
+                            ErrorSnackbar(context: context, error: e)
+                              ..on<RestException>(
+                                content: (error) =>
+                                    ErrorContent(message: error.serverMessage),
+                              ),
+                      );
                 }
               },
-              loadingChild: const SizedBox(width: 16, height: 16),
+              loadingChild: const SizedBox(
+                width: 16,
+                height: 16,
+                child: CircularProgressIndicator(),
+              ),
               child: const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 4),
                 child: Text('Salvar'),

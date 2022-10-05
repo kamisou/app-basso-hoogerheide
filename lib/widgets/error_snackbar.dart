@@ -11,7 +11,7 @@ class ErrorSnackbar {
   final Object error;
 
   void on<E>({required ErrorContent Function(E) content}) {
-    if (error is! E) throw error;
+    if (error is! E) return;
     final ErrorContent errorContent = content(error as E);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
