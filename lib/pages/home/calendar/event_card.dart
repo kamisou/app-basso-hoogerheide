@@ -29,7 +29,7 @@ class _EventCardState extends ConsumerState<EventCard> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Card(
-          color: widget.event.color,
+          color: widget.event.color ?? Theme.of(context).colorScheme.primary,
           shape: _expanded
               ? const RoundedRectangleBorder(
                   borderRadius: BorderRadius.vertical(

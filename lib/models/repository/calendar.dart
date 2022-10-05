@@ -81,7 +81,7 @@ class CalendarRepository {
         )
         .then((value) => (value['events'] as Map? ?? {}).map(
               (key, value) => MapEntry(
-                DateTime.parse(key),
+                DateTime.parse(key).dayOnly(),
                 (value as List? ?? [])
                     .cast<Map<String, dynamic>>()
                     .map(CalendarEvent.fromJson)

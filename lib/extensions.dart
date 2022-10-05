@@ -6,10 +6,8 @@ extension DateTimeExtension on DateTime {
 
 extension TimeOfDayExtension on TimeOfDay {
   static TimeOfDay? parse(String? date) {
-    final List<String>? start = date?.split(':');
-    return start != null
-        ? TimeOfDay(hour: int.parse(start.first), minute: int.parse(start.last))
-        : null;
+    if (date == null) return null;
+    return TimeOfDay.fromDateTime(DateTime.parse(date));
   }
 
   String fmt([bool twentyFourHours = true]) {
