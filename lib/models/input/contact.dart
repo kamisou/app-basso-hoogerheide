@@ -1,9 +1,9 @@
 class Contact {
   Contact.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        name = json['name'],
-        telephone = json['telephone'],
-        cellphone = json['cellphone'],
+        name = json['nome'],
+        telephone = json['fone'],
+        cellphone = json['cel'],
         email = json['email'],
         fax = json['fax'],
         address = json['address'];
