@@ -82,50 +82,57 @@ class _EventCardState extends ConsumerState<EventCard> {
                     color: Theme.of(context).colorScheme.surface,
                   ),
                   padding: const EdgeInsets.all(20),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            if (widget.event.startTime != null)
-                              KeyValueText(
-                                keyString: 'Início',
-                                valueString:
-                                    widget.event.startTime!.format(context),
-                              ),
-                            if (widget.event.endTime != null)
-                              KeyValueText(
-                                keyString: 'Término',
-                                valueString:
-                                    widget.event.endTime!.format(context),
-                              ),
-                            widget.event.description?.isNotEmpty ?? false
-                                ? KeyValueText(
-                                    keyString: 'Descrição',
-                                    valueString: widget.event.description!,
-                                  )
-                                : Text(
-                                    '(Nenhuma informação sobre o evento)',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium
-                                        ?.copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .secondary,
-                                        ),
-                                  )
-                          ],
-                        ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                if (widget.event.startTime != null)
+                                  KeyValueText(
+                                    keyString: 'Início',
+                                    valueString:
+                                        widget.event.startTime!.format(context),
+                                  ),
+                                if (widget.event.endTime != null)
+                                  KeyValueText(
+                                    keyString: 'Término',
+                                    valueString:
+                                        widget.event.endTime!.format(context),
+                                  ),
+                              ],
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {},
+                            child: Icon(
+                              widget.notificationEnabled
+                                  ? Icons.notifications_active_outlined
+                                  : Icons.notifications_outlined,
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
+                          ),
+                        ],
                       ),
-                      Icon(
-                        widget.notificationEnabled
-                            ? Icons.notifications_active_outlined
-                            : Icons.notifications_outlined,
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
+                      widget.event.description?.isNotEmpty ?? false
+                          ? KeyValueText(
+                              keyString: 'Descrição',
+                              valueString: widget.event.description!,
+                            )
+                          : Text(
+                              '(Nenhuma informação sobre o evento)',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
+                                  ),
+                            )
                     ],
                   ),
                 )

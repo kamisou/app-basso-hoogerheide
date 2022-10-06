@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:basso_hoogerheide/constants/secure_storage_keys.dart';
 import 'package:basso_hoogerheide/constants/theme_data.dart';
+import 'package:basso_hoogerheide/interface/local_notifications.dart';
 import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/interface/secure_storage.dart';
 import 'package:basso_hoogerheide/models/repository/profile.dart';
@@ -34,6 +35,7 @@ class App extends ConsumerWidget {
           Intl.defaultLocale =
               PlatformDispatcher.instance.locale.toLanguageTag();
           final bool isTokenValid = await _validateToken(ref);
+          await ref.read(localNotificationsProvider).initialize();
           return isTokenValid ? '/home' : '/login';
         },
       ),
