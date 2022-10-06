@@ -98,7 +98,9 @@ class ProfilePage extends ConsumerWidget {
                   ],
                 ),
                 error: (_, __) => const SizedBox.shrink(),
-                loading: () => const CircularProgressIndicator(),
+                loading: () => const Center(
+                  child: CircularProgressIndicator(),
+                ),
               ),
           const SizedBox(height: 40),
           ProfileOption(
