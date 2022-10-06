@@ -1,3 +1,5 @@
+import 'package:basso_hoogerheide/constants/configuration.dart';
+import 'package:basso_hoogerheide/interface/local_notifications.dart';
 import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/input/calendar_event.dart';
 import 'package:basso_hoogerheide/models/repository/calendar.dart';
@@ -5,17 +7,15 @@ import 'package:basso_hoogerheide/widgets/error_snackbar.dart';
 import 'package:basso_hoogerheide/widgets/key_value_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 class EventCard extends ConsumerStatefulWidget {
   const EventCard({
     super.key,
     required this.event,
-    required this.notificationEnabled,
   });
 
   final CalendarEvent event;
-
-  final bool notificationEnabled;
 
   @override
   ConsumerState<EventCard> createState() => _EventCardState();
@@ -107,15 +107,31 @@ class _EventCardState extends ConsumerState<EventCard> {
                               ],
                             ),
                           ),
-                          GestureDetector(
-                            onTap: () {},
-                            child: Icon(
-                              widget.notificationEnabled
-                                  ? Icons.notifications_active_outlined
-                                  : Icons.notifications_outlined,
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                          ),
+                          ref.watch(scheduledNotificationsProvider).when(
+                                data: (data) {
+                                  final LocalNotification? event = data[ref
+                                          .read(configurationProvider)
+                                          .calendarNotificationChannelKey]
+                                      ?[widget.event.id];
+                                  return GestureDetector(
+                                    onTap: () =>
+                                        _onTapNotification(event != null),
+                                    child: Icon(
+                                      event != null
+                                          ? Icons.notifications_active
+                                          : Icons.notifications_outlined,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                    ),
+                                  );
+                                },
+                                loading: () => Icon(
+                                  Icons.notifications_outlined,
+                                  color: Theme.of(context).colorScheme.secondary,
+                                ),
+                                error: (_, __) => const SizedBox.shrink(),
+                              ),
                         ],
                       ),
                       widget.event.description?.isNotEmpty ?? false
@@ -180,5 +196,53 @@ class _EventCardState extends ConsumerState<EventCard> {
             );
       }
     });
+  }
+
+  void _onTapNotification(bool isEnabled) {
+    final notifications = ref.read(localNotificationsProvider);
+
+    final CalendarEvent event = widget.event;
+
+    if (isEnabled) {
+      notifications.removeNotification(event.id);
+    } else {
+      notifications
+          .addNotification(
+        LocalNotification(
+          id: event.id,
+          channelKey:
+              ref.read(configurationProvider).calendarNotificationChannelKey,
+          title: event.title,
+          body: event.description,
+        ),
+        event.startTime != null
+            ? event.date.add(
+                Duration(
+                  hours: event.startTime!.hour,
+                  minutes: event.startTime!.minute,
+                ),
+              )
+            : event.date,
+      )
+          .then((success) {
+        if (success) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      'Uma notificação foi adicionada para o evento.',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ),
+                  const Icon(Icons.notifications_outlined),
+                ],
+              ),
+            ),
+          );
+        }
+      });
+    }
   }
 }

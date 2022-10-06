@@ -1,6 +1,10 @@
+import 'dart:developer';
+
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:basso_hoogerheide/constants/configuration.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+typedef ScheduledNotifications = Map<String, Map<int, LocalNotification>>;
 
 final localNotificationsProvider = Provider.autoDispose(
   (ref) => LocalNotifications(ref, channels: [
@@ -12,7 +16,7 @@ final localNotificationsProvider = Provider.autoDispose(
   ]),
 );
 
-final activeNotificationsProvider = FutureProvider.autoDispose(
+final scheduledNotificationsProvider = FutureProvider.autoDispose(
   (ref) => ref.read(localNotificationsProvider).getNotifications(),
 );
 
@@ -39,32 +43,59 @@ class LocalNotifications {
             .toList(),
       );
 
-  Future<List<LocalNotification>> getNotifications() =>
-      _notifications.listScheduledNotifications().then((value) => value
-          .map((e) => LocalNotification(
-                id: e.content!.id!,
-                channelKey: e.content!.channelKey!,
-                title: e.content!.title,
-                body: e.content!.body,
-              ))
-          .toList());
+  Future<ScheduledNotifications> getNotifications() async {
+    log('getNotifications');
+    final List<LocalNotification> scheduled =
+        await _notifications.listScheduledNotifications().then((value) => value
+            .map((e) => LocalNotification(
+                  id: e.content!.id!,
+                  channelKey: e.content!.channelKey!,
+                  title: e.content!.title,
+                  body: e.content!.body,
+                ))
+            .toList());
+    final ScheduledNotifications notifications = {};
+    for (final notification in scheduled) {
+      if (!notifications.containsKey(notification.channelKey)) {
+        notifications[notification.channelKey] = <int, LocalNotification>{};
+      }
+      notifications[notification.channelKey]![notification.id] = notification;
+    }
+    return notifications;
+  }
 
-  Future<void> addNotification(
+  Future<bool> addNotification(
     LocalNotification notification,
     DateTime scheduledDate,
-  ) async =>
-      _notifications.createNotification(
-        content: NotificationContent(
-          id: notification.id,
-          channelKey: notification.channelKey,
-          title: notification.title,
-          body: notification.body,
-        ),
-        schedule: NotificationCalendar.fromDate(
-          allowWhileIdle: true,
-          date: scheduledDate,
-        ),
-      );
+  ) async {
+    log('addNotification ${notification.id}');
+    return _notifications
+        .createNotification(
+      content: NotificationContent(
+        id: notification.id,
+        channelKey: notification.channelKey,
+        title: notification.title,
+        body: notification.body,
+      ),
+      schedule: NotificationCalendar.fromDate(
+        allowWhileIdle: true,
+        date: scheduledDate,
+      ),
+    )
+        .then((success) {
+      // TODO: o método não retorna sucesso?
+      // if (success) ref.refresh(scheduledNotificationsProvider);
+      ref.refresh(scheduledNotificationsProvider);
+      return success;
+    });
+  }
+
+  Future<void> removeNotification(int id) {
+    log('removeNotification $id');
+    return _notifications
+        .cancel(id)
+        .then((_) => ref.refresh(scheduledNotificationsProvider));
+  }
 }
 
 class LocalNotificationChannel {
