@@ -48,7 +48,7 @@ class _ContactTileState extends ConsumerState<ContactTile> {
                   ),
                   Row(
                     children: [
-                      if (widget.contact.telephone != null) ...[
+                      if (widget.contact.telephone?.isEmpty ?? true) ...[
                         Flexible(
                           child: KeyValueText(
                             keyString: 'Tel',
@@ -58,7 +58,7 @@ class _ContactTileState extends ConsumerState<ContactTile> {
                         ),
                         const SizedBox(width: 8),
                       ],
-                      if (widget.contact.cellphone != null)
+                      if (widget.contact.cellphone?.isEmpty ?? true)
                         Flexible(
                           child: KeyValueText(
                             keyString: 'Cel',
