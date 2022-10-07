@@ -1,5 +1,3 @@
-import 'package:basso_hoogerheide/constants/configuration.dart';
-import 'package:basso_hoogerheide/interface/local_notifications.dart';
 import 'package:basso_hoogerheide/models/input/calendar_event.dart';
 import 'package:basso_hoogerheide/pages/home/calendar/event_card.dart';
 import 'package:flutter/material.dart';
