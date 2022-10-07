@@ -4,7 +4,7 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:basso_hoogerheide/constants/configuration.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-typedef ScheduledNotifications = Map<String, Map<int, LocalNotification>>;
+typedef ScheduledNotifications = Map<int, LocalNotification>;
 
 final localNotificationsProvider = Provider.autoDispose(
   (ref) => LocalNotifications(ref, channels: [
@@ -56,38 +56,30 @@ class LocalNotifications {
             .toList());
     final ScheduledNotifications notifications = {};
     for (final notification in scheduled) {
-      if (!notifications.containsKey(notification.channelKey)) {
-        notifications[notification.channelKey] = <int, LocalNotification>{};
-      }
-      notifications[notification.channelKey]![notification.id] = notification;
+      notifications[notification.id] = notification;
     }
     return notifications;
   }
 
-  Future<bool> addNotification(
+  Future<void> addNotification(
     LocalNotification notification,
     DateTime scheduledDate,
   ) async {
     log('addNotification ${notification.id}');
     return _notifications
         .createNotification(
-      content: NotificationContent(
-        id: notification.id,
-        channelKey: notification.channelKey,
-        title: notification.title,
-        body: notification.body,
-      ),
-      schedule: NotificationCalendar.fromDate(
-        allowWhileIdle: true,
-        date: scheduledDate,
-      ),
-    )
-        .then((success) {
-      // TODO: o método não retorna sucesso?
-      // if (success) ref.refresh(scheduledNotificationsProvider);
-      ref.refresh(scheduledNotificationsProvider);
-      return success;
-    });
+          content: NotificationContent(
+            id: notification.id,
+            channelKey: notification.channelKey,
+            title: notification.title,
+            body: notification.body,
+          ),
+          schedule: NotificationCalendar.fromDate(
+            allowWhileIdle: true,
+            date: scheduledDate,
+          ),
+        )
+        .then((_) => ref.refresh(scheduledNotificationsProvider));
   }
 
   Future<void> removeNotification(int id) {

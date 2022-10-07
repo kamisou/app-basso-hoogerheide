@@ -27,47 +27,75 @@ class _EventCardState extends ConsumerState<EventCard> {
 
   @override
   Widget build(BuildContext context) {
+    final LocalNotification? notification =
+        ref.watch(scheduledNotificationsProvider).value?[widget.event.id];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Card(
-          color: widget.event.color ?? Theme.of(context).colorScheme.primary,
-          shape: _expanded
-              ? const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(4),
-                    bottom: Radius.zero,
+        Stack(
+          alignment: Alignment.topRight,
+          clipBehavior: Clip.none,
+          children: [
+            Card(
+              color:
+                  widget.event.color ?? Theme.of(context).colorScheme.primary,
+              shape: _expanded
+                  ? const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(4),
+                        bottom: Radius.zero,
+                      ),
+                    )
+                  : null,
+              child: InkWell(
+                onTap: () => setState(() => _expanded = !_expanded),
+                onTapDown: (details) => _tapDetails = details,
+                onLongPress: _onLongPress,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
                   ),
-                )
-              : null,
-          child: InkWell(
-            onTap: () => setState(() => _expanded = !_expanded),
-            onTapDown: (details) => _tapDetails = details,
-            onLongPress: _onLongPress,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 10,
-                vertical: 4,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Text(
-                      widget.event.title,
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                  ),
-                  Text(
-                    widget.event.startTime.format(context),
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          widget.event.title,
+                          style: Theme.of(context).textTheme.labelLarge,
                         ),
+                      ),
+                      Text(
+                        widget.event.startTime.format(context),
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
-          ),
+            if (!_expanded && notification != null)
+              Positioned(
+                top: -12,
+                right: -12,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    color: Theme.of(context).colorScheme.surface,
+                  ),
+                  width: 24,
+                  height: 24,
+                  child: Icon(
+                    Icons.notifications_on,
+                    size: 14,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                ),
+              ),
+          ],
         ),
         AnimatedContainer(
           duration: const Duration(milliseconds: 300),
@@ -104,32 +132,18 @@ class _EventCardState extends ConsumerState<EventCard> {
                               ],
                             ),
                           ),
-                          ref.watch(scheduledNotificationsProvider).when(
-                                data: (data) {
-                                  final LocalNotification? event = data[ref
-                                          .read(configurationProvider)
-                                          .calendarNotificationChannelKey]
-                                      ?[widget.event.id];
-                                  return GestureDetector(
-                                    onTap: () =>
-                                        _onTapNotification(event != null),
-                                    child: Icon(
-                                      event != null
-                                          ? Icons.notifications_active
-                                          : Icons.notifications_outlined,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
-                                    ),
-                                  );
-                                },
-                                loading: () => Icon(
-                                  Icons.notifications_outlined,
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
-                                ),
-                                error: (_, __) => const SizedBox.shrink(),
+                          if (widget.event.startDateTime
+                              .isAfter(DateTime.now()))
+                            GestureDetector(
+                              onTap: () =>
+                                  _onTapNotification(notification != null),
+                              child: Icon(
+                                notification != null
+                                    ? Icons.notifications_active
+                                    : Icons.notifications_outlined,
+                                color: Theme.of(context).colorScheme.secondary,
                               ),
+                            ),
                         ],
                       ),
                       widget.event.description?.isNotEmpty ?? false
@@ -204,8 +218,7 @@ class _EventCardState extends ConsumerState<EventCard> {
     if (isEnabled) {
       notifications.removeNotification(event.id);
     } else {
-      notifications
-          .addNotification(
+      notifications.addNotification(
         LocalNotification(
           id: event.id,
           channelKey:
@@ -213,32 +226,8 @@ class _EventCardState extends ConsumerState<EventCard> {
           title: event.title,
           body: event.description,
         ),
-        event.date.add(
-          Duration(
-            hours: event.startTime.hour,
-            minutes: event.startTime.minute,
-          ),
-        ),
-      )
-          .then((success) {
-        if (success) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      'Uma notificação foi adicionada para o evento.',
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                  ),
-                  const Icon(Icons.notifications_outlined),
-                ],
-              ),
-            ),
-          );
-        }
-      });
+        event.startDateTime,
+      );
     }
   }
 }

@@ -31,4 +31,7 @@ class CalendarEvent {
   final String? description;
 
   late Color? color;
+
+  DateTime get startDateTime =>
+      date.add(Duration(hours: startTime.hour, minutes: startTime.minute));
 }
