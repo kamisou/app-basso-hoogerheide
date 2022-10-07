@@ -60,6 +60,7 @@ class NewCalendarEvent {
         ),
         'title': title,
         'description': description,
-        'color': color!.value.toRadixString(16),
+        'color':
+            '#${color!.withAlpha(0).value.toRadixString(16).padLeft(6, '0')}',
       };
 }

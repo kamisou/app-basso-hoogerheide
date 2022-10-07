@@ -9,7 +9,12 @@ class CalendarEvent {
         endTime = TimeOfDayExtension.parse(json['end'])!,
         title = json['title'],
         description = json['description'] {
-    final int? hex = int.tryParse(json['color'], radix: 16);
+    final String? hexString = json['color'];
+    if (hexString?.isEmpty ?? true) {
+      color = null;
+      return;
+    }
+    final int? hex = int.tryParse(hexString!.substring(1), radix: 16);
     color = hex != null ? Color(hex) : null;
   }
 
