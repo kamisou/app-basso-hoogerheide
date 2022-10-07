@@ -46,9 +46,9 @@ class NewContact {
   void setAddress(String? value) => address = value;
 
   Map<String, dynamic> toJson() => {
-        'name': name,
-        'telephone': telephone,
-        'cellphone': cellphone,
+        'nome': name,
+        'fone': telephone,
+        'cel': cellphone,
         'email': email,
         'fax': fax,
         'address': address,
