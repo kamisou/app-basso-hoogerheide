@@ -94,22 +94,19 @@ class _NewEventPageState extends ConsumerState<NewEventPage> {
                         const SizedBox(height: 16),
                         TimeIntervalPicker(
                           startTimeLabelText: '* Início',
-                          initialStartTime: TimeOfDay.fromDateTime(
-                            DateTime.now(),
-                          ),
+                          initialStartTime: _event.startTime,
                           onStartTimeChanged: _event.setStartTime,
                           endTimeLabelText: '* Término',
-                          initialEndTime: TimeOfDay.fromDateTime(
-                            DateTime.now().add(const Duration(hours: 1)),
-                          ),
+                          initialEndTime: _event.endTime,
                           onEndTimeChanged: _event.setEndTime,
+                          validator: (start, end) =>
+                              start == null || end == null
+                                  ? 'Informe o intervalo de horários.'
+                                  : null,
                         ),
                         const SizedBox(height: 16),
                         Padding(
-                          padding: const EdgeInsets.only(
-                            top: 4,
-                            bottom: 24,
-                          ),
+                          padding: const EdgeInsets.only(top: 4, bottom: 24),
                           child: TextFormField(
                             decoration: const InputDecoration(
                               alignLabelWithHint: true,

@@ -15,7 +15,7 @@ class CalendarEvent {
       return;
     }
     final int? hex = int.tryParse(hexString!.substring(1), radix: 16);
-    color = hex != null ? Color(hex) : null;
+    color = hex != null ? Color((0xff << 24) | hex) : null;
   }
 
   final int id;

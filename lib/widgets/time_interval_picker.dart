@@ -54,73 +54,92 @@ class _TimeIntervalPickerState extends State<TimeIntervalPicker> {
     return FormField(
       validator: (_) => widget.validator?.call(_start, _end),
       builder: (state) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: GestureDetector(
-                  onTap: () async {
-                    final TimeOfDay? time = await showTimePicker(
-                      context: context,
-                      initialTime:
-                          _start ?? TimeOfDay.fromDateTime(DateTime.now()),
-                    );
-                    if (time == null) return;
-                    if (_end?.isBefore(time) ?? true) {
-                      _setEndTime(time);
-                    }
-                    _setStartTime(time);
-                  },
-                  child: AbsorbPointer(
-                    child: TextFormField(
-                      controller: _startController,
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.schedule_outlined),
-                        labelText: widget.startTimeLabelText,
-                      ),
+          Container(
+            decoration: state.hasError
+                ? BoxDecoration(
+                    border: Border.all(
+                      color: Theme.of(context).colorScheme.error,
                     ),
-                  ),
-                ),
-              ),
-              Text(
-                ' - ',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              Expanded(
-                child: GestureDetector(
-                  onTap: () async {
-                    final TimeOfDay? time = await showTimePicker(
-                      context: context,
-                      initialTime: _end ??
-                          TimeOfDay.fromDateTime(
-                            DateTime.now().add(
-                              const Duration(hours: 1),
-                            ),
-                          ),
-                    );
-                    if (time == null) return;
-                    if (time.isBefore(_start!)) {
+                    borderRadius: BorderRadius.circular(4),
+                  )
+                : null,
+            child: Row(
+              children: [
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () async {
+                      final TimeOfDay? time = await showTimePicker(
+                        context: context,
+                        initialTime:
+                            _start ?? TimeOfDay.fromDateTime(DateTime.now()),
+                      );
+                      if (time == null) return;
+                      if (_end?.isBefore(time) ?? true) {
+                        _setEndTime(time);
+                      }
                       _setStartTime(time);
-                    }
-                    _setEndTime(time);
-                  },
-                  child: AbsorbPointer(
-                    child: TextFormField(
-                      controller: _endController,
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.schedule_outlined),
-                        labelText: widget.endTimeLabelText,
+                    },
+                    child: AbsorbPointer(
+                      child: TextFormField(
+                        controller: _startController,
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.schedule_outlined),
+                          labelText: widget.startTimeLabelText,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+                Text(
+                  ' - ',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () async {
+                      final TimeOfDay? time = await showTimePicker(
+                        context: context,
+                        initialTime: _end ??
+                            TimeOfDay.fromDateTime(
+                              DateTime.now().add(
+                                const Duration(hours: 1),
+                              ),
+                            ),
+                      );
+                      if (time == null) return;
+                      if (time.isBefore(_start!)) {
+                        _setStartTime(time);
+                      }
+                      _setEndTime(time);
+                    },
+                    child: AbsorbPointer(
+                      child: TextFormField(
+                        controller: _endController,
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.schedule_outlined),
+                          labelText: widget.endTimeLabelText,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
           if (state.hasError)
-            Text(
-              state.errorText!,
-              style: Theme.of(context).inputDecorationTheme.errorStyle,
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 8,
+              ),
+              child: Text(
+                state.errorText!,
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.error,
+                    ),
+              ),
             ),
         ],
       ),
