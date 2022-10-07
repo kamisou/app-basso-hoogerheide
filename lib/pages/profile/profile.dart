@@ -257,6 +257,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               decoration: const InputDecoration(
                 hintText: 'Senha',
               ),
+              keyboardType: TextInputType.visiblePassword,
               obscureText: true,
               textInputAction: TextInputAction.next,
               validator: (value) =>
@@ -267,6 +268,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               decoration: const InputDecoration(
                 hintText: 'Confirmar Senha',
               ),
+              keyboardType: TextInputType.visiblePassword,
               obscureText: true,
               validator: (value) {
                 if (value?.isEmpty ?? true) {

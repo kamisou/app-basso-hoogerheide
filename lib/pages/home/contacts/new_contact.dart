@@ -44,6 +44,7 @@ class _NewContactPageState extends ConsumerState<NewContactPage> {
                     labelText: '* Nome',
                   ),
                   initialValue: _contact.name,
+                  keyboardType: TextInputType.name,
                   onChanged: _contact.setName,
                   validator: (value) => (value?.isEmpty ?? true)
                       ? 'Informe um nome para o contato.'
@@ -56,6 +57,7 @@ class _NewContactPageState extends ConsumerState<NewContactPage> {
                     labelText: 'Telefone',
                   ),
                   initialValue: _contact.telephone,
+                  keyboardType: TextInputType.phone,
                   onChanged: _contact.setTelephone,
                   inputFormatters: [TextInputMask(mask: '(99) 9999-9999')],
                   validator: (value) => (value?.isNotEmpty ?? false)
@@ -71,6 +73,7 @@ class _NewContactPageState extends ConsumerState<NewContactPage> {
                     labelText: 'Celular',
                   ),
                   initialValue: _contact.cellphone,
+                  keyboardType: TextInputType.phone,
                   onChanged: _contact.setCellphone,
                   inputFormatters: [
                     TextInputMask(mask: ['(99) 9999-9999', '(99) 9 9999-9999']),
@@ -89,6 +92,7 @@ class _NewContactPageState extends ConsumerState<NewContactPage> {
                     labelText: 'E-mail',
                   ),
                   initialValue: _contact.email,
+                  keyboardType: TextInputType.emailAddress,
                   onChanged: _contact.setEmail,
                   validator: (value) => (value?.isNotEmpty ?? false)
                       ? !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
@@ -102,6 +106,7 @@ class _NewContactPageState extends ConsumerState<NewContactPage> {
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Fax'),
                   initialValue: _contact.fax,
+                  keyboardType: TextInputType.phone,
                   onChanged: _contact.setFax,
                   textInputAction: TextInputAction.next,
                 ),
@@ -109,6 +114,7 @@ class _NewContactPageState extends ConsumerState<NewContactPage> {
                 TextFormField(
                   decoration: const InputDecoration(labelText: 'Address'),
                   initialValue: _contact.address,
+                  keyboardType: TextInputType.streetAddress,
                   onChanged: _contact.setAddress,
                   textInputAction: TextInputAction.done,
                 ),

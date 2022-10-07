@@ -186,7 +186,7 @@ class NewFolderPage extends ConsumerWidget {
                     title: 'Data de protocolo',
                     icon: Icons.map_outlined,
                     firstDate:
-                        DateTime.now().subtract(const Duration(days: 365 * 2)),
+                        DateTime.now().subtract(const Duration(days: 3650)),
                     lastDate: DateTime.now(),
                     required: false,
                   ),

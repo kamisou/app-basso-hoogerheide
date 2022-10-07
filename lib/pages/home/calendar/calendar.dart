@@ -31,20 +31,8 @@ class _CalendarPageState extends ConsumerState<CalendarPage>
         children: [
           FloatingActionButton.small(
             heroTag: 'calendar_today_fab',
+            onPressed: _jumpToDateFabAction,
             child: const Icon(Icons.today_outlined),
-            onPressed: () {
-              final initialDate =
-                  ref.read(initialDateRepositoryProvider.notifier);
-              if (initialDate.state != today) {
-                initialDate.state = today;
-              } else {
-                _controller.animateTo(
-                  0,
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.decelerate,
-                );
-              }
-            },
           ),
           const SizedBox(height: 8),
           FloatingActionButton(
@@ -95,6 +83,29 @@ class _CalendarPageState extends ConsumerState<CalendarPage>
             ),
           ),
     );
+  }
+
+  Future<void> _jumpToDateFabAction() async {
+    final DateTime now = DateTime.now();
+    final DateTime? date = await showDatePicker(
+      helpText: 'Pular para...',
+      context: context,
+      initialDate: now,
+      firstDate: now.subtract(const Duration(days: 3650)),
+      lastDate: now.add(const Duration(days: 3650)),
+    );
+    if (date == null) return;
+    final initialDate = ref.read(initialDateRepositoryProvider.notifier);
+    if (initialDate.state != date) {
+      initialDate.state = date;
+      ref.refresh(initialCalendarEventsProvider);
+    } else {
+      _controller.animateTo(
+        0,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.decelerate,
+      );
+    }
   }
 
   @override

@@ -75,6 +75,7 @@ class _NewEventPageState extends ConsumerState<NewEventPage> {
                             labelText: '* Título',
                           ),
                           initialValue: _event.title,
+                          keyboardType: TextInputType.name,
                           onChanged: _event.setTitle,
                           validator: (value) => (value?.isEmpty ?? true)
                               ? 'Informe um título para o evento.'
@@ -113,6 +114,7 @@ class _NewEventPageState extends ConsumerState<NewEventPage> {
                               labelText: 'Descrição',
                             ),
                             initialValue: _event.description,
+                            keyboardType: TextInputType.name,
                             maxLines: 4,
                             onChanged: _event.setDescription,
                           ),
