@@ -1,3 +1,4 @@
+import 'package:basso_hoogerheide/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -65,7 +66,7 @@ class _DatePickerState extends State<DatePicker> {
       firstDate: widget.firstDate,
       helpText: widget.labelText,
       lastDate: widget.lastDate,
-      initialDate: widget.initialDate ?? DateTime.now(),
+      initialDate: widget.initialDate ?? DateTime.now().dayOnly(),
     ).then((value) {
       final FormFieldState? currentState = _key.currentState;
       widget.onChanged?.call(value);

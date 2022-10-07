@@ -7,6 +7,7 @@ import 'package:basso_hoogerheide/widgets/color_picker.dart';
 import 'package:basso_hoogerheide/widgets/date_picker.dart';
 import 'package:basso_hoogerheide/widgets/empty_card.dart';
 import 'package:basso_hoogerheide/widgets/error_snackbar.dart';
+import 'package:basso_hoogerheide/widgets/time_interval_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -89,6 +90,19 @@ class _NewEventPageState extends ConsumerState<NewEventPage> {
                           validator: (value) => value == null
                               ? 'Informe uma data para o evento.'
                               : null,
+                        ),
+                        const SizedBox(height: 16),
+                        TimeIntervalPicker(
+                          startTimeLabelText: '* Início',
+                          initialStartTime: TimeOfDay.fromDateTime(
+                            DateTime.now(),
+                          ),
+                          onStartTimeChanged: _event.setStartTime,
+                          endTimeLabelText: '* Término',
+                          initialEndTime: TimeOfDay.fromDateTime(
+                            DateTime.now().add(const Duration(hours: 1)),
+                          ),
+                          onEndTimeChanged: _event.setEndTime,
                         ),
                         const SizedBox(height: 16),
                         Padding(

@@ -7,7 +7,6 @@ import 'package:basso_hoogerheide/widgets/error_snackbar.dart';
 import 'package:basso_hoogerheide/widgets/key_value_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 class EventCard extends ConsumerStatefulWidget {
   const EventCard({
@@ -60,7 +59,7 @@ class _EventCardState extends ConsumerState<EventCard> {
                     ),
                   ),
                   Text(
-                    widget.event.startTime?.format(context) ?? 'O dia todo',
+                    widget.event.startTime.format(context),
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -92,18 +91,16 @@ class _EventCardState extends ConsumerState<EventCard> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                if (widget.event.startTime != null)
-                                  KeyValueText(
-                                    keyString: 'Início',
-                                    valueString:
-                                        widget.event.startTime!.format(context),
-                                  ),
-                                if (widget.event.endTime != null)
-                                  KeyValueText(
-                                    keyString: 'Término',
-                                    valueString:
-                                        widget.event.endTime!.format(context),
-                                  ),
+                                KeyValueText(
+                                  keyString: 'Início',
+                                  valueString:
+                                      widget.event.startTime.format(context),
+                                ),
+                                KeyValueText(
+                                  keyString: 'Término',
+                                  valueString:
+                                      widget.event.endTime.format(context),
+                                ),
                               ],
                             ),
                           ),
@@ -128,7 +125,8 @@ class _EventCardState extends ConsumerState<EventCard> {
                                 },
                                 loading: () => Icon(
                                   Icons.notifications_outlined,
-                                  color: Theme.of(context).colorScheme.secondary,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
                                 ),
                                 error: (_, __) => const SizedBox.shrink(),
                               ),
@@ -215,14 +213,12 @@ class _EventCardState extends ConsumerState<EventCard> {
           title: event.title,
           body: event.description,
         ),
-        event.startTime != null
-            ? event.date.add(
-                Duration(
-                  hours: event.startTime!.hour,
-                  minutes: event.startTime!.minute,
-                ),
-              )
-            : event.date,
+        event.date.add(
+          Duration(
+            hours: event.startTime.hour,
+            minutes: event.startTime.minute,
+          ),
+        ),
       )
           .then((success) {
         if (success) {
