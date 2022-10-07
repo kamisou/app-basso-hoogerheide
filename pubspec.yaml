@@ -1,5 +1,5 @@
 name: basso_hoogerheide
-version: 0.1.0+1
+version: 0.1.0+2
 
 environment:
   flutter: ">=3.3.3 <4.0.0"
