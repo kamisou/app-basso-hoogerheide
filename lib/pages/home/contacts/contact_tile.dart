@@ -27,7 +27,7 @@ class _ContactTileState extends ConsumerState<ContactTile> {
     final TextStyle? detailStyle = Theme.of(context).textTheme.labelMedium;
     return InkWell(
       onTapDown: (details) => setState(() => _tapDetails = details),
-      onLongPress: () => _onLongPress(context),
+      onLongPress: _onLongPress,
       borderRadius: BorderRadius.circular(4),
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -95,7 +95,7 @@ class _ContactTileState extends ConsumerState<ContactTile> {
     );
   }
 
-  void _onLongPress(BuildContext context) async {
+  void _onLongPress() async {
     if (_tapDetails == null) return;
     final double dx = _tapDetails!.globalPosition.dx;
     final double dy = _tapDetails!.globalPosition.dy;

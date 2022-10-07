@@ -23,7 +23,7 @@ class Contact {
   final String? address;
 
   String get initials {
-    final List<String> names = name.split(' ');
+    final List<String> names = name.trim().split(' ');
     return '${names.first[0]}${names.length > 1 ? names[1][0] : ""}';
   }
 }

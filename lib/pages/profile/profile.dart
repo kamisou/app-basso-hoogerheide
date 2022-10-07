@@ -9,11 +9,18 @@ import 'package:basso_hoogerheide/widgets/shimmering_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ProfilePage extends ConsumerWidget {
+class ProfilePage extends ConsumerStatefulWidget {
   const ProfilePage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends ConsumerState<ProfilePage> {
+  TapDownDetails? _tapDetails;
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Perfil')),
       body: ListView(
@@ -25,6 +32,8 @@ class ProfilePage extends ConsumerWidget {
                     Center(
                       child: GestureDetector(
                         onTap: () => _onTapProfilePic(context, ref),
+                        onTapDown: (details) => _tapDetails = details,
+                        onLongPress: _onLongPressProfilePic,
                         child: Stack(
                           alignment: Alignment.topRight,
                           clipBehavior: Clip.none,
@@ -45,9 +54,7 @@ class ProfilePage extends ConsumerWidget {
                                   style: Theme.of(context)
                                       .textTheme
                                       .headlineSmall
-                                      ?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                      ?.copyWith(fontWeight: FontWeight.bold),
                                 ),
                               ),
                             ),
@@ -200,6 +207,35 @@ class ProfilePage extends ConsumerWidget {
         },
       ).show(context, ref.read(profileRepository).changeAvatar(value.first));
     });
+  }
+
+  Future<void> _onLongPressProfilePic() async {
+    if (ref.read(appUserProvider).value?.avatarUrl == null ||
+        _tapDetails == null) {
+      return;
+    }
+
+    final double dx = _tapDetails!.globalPosition.dx;
+    final double dy = _tapDetails!.globalPosition.dy;
+
+    final String? result = await showMenu<String?>(
+      context: context,
+      position: RelativeRect.fromLTRB(dx, dy, dx, dy),
+      items: [
+        PopupMenuItem(
+          textStyle: Theme.of(context)
+              .textTheme
+              .titleMedium
+              ?.copyWith(color: Theme.of(context).colorScheme.error),
+          value: 'delete',
+          child: const Text('Deletar foto'),
+        ),
+      ],
+    );
+
+    if (result == 'delete') {
+      return ref.read(profileRepository).deleteAvatar();
+    }
   }
 
   Widget _changePasswordFormBuilder(

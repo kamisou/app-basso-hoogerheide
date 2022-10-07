@@ -43,7 +43,7 @@ class _EventCardState extends ConsumerState<EventCard> {
           child: InkWell(
             onTap: () => setState(() => _expanded = !_expanded),
             onTapDown: (details) => _tapDetails = details,
-            onLongPress: () => _onLongPress(context),
+            onLongPress: _onLongPress,
             child: Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 10,
@@ -159,7 +159,7 @@ class _EventCardState extends ConsumerState<EventCard> {
     );
   }
 
-  void _onLongPress(BuildContext context) async {
+  void _onLongPress() async {
     if (_tapDetails == null) return;
     final double dx = _tapDetails!.globalPosition.dx;
     final double dy = _tapDetails!.globalPosition.dy;

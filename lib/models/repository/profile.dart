@@ -44,6 +44,11 @@ class ProfileRepository {
       .get('/profile')
       .then((value) => AppUser.fromJson(value));
 
+  Future<void> deleteAvatar() => ref
+      .read(restClientProvider)
+      .delete('/profile/delete_avatar')
+      .then((_) => ref.refresh(appUserProvider));
+
   Future<void> changeAvatar(File file) => ref
       .read(restClientProvider)
       .uploadImage('POST', '/profile/change_avatar',
