@@ -88,7 +88,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage>
   Future<void> _jumpToDateFabAction() async {
     final DateTime now = DateTime.now();
     final DateTime? date = await showDatePicker(
-      helpText: 'Pular para...',
+      helpText: 'Ir para...',
       context: context,
       initialDate: now,
       firstDate: now.subtract(const Duration(days: 3650)),

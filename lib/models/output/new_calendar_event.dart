@@ -1,6 +1,5 @@
 import 'package:basso_hoogerheide/models/input/calendar_event.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class NewCalendarEvent {
   NewCalendarEvent.empty() : id = null;
