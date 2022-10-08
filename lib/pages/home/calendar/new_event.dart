@@ -1,4 +1,5 @@
 import 'package:basso_hoogerheide/constants/configuration.dart';
+import 'package:basso_hoogerheide/extensions.dart';
 import 'package:basso_hoogerheide/interface/local_notifications.dart';
 import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/input/calendar_event.dart';
@@ -40,7 +41,7 @@ class _NewEventPageState extends ConsumerState<NewEventPage> {
       ),
       body: ref.watch(calendarEventColorsProvider).when(
             data: (data) {
-              final DateTime today = DateTime.now();
+              final DateTime today = DateTime.now().dayOnly();
               _event.date ??= today;
               _event.color ??= data.first;
               return Form(

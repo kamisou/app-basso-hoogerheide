@@ -7,7 +7,6 @@ import 'package:basso_hoogerheide/widgets/error_snackbar.dart';
 import 'package:basso_hoogerheide/widgets/loading_snackbar.dart';
 import 'package:basso_hoogerheide/widgets/shimmering_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_exif_rotation/flutter_exif_rotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProfilePage extends ConsumerStatefulWidget {
@@ -182,33 +181,31 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
         )
         .then((value) {
       if (value == null) return;
-      FlutterExifRotation.rotateImage(path: value.first.path).then(
-        (value) => LoadingSnackbar(
-          contentBuilder: (context) => Text(
-            'Fazendo upload da foto de perfil...',
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          errorBuilder: (context, error) {
-            String? errorMessage =
-                error is RestException ? error.serverMessage : null;
-            return Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    errorMessage ??
-                        'Ocorreu um erro inesperado ao fazer upload da imagem.',
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
+      LoadingSnackbar(
+        contentBuilder: (context) => Text(
+          'Fazendo upload da foto de perfil...',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        errorBuilder: (context, error) {
+          String? errorMessage =
+              error is RestException ? error.serverMessage : null;
+          return Row(
+            children: [
+              Expanded(
+                child: Text(
+                  errorMessage ??
+                      'Ocorreu um erro inesperado ao fazer upload da imagem.',
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
-                Icon(
-                  Icons.error_outline,
-                  color: Theme.of(context).colorScheme.error,
-                ),
-              ],
-            );
-          },
-        ).show(context, ref.read(profileRepository).changeAvatar(value)),
-      );
+              ),
+              Icon(
+                Icons.error_outline,
+                color: Theme.of(context).colorScheme.error,
+              ),
+            ],
+          );
+        },
+      ).show(context, ref.read(profileRepository).changeAvatar(value.first));
     });
   }
 

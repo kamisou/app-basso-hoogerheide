@@ -21,7 +21,6 @@ dependencies:
   flutter_secure_storage: ^6.0.0
   http: ^0.13.5
   awesome_notifications: ^0.7.1
-  flutter_exif_rotation: ^0.5.1
 
 dev_dependencies:
   flutter_test:
