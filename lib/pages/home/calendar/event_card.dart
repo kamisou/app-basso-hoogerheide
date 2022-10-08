@@ -218,7 +218,7 @@ class _EventCardState extends ConsumerState<EventCard> {
     if (isEnabled) {
       notifications.removeNotification(event.id);
     } else {
-      notifications.addNotification(
+      notifications.scheduleNotification(
         LocalNotification(
           id: event.id,
           channelKey:

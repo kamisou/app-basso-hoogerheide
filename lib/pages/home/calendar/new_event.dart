@@ -1,3 +1,5 @@
+import 'package:basso_hoogerheide/constants/configuration.dart';
+import 'package:basso_hoogerheide/interface/local_notifications.dart';
 import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/input/calendar_event.dart';
 import 'package:basso_hoogerheide/models/output/new_calendar_event.dart';
@@ -157,6 +159,32 @@ class _NewEventPageState extends ConsumerState<NewEventPage> {
     if (Form.of(context)!.validate()) {
       final CalendarRepository calendarRepository =
           ref.read(calendarRepositoryProvider);
+
+      if (_event.id != null) {
+        final localNotifications = ref.read(localNotificationsProvider);
+        final notifications =
+            await ref.read(scheduledNotificationsProvider.future);
+        if (notifications.containsKey(_event.id)) {
+          localNotifications.cancelNotification(_event.id!).then(
+                (_) => localNotifications.scheduleNotification(
+                  LocalNotification(
+                    id: _event.id!,
+                    channelKey: ref
+                        .read(configurationProvider)
+                        .calendarNotificationChannelKey,
+                    title: _event.title,
+                    body: _event.description,
+                  ),
+                  _event.date!.add(
+                    Duration(
+                      hours: _event.startTime!.hour,
+                      minutes: _event.startTime!.minute,
+                    ),
+                  ),
+                ),
+              );
+        }
+      }
 
       return (_event.id == null
               ? calendarRepository.addEvent(_event)

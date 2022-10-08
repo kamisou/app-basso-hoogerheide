@@ -61,7 +61,7 @@ class LocalNotifications {
     return notifications;
   }
 
-  Future<void> addNotification(
+  Future<void> scheduleNotification(
     LocalNotification notification,
     DateTime scheduledDate,
   ) async {
@@ -80,6 +80,11 @@ class LocalNotifications {
           ),
         )
         .then((_) => ref.refresh(scheduledNotificationsProvider));
+  }
+
+  Future<void> cancelNotification(int id) {
+    log('cancelNotification $id');
+    return _notifications.cancel(id);
   }
 
   Future<void> removeNotification(int id) {

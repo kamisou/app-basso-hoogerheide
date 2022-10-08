@@ -42,22 +42,18 @@ class NewCalendarEvent {
 
   Map<String, dynamic> toJson() => {
         'id': id,
-        'start': DateFormat('yyyy-MM-dd HH:mm:ss').format(
-          date!.add(
-            Duration(
+        'start': date!
+            .add(Duration(
               hours: startTime!.hour,
               minutes: startTime!.minute,
-            ),
-          ),
-        ),
-        'end': DateFormat('yyyy-MM-dd HH:mm:ss').format(
-          date!.add(
-            Duration(
+            ))
+            .toIso8601String(),
+        'end': date!
+            .add(Duration(
               hours: endTime!.hour,
               minutes: endTime!.minute,
-            ),
-          ),
-        ),
+            ))
+            .toIso8601String(),
         'title': title,
         'description': description,
         'color':
