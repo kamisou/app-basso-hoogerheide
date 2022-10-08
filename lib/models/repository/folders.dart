@@ -31,13 +31,17 @@ final annotationOptionsProvider = FutureProvider.autoDispose(
 );
 
 class FoldersRepository {
+  static const int _foldersPageSize = 20;
+
   const FoldersRepository(this.ref);
 
   final Ref ref;
 
-  Future<List<Folder>> getFolders() => ref
+  Future<List<Folder>> getFolders([int? afterPage]) => ref
       .read(restClientProvider)
-      .get('/folders')
+      .get(
+        '/folders?page_size=$_foldersPageSize${afterPage != null ? '&page_after=$afterPage' : ''}',
+      )
       .then((value) => (value['folders'] as List? ?? [])
           .cast<Map<String, dynamic>>()
           .map(Folder.fromJson)

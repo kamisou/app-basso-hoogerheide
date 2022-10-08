@@ -70,6 +70,14 @@ class _FoldersPageState extends ConsumerState<FoldersPage>
                 ref.refresh(foldersProvider);
                 return ref.read(foldersProvider.future);
               },
+              onReachingEnd: (finishFetching) async {
+                final folders = ref.read(foldersProvider).value!;
+                final newFolders = await ref
+                    .read(foldersRepositoryProvider)
+                    .getFolders(folders.last.id);
+                folders.addAll(newFolders);
+                finishFetching();
+              },
             ),
           ),
         ],

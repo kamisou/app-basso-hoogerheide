@@ -49,12 +49,12 @@ class CalendarRepository {
   Future<void> addEvent(NewCalendarEvent event) {
     log(event.toJson().toString());
     return ref
-          .read(restClientProvider)
-          .post('/events/add', body: event.toJson())
-          .then((_) {
-        ref.read(initialDateRepositoryProvider.notifier).state = event.date!;
-        return ref.refresh(initialCalendarEventsProvider);
-      });
+        .read(restClientProvider)
+        .post('/events/add', body: event.toJson())
+        .then((_) {
+      ref.read(initialDateRepositoryProvider.notifier).state = event.date!;
+      return ref.refresh(initialCalendarEventsProvider);
+    });
   }
 
   Future<void> editEvent(NewCalendarEvent? event) async {
@@ -100,7 +100,7 @@ class CalendarRepository {
       .get('/events/colors')
       .then((value) => (value['colors'] as List? ?? [])
           .cast<String>()
-          .map((e) => Color(int.parse(e, radix: 16)))
+          .map((e) => ColorExtension.parseHex(e)!.withOpacity(1))
           .toList());
 }
 
