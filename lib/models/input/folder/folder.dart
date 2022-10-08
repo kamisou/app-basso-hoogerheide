@@ -1,24 +1,33 @@
 import 'package:basso_hoogerheide/models/input/downloadable_file.dart';
 import 'package:basso_hoogerheide/models/input/folder/address_info.dart';
 import 'package:basso_hoogerheide/models/input/folder/annotation.dart';
-import 'package:basso_hoogerheide/models/input/folder/company_folder.dart';
 import 'package:basso_hoogerheide/models/input/folder/contact_info.dart';
-import 'package:basso_hoogerheide/models/input/folder/person_folder.dart';
 import 'package:basso_hoogerheide/models/input/folder/process_info.dart';
 
-abstract class Folder {
-  const Folder({
-    required this.id,
-    required this.name,
-    required this.writtenOff,
-    required this.contactInfo,
-    required this.addressInfo,
-    required this.processInfo,
-    required this.files,
-    this.annotations = const [],
-  });
+class Folder {
+  Folder.fromJson(Map<String, dynamic> json)
+      : id = json['id'],
+        name = json['name'],
+        cpf = json['cpf'],
+        rg = json['rg'],
+        addressInfo = AddressInfo.fromJson(json['address_info']),
+        annotations = (json['annotations'] as List? ?? [])
+            .cast<Map<String, dynamic>>()
+            .map(Annotation.fromJson)
+            .toList(),
+        contactInfo = ContactInfo.fromJson(json['contact_info']),
+        files = (json['files'] as List? ?? [])
+            .cast<Map<String, dynamic>>()
+            .map(DownloadableFile.fromJson)
+            .toList(),
+        processInfo = ProcessInfo.fromJson(json['process_info']),
+        writtenOff = json['written_off'];
 
   final int id;
+
+  final String cpf;
+
+  final String? rg;
 
   final String name;
 
@@ -33,15 +42,4 @@ abstract class Folder {
   final List<DownloadableFile> files;
 
   final List<Annotation> annotations;
-
-  factory Folder.fromJson(Map<String, dynamic> json) {
-    switch (json['folder_type']) {
-      case 'person':
-        return PersonFolder.fromJson(json);
-      case 'company':
-        return CompanyFolder.fromJson(json);
-      default:
-        throw ArgumentError('folder type "${json['folder_type']}" not valid');
-    }
-  }
 }

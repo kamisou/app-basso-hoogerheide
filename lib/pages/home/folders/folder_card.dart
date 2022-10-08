@@ -1,10 +1,8 @@
 import 'package:basso_hoogerheide/constants/theme_data.dart';
 import 'package:basso_hoogerheide/models/input/downloadable_file.dart';
 import 'package:basso_hoogerheide/models/input/folder/address_info.dart';
-import 'package:basso_hoogerheide/models/input/folder/company_folder.dart';
 import 'package:basso_hoogerheide/models/input/folder/contact_info.dart';
 import 'package:basso_hoogerheide/models/input/folder/folder.dart';
-import 'package:basso_hoogerheide/models/input/folder/person_folder.dart';
 import 'package:basso_hoogerheide/models/input/folder/process_info.dart';
 import 'package:basso_hoogerheide/widgets/key_value_text.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +40,7 @@ class _FolderCardState extends State<FolderCard> {
                     height: double.infinity,
                     width: 4,
                     child: ColoredBox(
-                      color: widget.folder.processInfo.color,
+                      color: widget.folder.processInfo.color.withOpacity(1),
                     ),
                   ),
                   Expanded(
@@ -105,31 +103,21 @@ class _FolderCardState extends State<FolderCard> {
                         fontWeight: FontWeight.bold,
                       ),
                 ),
-                if (widget.folder is PersonFolder)
-                  KeyValueText(
-                    keyString: 'CPF',
-                    valueString: (widget.folder as PersonFolder).cpf,
-                  )
-                else
-                  KeyValueText(
-                    keyString: 'CNPJ',
-                    valueString: (widget.folder as CompanyFolder).cnpj,
-                  ),
-                if (_expanded &&
-                    widget.folder is PersonFolder &&
-                    (widget.folder as PersonFolder).rg != null)
+                KeyValueText(
+                  keyString: 'CPF',
+                  valueString: widget.folder.cpf,
+                ),
+                if (_expanded && (widget.folder.rg?.isNotEmpty ?? false))
                   KeyValueText(
                     keyString: 'RG',
-                    valueString: (widget.folder as PersonFolder).rg!,
+                    valueString: widget.folder.rg!,
                   ),
               ],
             ),
           ),
         ),
         Icon(
-          widget.folder is PersonFolder
-              ? Icons.person_outline
-              : Icons.apartment,
+          Icons.person_outline,
           color: Theme.of(context).disabledColor,
           size: 36,
         ),

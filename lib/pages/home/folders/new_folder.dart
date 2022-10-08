@@ -12,7 +12,6 @@ class NewFolderPage extends ConsumerWidget {
     final Map<String, dynamic> args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final Map<String, dynamic> formData = args['form_data'];
-    final bool isPerson = args['folder_type'] == 'person';
     return Scaffold(
       appBar: AppBar(title: const Text('Cadastro Nova Pasta')),
       body: ListView(
@@ -53,41 +52,30 @@ class NewFolderPage extends ConsumerWidget {
           const SizedBox(height: 24),
           LargeForm(
             sections: [
-              LargeFormSection(
+              const LargeFormSection(
                 key: 'personal_data',
                 title: 'Dados Pessoais',
                 fields: [
                   LargeFormTextField(
                     key: 'name',
-                    title: isPerson ? 'Nome completo' : 'Razão social',
-                    icon: isPerson
-                        ? Icons.person_outlined
-                        : Icons.apartment_outlined,
+                    title: 'Nome completo',
+                    icon: Icons.person_outlined,
                     type: TextInputType.name,
                   ),
-                  if (isPerson) ...[
-                    const LargeFormTextField(
+                    LargeFormTextField(
                       key: 'cpf',
                       title: 'CPF',
                       icon: Icons.numbers_outlined,
                       type: TextInputType.number,
                       mask: '999.999.999-99',
                     ),
-                    const LargeFormTextField(
+                    LargeFormTextField(
                       key: 'rg',
                       title: 'RG',
                       icon: Icons.fingerprint_outlined,
                       type: TextInputType.number,
                       mask: '99.999.999-9',
                       required: false,
-                    ),
-                  ] else
-                    const LargeFormTextField(
-                      key: 'cnpj',
-                      title: 'CNPJ',
-                      icon: Icons.numbers_outlined,
-                      type: TextInputType.number,
-                      mask: '99.999.999/9999-99',
                     ),
                 ],
               ),

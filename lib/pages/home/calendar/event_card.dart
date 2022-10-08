@@ -37,8 +37,8 @@ class _EventCardState extends ConsumerState<EventCard> {
           clipBehavior: Clip.none,
           children: [
             Card(
-              color:
-                  widget.event.color ?? Theme.of(context).colorScheme.primary,
+              color: widget.event.color?.withOpacity(1) ??
+                  Theme.of(context).colorScheme.primary,
               shape: _expanded
                   ? const RoundedRectangleBorder(
                       borderRadius: BorderRadius.vertical(

@@ -8,15 +8,8 @@ class CalendarEvent {
         startTime = TimeOfDayExtension.parse(json['start'])!,
         endTime = TimeOfDayExtension.parse(json['end'])!,
         title = json['title'],
-        description = json['description'] {
-    final String? hexString = json['color'];
-    if (hexString?.isEmpty ?? true) {
-      color = null;
-      return;
-    }
-    final int? hex = int.tryParse(hexString!.substring(1), radix: 16);
-    color = hex != null ? Color((0xff << 24) | hex) : null;
-  }
+        description = json['description'],
+        color = ColorExtension.parseHex(json['color']);
 
   final int id;
 
@@ -30,7 +23,7 @@ class CalendarEvent {
 
   final String? description;
 
-  late Color? color;
+  final Color? color;
 
   DateTime get startDateTime =>
       date.add(Duration(hours: startTime.hour, minutes: startTime.minute));

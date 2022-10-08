@@ -10,29 +10,21 @@ final foldersProvider = FutureProvider.autoDispose(
   (ref) => ref.read(foldersRepositoryProvider).getFolders(),
 );
 
-final filteredFoldersProvider =
-    Provider.autoDispose<AsyncValue<List<Folder>>>((ref) {
-  final String? filter = ref.watch(foldersFilterProvider);
-  final AsyncValue<List<Folder>> folders = ref.watch(foldersProvider);
-  return folders.when(
-    data: (data) {
-      if (filter?.isNotEmpty ?? false) {
-        final regex = RegExp(filter!, caseSensitive: false);
-        return AsyncData(
-          data
-              .where(
-                (e) =>
-                    e.name.contains(regex) || e.id.toString().contains(regex),
-              )
-              .toList(),
-        );
-      }
-      return AsyncData(data);
-    },
-    error: (error, stackTrace) => AsyncError(error, stackTrace: stackTrace),
-    loading: () => const AsyncLoading(),
-  );
-});
+final filteredFoldersProvider = FutureProvider.autoDispose(
+  (ref) async {
+    final String? filter = ref.watch(foldersFilterProvider);
+    final List<Folder> folders = await ref.watch(foldersProvider.future);
+    if (filter?.isNotEmpty ?? false) {
+      final regex = RegExp(filter!, caseSensitive: false);
+      return folders
+          .where(
+            (e) => e.name.contains(regex) || e.id.toString().contains(regex),
+          )
+          .toList();
+    }
+    return folders;
+  },
+);
 
 final annotationOptionsProvider = FutureProvider.autoDispose(
   (ref) => ref.read(foldersRepositoryProvider).getNewAnnotationOptions(),
