@@ -1,12 +1,49 @@
-import 'dart:developer';
-
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:basso_hoogerheide/interface/notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final messagingProvider = Provider.autoDispose(Messaging.new);
 
+// TODO: ache uma maneira mais elegante para lidar com as notificações que não seja hardcoded
+
+Future<void> onBackgroundMessage(RemoteMessage message) async {
+  final notifications = AwesomeNotifications();
+  notifications.initialize(
+    null,
+    [
+      NotificationChannel(
+        channelKey: 'default',
+        channelName: null,
+        channelDescription: null,
+      ),
+    ],
+  );
+  switch (message.data['type']) {
+    case 'event':
+      final Map<String, dynamic> event = message.data['event'];
+      final String? action = message.data['action'];
+      if (action == 'cancel' || action == 'edit') {
+        await notifications.cancel(int.parse(event['id']));
+      }
+      if (action == 'add' || action == 'edit') {
+        await notifications.createNotification(
+          content: NotificationContent(
+            id: int.parse(event['id']),
+            channelKey: 'default',
+            title: event['title'],
+            body: event['description'],
+          ),
+          schedule: NotificationCalendar.fromDate(
+            date: DateTime.parse(event['start']),
+          ),
+        );
+      }
+  }
+}
+
 class Messaging {
-  Messaging(this.ref);
+  const Messaging(this.ref);
 
   final Ref ref;
 
@@ -26,12 +63,33 @@ class Messaging {
       return false;
     }
 
-    FirebaseMessaging.instance.getToken().then((value) => log(value ?? ''));
-
-    FirebaseMessaging.onMessage.listen(_onMessage);
-    FirebaseMessaging.onBackgroundMessage(_onBackgroundMessage);
+    FirebaseMessaging.onMessage.listen(onMessage);
+    FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
 
     return true;
+  }
+
+  Future<void> onMessage(RemoteMessage message) async {
+    switch (message.data['type']) {
+      case 'event':
+        final Map<String, dynamic> event = message.data['event'];
+        final String? action = message.data['action'];
+        if (action == 'cancel' || action == 'edit') {
+          await ref
+              .read(notificationsProvider)
+              .cancelNotification(int.parse(event['id']));
+        }
+        if (action == 'add' || action == 'edit') {
+          await ref.read(notificationsProvider).scheduleNotification(
+                LocalNotification(
+                  id: int.parse(event['id']),
+                  title: event['title'],
+                  body: event['description'],
+                ),
+                DateTime.parse(event['start']),
+              );
+        }
+    }
   }
 
   Future<void> subscribeToTopic(String topic) =>
@@ -39,8 +97,4 @@ class Messaging {
 
   Future<void> unsubscribeFromTopic(String topic) =>
       FirebaseMessaging.instance.unsubscribeFromTopic(topic);
-
-  void _onMessage(RemoteMessage message) {}
-
-  static Future<void> _onBackgroundMessage(RemoteMessage message) async {}
 }

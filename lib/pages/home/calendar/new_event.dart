@@ -1,6 +1,4 @@
-import 'package:basso_hoogerheide/constants/configuration.dart';
 import 'package:basso_hoogerheide/extensions.dart';
-import 'package:basso_hoogerheide/interface/notifications.dart';
 import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/input/calendar_event.dart';
 import 'package:basso_hoogerheide/models/output/new_calendar_event.dart';
