@@ -1,8 +1,10 @@
 import 'dart:ui';
 
+import 'package:basso_hoogerheide/constants/configuration.dart';
 import 'package:basso_hoogerheide/constants/secure_storage_keys.dart';
 import 'package:basso_hoogerheide/constants/theme_data.dart';
-import 'package:basso_hoogerheide/interface/local_notifications.dart';
+import 'package:basso_hoogerheide/interface/notifications.dart';
+import 'package:basso_hoogerheide/interface/messaging.dart';
 import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/interface/secure_storage.dart';
 import 'package:basso_hoogerheide/models/repository/profile.dart';
@@ -14,6 +16,7 @@ import 'package:basso_hoogerheide/pages/home/home.dart';
 import 'package:basso_hoogerheide/pages/login.dart';
 import 'package:basso_hoogerheide/pages/profile/profile.dart';
 import 'package:basso_hoogerheide/pages/splash.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -34,9 +37,21 @@ class App extends ConsumerWidget {
         initialWork: () async {
           Intl.defaultLocale =
               PlatformDispatcher.instance.locale.toLanguageTag();
+          await Firebase.initializeApp();
+          await ref.read(notificationsProvider).initialize();
           final bool isTokenValid = await _validateToken(ref);
-          await ref.read(localNotificationsProvider).initialize();
           return isTokenValid ? '/home' : '/login';
+        },
+        afterWork: (route) async {
+          switch (route) {
+            case '/home':
+              await _initializeMessaging(ref);
+              break;
+            case '/login':
+              await ref.read(messagingProvider).unsubscribeFromTopic(
+                  ref.read(configurationProvider).calendarEventsMessagingTopic);
+              break;
+          }
         },
       ),
       supportedLocales: const [
@@ -64,15 +79,24 @@ class App extends ConsumerWidget {
   }
 
   Future<bool> _validateToken(WidgetRef ref) async {
-    final String? authToken = await ref
-        .read(secureStorageProvider)
-        .read(SecureStorageKey.authToken.key);
+    final String? authToken =
+        await ref.read(secureStorageProvider).read(SecureStorageKey.authToken);
     ref.read(authTokenProvider.notifier).state = authToken;
     try {
       await ref.read(appUserProvider.future);
       return authToken != null;
     } on RestException {
       return false;
+    }
+  }
+
+  Future<void> _initializeMessaging(WidgetRef ref) async {
+    final Messaging messaging = ref.read(messagingProvider);
+    final bool isAuthorized = await messaging.initialize();
+    if (isAuthorized) {
+      messaging.subscribeToTopic(
+        ref.read(configurationProvider).calendarEventsMessagingTopic,
+      );
     }
   }
 }

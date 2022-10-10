@@ -8,5 +8,5 @@ class Configuration {
 
   final String restServerUrl = 'https://www.bassoadvogados.adv.br/api';
 
-  final String calendarNotificationChannelKey = 'calendar_events';
+  final String calendarEventsMessagingTopic = 'calendar_events';
 }

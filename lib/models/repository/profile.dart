@@ -26,13 +26,13 @@ class ProfileRepository {
     ref.refresh(appUserProvider);
     return ref
         .read(secureStorageProvider)
-        .write(SecureStorageKey.authToken.key, response);
+        .write(SecureStorageKey.authToken, response);
   }
 
   Future<void> logout() {
     return Future.wait([
       ref.read(restClientProvider).post('/logout'),
-      ref.read(secureStorageProvider).delete(SecureStorageKey.authToken.key),
+      ref.read(secureStorageProvider).delete(SecureStorageKey.authToken),
     ]).then((_) => ref.refresh(authTokenProvider));
   }
 

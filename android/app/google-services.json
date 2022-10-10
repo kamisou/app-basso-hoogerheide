@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "992219162954",
+    "project_id": "basso-hoogerheide",
+    "storage_bucket": "basso-hoogerheide.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:992219162954:android:271f371013bc88026d39b3",
+        "android_client_info": {
+          "package_name": "br.com.kamis.basso_hoogerheide"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "992219162954-4tboddr8qjsfhdh1029m4ub0sbvsq9er.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4lf-TDAHIdJGUV4b2CdILPZOy9crVAh0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "992219162954-4tboddr8qjsfhdh1029m4ub0sbvsq9er.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

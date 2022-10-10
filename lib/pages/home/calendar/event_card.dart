@@ -1,5 +1,5 @@
 import 'package:basso_hoogerheide/constants/configuration.dart';
-import 'package:basso_hoogerheide/interface/local_notifications.dart';
+import 'package:basso_hoogerheide/interface/notifications.dart';
 import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/input/calendar_event.dart';
 import 'package:basso_hoogerheide/models/repository/calendar.dart';
@@ -211,7 +211,7 @@ class _EventCardState extends ConsumerState<EventCard> {
   }
 
   void _onTapNotification(bool isEnabled) {
-    final notifications = ref.read(localNotificationsProvider);
+    final notifications = ref.read(notificationsProvider);
 
     final CalendarEvent event = widget.event;
 
@@ -221,8 +221,6 @@ class _EventCardState extends ConsumerState<EventCard> {
       notifications.scheduleNotification(
         LocalNotification(
           id: event.id,
-          channelKey:
-              ref.read(configurationProvider).calendarNotificationChannelKey,
           title: event.title,
           body: event.description,
         ),

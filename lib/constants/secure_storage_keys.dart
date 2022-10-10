@@ -3,5 +3,7 @@ class SecureStorageKey {
 
   final String key;
 
-  static const SecureStorageKey authToken = SecureStorageKey._('auth_token');
+  static const String authToken = 'auth_token';
+
+  static const String messagingToken = 'messaging_token';
 }

@@ -1,46 +1,32 @@
 import 'dart:developer';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:basso_hoogerheide/constants/configuration.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 typedef ScheduledNotifications = Map<int, LocalNotification>;
 
-final localNotificationsProvider = Provider.autoDispose(
-  (ref) => LocalNotifications(ref, channels: [
-    LocalNotificationChannel(
-      key: ref.read(configurationProvider).calendarNotificationChannelKey,
-      title: null,
-      description: null,
-    ),
-  ]),
-);
+final notificationsProvider = Provider.autoDispose(Notifications.new);
 
 final scheduledNotificationsProvider = FutureProvider.autoDispose(
-  (ref) => ref.read(localNotificationsProvider).getNotifications(),
+  (ref) => ref.read(notificationsProvider).getNotifications(),
 );
 
-class LocalNotifications {
-  LocalNotifications(
-    this.ref, {
-    required this.channels,
-  });
+class Notifications {
+  Notifications(this.ref);
 
   final Ref ref;
-
-  final List<LocalNotificationChannel> channels;
 
   final _notifications = AwesomeNotifications();
 
   Future<bool> initialize() => _notifications.initialize(
         null,
-        channels
-            .map((e) => NotificationChannel(
-                  channelKey: e.key,
-                  channelName: e.title,
-                  channelDescription: e.description,
-                ))
-            .toList(),
+        [
+          NotificationChannel(
+            channelKey: 'default',
+            channelName: null,
+            channelDescription: null,
+          ),
+        ],
       );
 
   Future<ScheduledNotifications> getNotifications() async {
@@ -49,7 +35,6 @@ class LocalNotifications {
         await _notifications.listScheduledNotifications().then((value) => value
             .map((e) => LocalNotification(
                   id: e.content!.id!,
-                  channelKey: e.content!.channelKey!,
                   title: e.content!.title,
                   body: e.content!.body,
                 ))
@@ -61,6 +46,16 @@ class LocalNotifications {
     return notifications;
   }
 
+  void showNotification(LocalNotification notification) =>
+      _notifications.createNotification(
+        content: NotificationContent(
+          id: notification.id,
+          channelKey: 'default',
+          title: notification.title,
+          body: notification.body,
+        ),
+      );
+
   Future<void> scheduleNotification(
     LocalNotification notification,
     DateTime scheduledDate,
@@ -70,7 +65,7 @@ class LocalNotifications {
         .createNotification(
           content: NotificationContent(
             id: notification.id,
-            channelKey: notification.channelKey,
+            channelKey: 'default',
             title: notification.title,
             body: notification.body,
           ),
@@ -95,31 +90,14 @@ class LocalNotifications {
   }
 }
 
-class LocalNotificationChannel {
-  const LocalNotificationChannel({
-    required this.key,
-    required this.title,
-    required this.description,
-  });
-
-  final String key;
-
-  final String? title;
-
-  final String? description;
-}
-
 class LocalNotification {
   const LocalNotification({
     required this.id,
-    required this.channelKey,
     required this.title,
     required this.body,
   });
 
   final int id;
-
-  final String channelKey;
 
   final String? title;
 
