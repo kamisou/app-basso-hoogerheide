@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:basso_hoogerheide/interface/notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -21,7 +23,7 @@ Future<void> onBackgroundMessage(RemoteMessage message) async {
   );
   switch (message.data['type']) {
     case 'event':
-      final Map<String, dynamic> event = message.data['event'];
+      final Map<String, dynamic> event = json.decode(message.data['event']);
       final String? action = message.data['action'];
       if (action == 'cancel' || action == 'edit') {
         await notifications.cancel(int.parse(event['id']));
@@ -72,7 +74,7 @@ class Messaging {
   Future<void> onMessage(RemoteMessage message) async {
     switch (message.data['type']) {
       case 'event':
-        final Map<String, dynamic> event = message.data['event'];
+        final Map<String, dynamic> event = json.decode(message.data['event']);
         final String? action = message.data['action'];
         if (action == 'cancel' || action == 'edit') {
           await ref
