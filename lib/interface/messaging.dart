@@ -26,12 +26,12 @@ Future<void> onBackgroundMessage(RemoteMessage message) async {
       final Map<String, dynamic> event = json.decode(message.data['event']);
       final String? action = message.data['action'];
       if (action == 'cancel' || action == 'edit') {
-        await notifications.cancel(int.parse(event['id']));
+        await notifications.cancel(event['id']);
       }
       if (action == 'add' || action == 'edit') {
         await notifications.createNotification(
           content: NotificationContent(
-            id: int.parse(event['id']),
+            id: event['id'],
             channelKey: 'default',
             title: event['title'],
             body: event['description'],
@@ -77,14 +77,12 @@ class Messaging {
         final Map<String, dynamic> event = json.decode(message.data['event']);
         final String? action = message.data['action'];
         if (action == 'cancel' || action == 'edit') {
-          await ref
-              .read(notificationsProvider)
-              .cancelNotification(int.parse(event['id']));
+          await ref.read(notificationsProvider).cancelNotification(event['id']);
         }
         if (action == 'add' || action == 'edit') {
           await ref.read(notificationsProvider).scheduleNotification(
                 LocalNotification(
-                  id: int.parse(event['id']),
+                  id: event['id'],
                   title: event['title'],
                   body: event['description'],
                 ),
