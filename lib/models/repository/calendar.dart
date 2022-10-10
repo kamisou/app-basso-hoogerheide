@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:basso_hoogerheide/extensions.dart';
 import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/input/calendar_event.dart';
@@ -47,7 +45,6 @@ class CalendarRepository {
   final Ref ref;
 
   Future<void> addEvent(NewCalendarEvent event) {
-    log(event.toJson().toString());
     return ref
         .read(restClientProvider)
         .post('/events/add', body: event.toJson())

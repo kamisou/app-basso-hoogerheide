@@ -1,9 +1,12 @@
 class AppUser {
   AppUser.fromJson(Map<String, dynamic> json)
-      : name = json['name'],
+      : id = json['id'],
+        name = json['name'],
         email = json['email'],
         division = json['funcao'],
         avatarUrl = json['foto'];
+
+  final int id;
 
   final String name;
 

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:basso_hoogerheide/interface/notifications.dart';
+import 'package:basso_hoogerheide/models/repository/profile.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -23,12 +24,14 @@ Future<void> onBackgroundMessage(RemoteMessage message) async {
   );
   switch (message.data['type']) {
     case 'event':
-      final Map<String, dynamic> event = json.decode(message.data['event']);
       final String? action = message.data['action'];
-      if (action == 'cancel' || action == 'edit') {
-        await notifications.cancel(event['id']);
-      }
-      if (action == 'add' || action == 'edit') {
+      if (action == 'add') return;
+
+      final Map<String, dynamic> event = json.decode(message.data['event']);
+
+      await notifications.cancel(event['id']);
+
+      if (action == 'edit') {
         await notifications.createNotification(
           content: NotificationContent(
             id: event['id'],
@@ -72,23 +75,37 @@ class Messaging {
   }
 
   Future<void> onMessage(RemoteMessage message) async {
+    final notifications = ref.read(notificationsProvider);
+
     switch (message.data['type']) {
       case 'event':
-        final Map<String, dynamic> event = json.decode(message.data['event']);
         final String? action = message.data['action'];
-        if (action == 'cancel' || action == 'edit') {
-          await ref.read(notificationsProvider).cancelNotification(event['id']);
+        if (action == 'add') break;
+
+        final Map<String, dynamic> event = json.decode(message.data['event']);
+
+        await notifications.cancelNotification(event['id']);
+        if (action == 'edit') {
+          await notifications.scheduleNotification(
+            LocalNotification(
+              id: event['id'],
+              title: event['title'],
+              body: event['description'],
+            ),
+            DateTime.parse(event['start']),
+          );
         }
-        if (action == 'add' || action == 'edit') {
-          await ref.read(notificationsProvider).scheduleNotification(
-                LocalNotification(
-                  id: event['id'],
-                  title: event['title'],
-                  body: event['description'],
-                ),
-                DateTime.parse(event['start']),
-              );
-        }
+    }
+
+    if (ref.read(appUserProvider).value!.id !=
+        int.parse(message.data['author_id'])) {
+      notifications.showNotification(
+        LocalNotification(
+          id: message.hashCode,
+          title: message.notification?.title,
+          body: message.notification?.body,
+        ),
+      );
     }
   }
 
