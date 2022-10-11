@@ -22,10 +22,11 @@ class ModelsRepository {
           .map(ModelCategory.fromJson)
           .toList());
 
-  Future<void> deleteModel(int categoryId, int fileId) => ref
-      .read(restClientProvider)
-      .delete('/models/categories/$categoryId/files/$fileId/delete')
-      .then((_) => ref.refresh(modelsRepositoryProvider));
+  Future<void> deleteModel(int categoryId, String fileName) =>
+      ref.read(restClientProvider).delete(
+        '/models/categories/files/delete',
+        body: {'category_id': categoryId, 'file_name': fileName},
+      ).then((_) => ref.refresh(modelsRepositoryProvider));
 
   Future<void> uploadModelFile(int categoryId, File file) => ref
       .read(restClientProvider)

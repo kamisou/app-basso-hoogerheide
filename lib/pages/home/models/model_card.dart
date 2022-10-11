@@ -109,24 +109,12 @@ class _ModelCardState extends State<ModelCard> {
   Widget _document(BuildContext context, DownloadableFile file) {
     return Row(
       children: [
-        SizedBox(
-          width: MediaQuery.of(context).size.width * .2,
-          child: AspectRatio(
-            aspectRatio: 0.7071,
-            child: ShimmeringImage(
-              url: file.previewUrl,
-              imageFit: BoxFit.cover,
-              errorBuilder: (context) => const SizedBox.shrink(),
-            ),
-          ),
-        ),
-        const SizedBox(width: 16),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                file.title,
+                file.name,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(

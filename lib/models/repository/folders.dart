@@ -64,10 +64,11 @@ class FoldersRepository {
         .then((_) => ref.refresh(foldersProvider));
   }
 
-  Future<void> deleteFolderFile(int folderId, int fileId) => ref
-      .read(restClientProvider)
-      .delete('/folders/$folderId/files/$fileId/delete')
-      .then((_) => ref.refresh(foldersProvider));
+  Future<void> deleteFolderFile(int folderId, String fileName) =>
+      ref.read(restClientProvider).delete('/folders/files/delete', body: {
+        'folder_id': folderId,
+        'file_name': fileName,
+      }).then((_) => ref.refresh(foldersProvider));
 
   Future<Map<String, dynamic>> getNewFolderFormData() => ref
       .read(restClientProvider)

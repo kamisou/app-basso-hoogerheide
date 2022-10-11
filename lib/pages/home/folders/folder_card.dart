@@ -209,7 +209,7 @@ class _FolderCardState extends State<FolderCard> {
               children: [
                 Expanded(
                   child: Text(
-                    e.title,
+                    e.name,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.titleMedium,
