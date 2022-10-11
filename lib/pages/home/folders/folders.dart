@@ -1,5 +1,4 @@
 import 'package:basso_hoogerheide/models/input/folder/folder.dart';
-import 'package:basso_hoogerheide/models/repository/contacts.dart';
 import 'package:basso_hoogerheide/models/repository/folders.dart';
 import 'package:basso_hoogerheide/pages/home/folders/folder_card.dart';
 import 'package:basso_hoogerheide/widgets/collection.dart';
@@ -37,16 +36,19 @@ class _FoldersPageState extends ConsumerState<FoldersPage>
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: SearchBar(
-              hintText: 'N° da pasta, cliente, procurador, CPF...',
-              onChanged: (value) =>
-                  ref.read(contactsFilterProvider.notifier).state = value,
+            child: GestureDetector(
+              onTap: () => Navigator.pushNamed(context, '/folderSearch'),
+              child: const AbsorbPointer(
+                child: SearchBar(
+                  hintText: 'N° da pasta, cliente, procurador, CPF...',
+                ),
+              ),
             ),
           ),
           const SizedBox(height: 32),
           Expanded(
             child: AsyncCollection<Folder>(
-              asyncCollection: ref.watch(filteredFoldersProvider),
+              asyncCollection: ref.watch(foldersProvider),
               itemBuilder: (_, folder) => FolderCard(
                 folder: folder,
                 onDeleteFolderFile: (file) => ref
@@ -74,7 +76,7 @@ class _FoldersPageState extends ConsumerState<FoldersPage>
                 final folders = ref.read(foldersProvider).value!;
                 final newFolders = await ref
                     .read(foldersRepositoryProvider)
-                    .getFolders(folders.last.id);
+                    .getFolders(afterPage: folders.last.id);
                 folders.addAll(newFolders);
                 finishFetching();
               },

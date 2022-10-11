@@ -4,26 +4,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final foldersRepositoryProvider = Provider.autoDispose(FoldersRepository.new);
 
-final foldersFilterProvider = StateProvider.autoDispose<String?>((ref) => null);
-
 final foldersProvider = FutureProvider.autoDispose(
   (ref) => ref.read(foldersRepositoryProvider).getFolders(),
 );
 
-final filteredFoldersProvider = FutureProvider.autoDispose(
-  (ref) async {
-    final String? filter = ref.watch(foldersFilterProvider);
-    final List<Folder> folders = await ref.watch(foldersProvider.future);
-    if (filter?.isNotEmpty ?? false) {
-      final regex = RegExp(filter!, caseSensitive: false);
-      return folders
-          .where(
-            (e) => e.name.contains(regex) || e.id.toString().contains(regex),
-          )
-          .toList();
-    }
-    return folders;
-  },
+final searchTermProvider = StateProvider.autoDispose((ref) => '');
+
+final searchFoldersProvider = FutureProvider.autoDispose(
+  (ref) => ref
+      .read(foldersRepositoryProvider)
+      .getFolders(searchTerm: ref.watch(searchTermProvider)),
 );
 
 final annotationOptionsProvider = FutureProvider.autoDispose(
@@ -37,10 +27,12 @@ class FoldersRepository {
 
   final Ref ref;
 
-  Future<List<Folder>> getFolders([int? afterPage]) => ref
+  Future<List<Folder>> getFolders({int? afterPage, String? searchTerm}) => ref
       .read(restClientProvider)
       .get(
-        '/folders?page_size=$_foldersPageSize${afterPage != null ? '&page_after=$afterPage' : ''}',
+        '/folders?page_size=$_foldersPageSize'
+        '${afterPage != null ? '&page_after=$afterPage' : ''}'
+        '${searchTerm != null ? '&q=$searchTerm' : ''}',
       )
       .then((value) => (value['folders'] as List? ?? [])
           .cast<Map<String, dynamic>>()

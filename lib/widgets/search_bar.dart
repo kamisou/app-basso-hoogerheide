@@ -6,6 +6,8 @@ class SearchBar extends StatefulWidget {
     this.controller,
     this.hintText,
     this.onChanged,
+    this.onEditingComplete,
+    this.autofocus = false,
   });
 
   final TextEditingController? controller;
@@ -13,6 +15,10 @@ class SearchBar extends StatefulWidget {
   final String? hintText;
 
   final void Function(String)? onChanged;
+
+  final VoidCallback? onEditingComplete;
+
+  final bool autofocus;
 
   @override
   State<SearchBar> createState() => _SearchBarState();
@@ -32,6 +38,7 @@ class _SearchBarState extends State<SearchBar> {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      autofocus: widget.autofocus,
       controller: _controller,
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.symmetric(
@@ -56,6 +63,7 @@ class _SearchBarState extends State<SearchBar> {
       ),
       focusNode: _focusNode,
       onChanged: widget.onChanged,
+      onEditingComplete: widget.onEditingComplete,
     );
   }
 }
