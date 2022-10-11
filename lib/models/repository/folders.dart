@@ -20,6 +20,10 @@ final annotationOptionsProvider = FutureProvider.autoDispose(
   (ref) => ref.read(foldersRepositoryProvider).getNewAnnotationOptions(),
 );
 
+final folderFormData = FutureProvider.autoDispose(
+  (ref) => ref.read(foldersRepositoryProvider).getNewFolderFormData(),
+);
+
 class FoldersRepository {
   static const int _foldersPageSize = 20;
 

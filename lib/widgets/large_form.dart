@@ -12,9 +12,19 @@ class LargeForm extends StatefulWidget {
     required this.filePicker,
     this.sectionTitleStyle,
     this.onSaved,
-  });
+  }) : json = null;
 
-  final List<LargeFormSection> sections;
+  const LargeForm.fromJson({
+    super.key,
+    required this.json,
+    required this.filePicker,
+    this.sectionTitleStyle,
+    this.onSaved,
+  }) : sections = null;
+
+  final List<LargeFormSection>? sections;
+
+  final Map<String, dynamic>? json;
 
   final FilePicker filePicker;
 
@@ -27,19 +37,100 @@ class LargeForm extends StatefulWidget {
 }
 
 class _LargeFormState extends State<LargeForm> {
+  late List<LargeFormSection> _sections;
+
   Map<String, Map<String, dynamic>> _data = {};
 
   @override
   void initState() {
     super.initState();
+    if (widget.sections != null) {
+      _parseSections(widget.sections!);
+    } else {
+      _parseJson(widget.json!);
+    }
+  }
+
+  void _parseSections(List<LargeFormSection> sections) {
     _data = Map.fromEntries(
-      widget.sections.map(
+      sections.map(
         (e) => MapEntry(
           e.key,
           {for (final field in e.fields) field.key: null},
         ),
       ),
     );
+    _sections = sections;
+  }
+
+  void _parseJson(Map<String, dynamic> json) {
+    final List<Map<String, dynamic>> sections =
+        (json['sections'] as List? ?? []).cast<Map<String, dynamic>>();
+    _data = Map.fromEntries(
+      sections.cast<Map<String, dynamic>>().map(
+        (section) {
+          final List<Map<String, dynamic>> fields =
+              (section['fields'] as List? ?? []).cast<Map<String, dynamic>>();
+          return MapEntry(
+            section['key'],
+            {for (final field in fields) field['key']: null},
+          );
+        },
+      ),
+    );
+    _sections = sections.map((section) {
+      final List<Map<String, dynamic>> fields =
+          (section['fields'] as List? ?? []).cast<Map<String, dynamic>>();
+      return LargeFormSection(
+        key: section['key'],
+        title: section['title'],
+        fields: fields.map((field) {
+          final IconData icon = IconData(
+            int.parse(field['icon'], radix: 16),
+            fontFamily: 'MaterialIcons',
+          );
+          final bool required = field['required'] ?? true;
+          switch (field['type']) {
+            case 'options':
+              return LargeFormOptionsField(
+                key: field['key'],
+                title: field['title'],
+                icon: icon,
+                required: required,
+                options: (field['options'] as List? ?? []).cast<String>(),
+              );
+            case 'date':
+              return LargeFormDateField(
+                key: field['key'],
+                title: field['title'],
+                icon: icon,
+                required: required,
+                firstDate: DateTime.parse(field['first_date']),
+                lastDate: DateTime.parse(field['last_date']),
+              );
+            case 'file':
+              return LargeFormFileField(
+                key: field['key'],
+                title: field['title'],
+                required: field['required'],
+                multiple: field['multiple'] ?? false,
+              );
+          }
+          return LargeFormTextField(
+            key: field['key'],
+            title: field['title'],
+            icon: icon,
+            mask: field['mask'] is List
+                ? (field['mask'] as List? ?? []).cast<String>()
+                : field['mask'],
+            required: required,
+            type: TextInputType.values.firstWhere(
+              (e) => e.toJson()['name'] == 'TextInputType.${field['type']}',
+            ),
+          );
+        }).toList(),
+      );
+    }).toList();
   }
 
   @override
@@ -50,7 +141,7 @@ class _LargeFormState extends State<LargeForm> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              ...widget.sections.map(
+              ..._sections.map(
                 (section) => Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

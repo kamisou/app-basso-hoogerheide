@@ -23,14 +23,7 @@ class _FoldersPageState extends ConsumerState<FoldersPage>
       floatingActionButton: FloatingActionButton(
         heroTag: 'folder_fab',
         child: const Icon(Icons.person_add),
-        onPressed: () => ref
-            .read(foldersRepositoryProvider)
-            .getNewFolderFormData()
-            .then((data) => Navigator.pushNamed(
-                  context,
-                  '/newFolder',
-                  arguments: {'form_data': data},
-                )),
+        onPressed: () => Navigator.pushNamed(context, '/newFolder'),
       ),
       body: Column(
         children: [
