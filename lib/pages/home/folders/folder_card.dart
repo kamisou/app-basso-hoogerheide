@@ -6,7 +6,6 @@ import 'package:basso_hoogerheide/models/input/folder/folder.dart';
 import 'package:basso_hoogerheide/models/input/folder/process_info.dart';
 import 'package:basso_hoogerheide/widgets/key_value_text.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class FolderCard extends StatefulWidget {

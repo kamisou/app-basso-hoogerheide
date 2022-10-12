@@ -1,6 +1,5 @@
 import 'package:basso_hoogerheide/models/input/downloadable_file.dart';
 import 'package:basso_hoogerheide/models/input/model_category.dart';
-import 'package:basso_hoogerheide/widgets/shimmering_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
