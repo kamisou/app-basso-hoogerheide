@@ -83,10 +83,11 @@ class App extends ConsumerWidget {
   Future<bool> _validateToken(WidgetRef ref) async {
     final String? authToken =
         await ref.read(secureStorageProvider).read(SecureStorageKey.authToken);
+    if (authToken == null) return false;
     ref.read(authTokenProvider.notifier).state = authToken;
     try {
       await ref.read(appUserProvider.future);
-      return authToken != null;
+      return true;
     } on RestException {
       return false;
     }

@@ -6,6 +6,8 @@ import 'package:basso_hoogerheide/models/input/folder/folder.dart';
 import 'package:basso_hoogerheide/models/input/folder/process_info.dart';
 import 'package:basso_hoogerheide/widgets/key_value_text.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class FolderCard extends StatefulWidget {
   const FolderCard({
@@ -203,29 +205,28 @@ class _FolderCardState extends State<FolderCard> {
           ),
         _cardSection(context, Icons.file_present_outlined, 'Arquivos'),
         ...widget.folder.files.map(
-          (e) => Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    e.name,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.titleMedium,
+          (e) => InkWell(
+            onTap: () =>
+                launchUrlString(e.url, mode: LaunchMode.externalApplication),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      e.name,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
                   ),
-                ),
-                const SizedBox(width: 16),
-                GestureDetector(
-                  onTap: widget.onDeleteFolderFile != null
-                      ? () => widget.onDeleteFolderFile!(e)
-                      : null,
-                  child: Icon(
-                    Icons.delete_outlined,
-                    color: Theme.of(context).colorScheme.error,
+                  const SizedBox(width: 16),
+                  Icon(
+                    Icons.open_in_new_outlined,
+                    color: Theme.of(context).disabledColor,
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
