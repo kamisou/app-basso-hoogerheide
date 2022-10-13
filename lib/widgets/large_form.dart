@@ -6,25 +6,15 @@ import 'package:easy_mask/easy_mask.dart';
 import 'package:flutter/material.dart';
 
 class LargeForm extends StatefulWidget {
-  const LargeForm({
-    super.key,
-    required this.sections,
-    required this.filePicker,
-    this.sectionTitleStyle,
-    this.onSaved,
-  }) : json = null;
-
   const LargeForm.fromJson({
     super.key,
     required this.json,
     required this.filePicker,
     this.sectionTitleStyle,
     this.onSaved,
-  }) : sections = null;
+  });
 
-  final List<LargeFormSection>? sections;
-
-  final Map<String, dynamic>? json;
+  final Map<String, dynamic> json;
 
   final FilePicker filePicker;
 
@@ -39,43 +29,22 @@ class LargeForm extends StatefulWidget {
 class _LargeFormState extends State<LargeForm> {
   late List<LargeFormSection> _sections;
 
-  Map<String, Map<String, dynamic>> _data = {};
+  Map<String, dynamic> _data = {};
 
   @override
   void initState() {
     super.initState();
-    if (widget.sections != null) {
-      _parseSections(widget.sections!);
-    } else {
-      _parseJson(widget.json!);
-    }
-  }
-
-  void _parseSections(List<LargeFormSection> sections) {
-    _data = Map.fromEntries(
-      sections.map(
-        (e) => MapEntry(
-          e.key,
-          {for (final field in e.fields) field.key: null},
-        ),
-      ),
-    );
-    _sections = sections;
+    _parseJson(widget.json);
   }
 
   void _parseJson(Map<String, dynamic> json) {
     final List<Map<String, dynamic>> sections =
         (json['sections'] as List? ?? []).cast<Map<String, dynamic>>();
     _data = Map.fromEntries(
-      sections.cast<Map<String, dynamic>>().map(
-        (section) {
-          final List<Map<String, dynamic>> fields =
-              (section['fields'] as List? ?? []).cast<Map<String, dynamic>>();
-          return MapEntry(
-            section['key'],
-            {for (final field in fields) field['key']: null},
-          );
-        },
+      sections.expand(
+        (section) => (section['fields'] as List? ?? []).map(
+          (field) => MapEntry(field['key'], null),
+        ),
       ),
     );
     _sections = sections.map((section) {
@@ -198,8 +167,7 @@ class _LargeFormState extends State<LargeForm> {
           firstDate: (field as LargeFormDateField).firstDate,
           lastDate: field.lastDate,
           labelText: _fieldLabel(field),
-          onChanged: (value) =>
-              _data[section.key]![field.key] = value?.toIso8601String(),
+          onChanged: (value) => _data[field.key] = value?.toIso8601String(),
           validator: (value) => _validator(field.required, value),
         );
       case LargeFormOptionsField:
@@ -207,8 +175,7 @@ class _LargeFormState extends State<LargeForm> {
           options: (field as LargeFormOptionsField).options,
           icon: field.icon,
           label: _fieldLabel(field),
-          onChanged: (value) =>
-              _data[section.key]![field.key] = value?.toString(),
+          onChanged: (value) => _data[field.key] = value?.toString(),
           validator: (value) => _validator(field.required, value),
           textInputAction: TextInputAction.next,
         );
@@ -218,7 +185,7 @@ class _LargeFormState extends State<LargeForm> {
           hintText: 'Anexar arquivos',
           icon: Icons.attach_file_outlined,
           allowMultiple: true,
-          onDocumentAdded: (files) => _data[section.key]![field.key] = files
+          onDocumentAdded: (files) => _data[field.key] = files
               .map((e) => {
                     'title': e.path.split('/').last,
                     'path': e.path,
@@ -235,8 +202,7 @@ class _LargeFormState extends State<LargeForm> {
           inputFormatters: (field as LargeFormTextField).mask != null
               ? [TextInputMask(mask: field.mask)]
               : null,
-          onChanged: (value) =>
-              _data[section.key]![field.key] = value.isEmpty ? null : value,
+          onChanged: (value) => _data[field.key] = value.isEmpty ? null : value,
           validator: (value) => _validator(field.required, value),
           textInputAction: TextInputAction.next,
         );
