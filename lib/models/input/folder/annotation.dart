@@ -4,11 +4,11 @@ class Annotation {
   Annotation.fromJson(Map<String, dynamic> json)
       : description = json['description'],
         author = AppUser.fromJson(json['author']),
-        timestamp = DateTime.parse(json['timestamp']);
+        createdAt = DateTime.parse(json['created_at']);
 
   final String description;
 
   final AppUser author;
 
-  final DateTime timestamp;
+  final DateTime createdAt;
 }

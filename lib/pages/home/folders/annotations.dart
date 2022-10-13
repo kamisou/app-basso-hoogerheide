@@ -117,7 +117,7 @@ class AnnotationsPage extends ConsumerWidget {
                               ),
                               Text(
                                 DateFormat('dd/MM/yyyy HH:mm')
-                                    .format(annotation.timestamp),
+                                    .format(annotation.createdAt),
                                 style: Theme.of(context).textTheme.labelMedium,
                               ),
                             ],
