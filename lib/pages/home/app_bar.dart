@@ -69,12 +69,8 @@ class _HomeAppBarState extends ConsumerState<HomeAppBar> {
                 ),
                 error: (_, __) => GestureDetector(
                   onTap: () {
-                    Navigator.pushNamedAndRemoveUntil(
-                      context,
-                      '/login',
-                      (_) => false,
-                    );
                     ref.read(profileRepository).logout();
+                    Navigator.pushReplacementNamed(context, '/login');
                   },
                   child: Container(
                     alignment: Alignment.center,
@@ -153,12 +149,8 @@ class _HomeAppBarState extends ConsumerState<HomeAppBar> {
           const SizedBox(width: 32),
           GestureDetector(
             onTap: () {
-              Navigator.pushNamedAndRemoveUntil(
-                context,
-                '/login',
-                (_) => false,
-              );
               ref.read(profileRepository).logout();
+              Navigator.pushReplacementNamed(context, '/login');
             },
             child: const Icon(Icons.exit_to_app),
           ),
