@@ -29,12 +29,10 @@ class ProfileRepository {
         .write(SecureStorageKey.authToken, response);
   }
 
-  Future<void> logout() {
-    return Future.wait([
-      ref.read(restClientProvider).post('/logout'),
-      ref.read(secureStorageProvider).delete(SecureStorageKey.authToken),
-    ]).then((_) => ref.refresh(authTokenProvider));
-  }
+  Future<void> logout() => Future.wait([
+        ref.read(restClientProvider).post('/logout'),
+        ref.read(secureStorageProvider).delete(SecureStorageKey.authToken),
+      ]).then((_) => ref.refresh(authTokenProvider));
 
   // Future<void> recoverPassword(Map<String, dynamic> body) =>
   //     ref.read(restClientProvider).put('/profile/recover_password', body: body);
