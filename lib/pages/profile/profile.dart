@@ -154,8 +154,12 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
           Center(
             child: GestureDetector(
               onTap: () {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  '/login',
+                  (_) => false,
+                );
                 ref.read(profileRepository).logout();
-                Navigator.pushReplacementNamed(context, '/login');
               },
               child: Text(
                 'Sair',

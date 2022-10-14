@@ -86,7 +86,7 @@ class App extends ConsumerWidget {
     if (authToken == null) return false;
     ref.read(authTokenProvider.notifier).state = authToken;
     try {
-      await ref.read(appUserProvider.future);
+      await ref.watch(appUserProvider.future);
       return true;
     } on RestException {
       return false;

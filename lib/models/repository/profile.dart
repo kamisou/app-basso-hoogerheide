@@ -8,7 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final profileRepository = Provider.autoDispose(ProfileRepository.new);
 
-final appUserProvider = FutureProvider(
+final appUserProvider = FutureProvider.autoDispose(
   (ref) => ref.read(profileRepository).getMyUser(),
 );
 
@@ -23,7 +23,6 @@ class ProfileRepository {
         .post('/login', body: body)
         .then((value) => value['token']);
     ref.read(authTokenProvider.notifier).state = response;
-    ref.refresh(appUserProvider);
     return ref
         .read(secureStorageProvider)
         .write(SecureStorageKey.authToken, response);
