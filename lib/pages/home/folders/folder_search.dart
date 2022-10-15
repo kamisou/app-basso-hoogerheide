@@ -69,7 +69,7 @@ class _FolderSearchPageState extends ConsumerState<FolderSearchPage> {
                   padding: const EdgeInsets.all(20),
                   child: const CircularProgressIndicator(),
                 ),
-                onReachingEnd: (finishFetching) async {
+                onReachingEnd: (finishFetching, reachEnd) async {
                   final folders = ref.read(searchFoldersProvider).value!;
                   final newFolders =
                       await ref.read(foldersRepositoryProvider).getFolders(
@@ -78,6 +78,7 @@ class _FolderSearchPageState extends ConsumerState<FolderSearchPage> {
                           );
                   folders.addAll(newFolders);
                   finishFetching();
+                  if (newFolders.isEmpty) reachEnd();
                 },
               ),
             ),

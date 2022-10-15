@@ -24,7 +24,10 @@ class AsyncCollection<T> extends StatefulWidget {
 
   final Widget emptyWidget;
 
-  final Future<void> Function(VoidCallback finishFetching)? onReachingEnd;
+  final Future<void> Function(
+    VoidCallback finishFetching,
+    VoidCallback reachEnd,
+  )? onReachingEnd;
 
   final Future<void> Function()? onRefresh;
 
@@ -41,6 +44,8 @@ class _AsyncCollectionState<T> extends State<AsyncCollection<T>> {
 
   bool _fetching = false;
 
+  bool _reachedEnd = false;
+
   @override
   void initState() {
     super.initState();
@@ -50,21 +55,28 @@ class _AsyncCollectionState<T> extends State<AsyncCollection<T>> {
   void _onControllerChange() {
     if (_controller.hasClients &&
         _controller.position.extentAfter <= _extentAfterEndTrigger &&
-        !_fetching) {
+        !_fetching &&
+        !_reachedEnd) {
       setState(() => _fetching = true);
-      widget.onReachingEnd?.call(_finishFetching);
+      widget.onReachingEnd?.call(_finishFetching, _reachEnd);
     }
   }
 
   void _finishFetching() => setState(() => _fetching = false);
 
+  void _reachEnd() => _reachedEnd = true;
+
   @override
   Widget build(BuildContext context) {
-    final refresh = widget.onRefresh ?? () async {};
+    Future<void> refresh() {
+      _fetching = false;
+      _reachedEnd = false;
+      return widget.onRefresh!.call();
+    }
+
     return widget.asyncCollection.when(
-      data: (data) => RefreshIndicator(
-        onRefresh: refresh,
-        child: data.isNotEmpty
+      data: (data) {
+        final Widget child = data.isNotEmpty
             ? ListView.separated(
                 controller: _controller,
                 itemCount: _fetching ? data.length + 1 : data.length,
@@ -92,15 +104,20 @@ class _AsyncCollectionState<T> extends State<AsyncCollection<T>> {
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(children: [widget.emptyWidget]),
                 ),
-              ),
-      ),
-      error: (error, _) => RefreshIndicator(
-        onRefresh: refresh,
-        child: SingleChildScrollView(
+              );
+        return widget.onRefresh != null
+            ? RefreshIndicator(onRefresh: refresh, child: child)
+            : child;
+      },
+      error: (error, _) {
+        final Widget child = SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           child: Column(children: [widget.errorWidget(error)]),
-        ),
-      ),
+        );
+        return widget.onRefresh != null
+            ? RefreshIndicator(onRefresh: refresh, child: child)
+            : child;
+      },
       loading: () => widget.loadingWidget,
     );
   }
