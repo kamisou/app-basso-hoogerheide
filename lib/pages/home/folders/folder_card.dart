@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:basso_hoogerheide/constants/theme_data.dart';
-import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/input/downloadable_file.dart';
 import 'package:basso_hoogerheide/models/input/folder/address_info.dart';
 import 'package:basso_hoogerheide/models/input/folder/contact_info.dart';
@@ -10,9 +7,6 @@ import 'package:basso_hoogerheide/models/input/folder/process_info.dart';
 import 'package:basso_hoogerheide/widgets/key_value_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 class FolderCard extends ConsumerStatefulWidget {
   const FolderCard({
@@ -211,8 +205,7 @@ class _FolderCardState extends ConsumerState<FolderCard> {
         _cardSection(context, Icons.file_present_outlined, 'Arquivos'),
         ...widget.folder.files.map(
           (e) => InkWell(
-            onTap: () =>
-                launchUrlString(e.url, mode: LaunchMode.externalApplication),
+            onTap: () {},
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: Row(
