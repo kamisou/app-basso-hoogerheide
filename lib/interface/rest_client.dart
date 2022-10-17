@@ -79,7 +79,7 @@ class RestClient {
         headers: headers,
       );
 
-  Future<dynamic> uploadImage(
+  Future<dynamic> upload(
     String method,
     String endpoint, {
     required String field,
