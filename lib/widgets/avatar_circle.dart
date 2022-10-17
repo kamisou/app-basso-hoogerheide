@@ -39,6 +39,8 @@ class AvatarCircle extends StatelessWidget {
               width: radius,
               child: ShimmeringImage(
                 url: avatarUrl,
+                height: radius,
+                width: radius,
                 errorBuilder: (context) => Text(
                   initials,
                   style: style ??

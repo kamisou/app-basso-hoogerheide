@@ -91,7 +91,8 @@ class AnnotationsPage extends ConsumerWidget {
                     Row(
                       children: [
                         AvatarCircle(
-                          initials: 'JM',
+                          initials: annotation.author.initials,
+                          avatarUrl: annotation.author.avatarUrl,
                           backgroundColor: Theme.of(context).disabledColor,
                           radius: 24,
                           style: Theme.of(context).textTheme.labelMedium,

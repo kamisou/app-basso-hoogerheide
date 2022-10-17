@@ -161,23 +161,23 @@ class _FolderCardState extends State<FolderCard> {
           '${address.city} - ${address.state}',
           style: Theme.of(context).textTheme.titleMedium,
         ),
-        if (address.cep != null)
+        if (address.cep?.isNotEmpty ?? false)
           Text(
             address.cep!,
             style: Theme.of(context).textTheme.titleMedium,
           ),
         _cardSection(context, Icons.phone_outlined, 'Contato'),
-        if (contact.email != null)
+        if (contact.email?.isNotEmpty ?? false)
           KeyValueText(
             keyString: 'E-mail',
             valueString: contact.email!,
           ),
-        if (contact.telephone != null)
+        if (contact.telephone?.isNotEmpty ?? false)
           KeyValueText(
             keyString: 'Telefone',
             valueString: contact.telephone!,
           ),
-        if (contact.cellphone != null)
+        if (contact.cellphone?.isNotEmpty ?? false)
           KeyValueText(
             keyString: 'Celular',
             valueString: contact.cellphone!,
@@ -187,17 +187,17 @@ class _FolderCardState extends State<FolderCard> {
           keyString: 'Natureza',
           valueString: process.nature,
         ),
-        if (process.number != null)
+        if (process.number?.isNotEmpty ?? false)
           KeyValueText(
             keyString: 'N° do Processo',
             valueString: process.number!.toString(),
           ),
-        if (process.district != null)
+        if (process.district?.isNotEmpty ?? false)
           KeyValueText(
             keyString: 'Comarca',
             valueString: process.district!.toString(),
           ),
-        if (process.division != null)
+        if (process.division?.isNotEmpty ?? false)
           KeyValueText(
             keyString: 'Vara',
             valueString: process.division!.toString(),

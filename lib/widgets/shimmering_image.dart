@@ -6,7 +6,9 @@ class ShimmeringImage extends StatelessWidget {
     super.key,
     required this.errorBuilder,
     this.url,
-    this.imageFit,
+    this.width,
+    this.height,
+    this.imageFit = BoxFit.cover,
   });
 
   final String? url;
@@ -15,22 +17,30 @@ class ShimmeringImage extends StatelessWidget {
 
   final WidgetBuilder errorBuilder;
 
+  final double? width, height;
+
   @override
   Widget build(BuildContext context) {
     return url?.isNotEmpty ?? false
         ? Image.network(
             url!,
             fit: imageFit,
+            height: height,
+            width: width,
             errorBuilder: (context, _, __) => errorBuilder(context),
-            loadingBuilder: (_, child, loadingProgress) {
-              if (loadingProgress == null) {
+            frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+              if (frame != null) {
                 return child;
               }
               return Shimmer.fromColors(
                 baseColor: Theme.of(context).colorScheme.surface,
                 highlightColor:
                     Theme.of(context).inputDecorationTheme.fillColor!,
-                child: child,
+                child: Container(
+                  width: width ?? double.infinity,
+                  height: height ?? double.infinity,
+                  color: Theme.of(context).colorScheme.surface,
+                ),
               );
             },
           )

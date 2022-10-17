@@ -49,6 +49,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                               width: 100,
                               child: ShimmeringImage(
                                 url: data.avatarUrl,
+                                height: 100,
+                                width: 100,
                                 errorBuilder: (context) => Text(
                                   data.initials,
                                   style: Theme.of(context)
