@@ -113,7 +113,7 @@ class _ModelCardState extends State<ModelCard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                file.filename,
+                file.name,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(

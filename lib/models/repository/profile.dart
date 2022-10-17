@@ -49,7 +49,7 @@ class ProfileRepository {
 
   Future<void> changeAvatar(File file) => ref
       .read(restClientProvider)
-      .upload('POST', '/profile/change_avatar',
+      .uploadImage('POST', '/profile/change_avatar',
           field: 'new_avatar', file: file)
       .then((_) => ref.refresh(appUserProvider));
 

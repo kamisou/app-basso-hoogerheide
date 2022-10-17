@@ -46,7 +46,7 @@ class _FoldersPageState extends ConsumerState<FoldersPage>
                 folder: folder,
                 onDeleteFolderFile: (file) => ref
                     .read(foldersRepositoryProvider)
-                    .deleteFolderFile(folder.id, file.filename),
+                    .deleteFolderFile(folder.id, file.name),
               ),
               errorWidget: (_) => const EmptyCard(
                 icon: Icons.error,
