@@ -1,10 +1,10 @@
 class DownloadableFile {
   DownloadableFile.fromJson(Map<String, dynamic> json)
-      : name = json['name'],
+      : filename = json['filename'],
         url = json['url'],
         uploadTimestamp = DateTime.parse(json['upload_timestamp']);
 
-  final String name;
+  final String filename;
 
   final String url;
 

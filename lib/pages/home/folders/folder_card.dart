@@ -1,14 +1,20 @@
+import 'dart:io';
+
 import 'package:basso_hoogerheide/constants/theme_data.dart';
+import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/input/downloadable_file.dart';
 import 'package:basso_hoogerheide/models/input/folder/address_info.dart';
 import 'package:basso_hoogerheide/models/input/folder/contact_info.dart';
 import 'package:basso_hoogerheide/models/input/folder/folder.dart';
 import 'package:basso_hoogerheide/models/input/folder/process_info.dart';
+import 'package:basso_hoogerheide/widgets/error_snackbar.dart';
 import 'package:basso_hoogerheide/widgets/key_value_text.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher_string.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class FolderCard extends StatefulWidget {
+class FolderCard extends ConsumerStatefulWidget {
   const FolderCard({
     super.key,
     required this.folder,
@@ -20,10 +26,10 @@ class FolderCard extends StatefulWidget {
   final Folder folder;
 
   @override
-  State<FolderCard> createState() => _FolderCardState();
+  ConsumerState<FolderCard> createState() => _FolderCardState();
 }
 
-class _FolderCardState extends State<FolderCard> {
+class _FolderCardState extends ConsumerState<FolderCard> {
   bool _expanded = false;
 
   @override
@@ -161,23 +167,23 @@ class _FolderCardState extends State<FolderCard> {
           '${address.city} - ${address.state}',
           style: Theme.of(context).textTheme.titleMedium,
         ),
-        if (address.cep != null)
+        if (address.cep?.isNotEmpty ?? false)
           Text(
             address.cep!,
             style: Theme.of(context).textTheme.titleMedium,
           ),
         _cardSection(context, Icons.phone_outlined, 'Contato'),
-        if (contact.email != null)
+        if (contact.email?.isNotEmpty ?? false)
           KeyValueText(
             keyString: 'E-mail',
             valueString: contact.email!,
           ),
-        if (contact.telephone != null)
+        if (contact.telephone?.isNotEmpty ?? false)
           KeyValueText(
             keyString: 'Telefone',
             valueString: contact.telephone!,
           ),
-        if (contact.cellphone != null)
+        if (contact.cellphone?.isNotEmpty ?? false)
           KeyValueText(
             keyString: 'Celular',
             valueString: contact.cellphone!,
@@ -187,17 +193,17 @@ class _FolderCardState extends State<FolderCard> {
           keyString: 'Natureza',
           valueString: process.nature,
         ),
-        if (process.number != null)
+        if (process.number?.isNotEmpty ?? false)
           KeyValueText(
             keyString: 'N° do Processo',
             valueString: process.number!.toString(),
           ),
-        if (process.district != null)
+        if (process.district?.isNotEmpty ?? false)
           KeyValueText(
             keyString: 'Comarca',
             valueString: process.district!.toString(),
           ),
-        if (process.division != null)
+        if (process.division?.isNotEmpty ?? false)
           KeyValueText(
             keyString: 'Vara',
             valueString: process.division!.toString(),
@@ -205,15 +211,27 @@ class _FolderCardState extends State<FolderCard> {
         _cardSection(context, Icons.file_present_outlined, 'Arquivos'),
         ...widget.folder.files.map(
           (e) => InkWell(
-            onTap: () =>
-                launchUrlString(e.url, mode: LaunchMode.externalApplication),
+            onTap: () async {
+              try {
+                final Directory directory =
+                    await getApplicationDocumentsDirectory();
+                final File file = await ref
+                    .read(restClientProvider)
+                    .download('GET', e.url, '${directory.path}${e.filename}');
+                launchUrl(Uri.parse('file:${file.path}'));
+              } on Exception catch (e) {
+                ErrorSnackbar(context: context, error: e).on<Exception>(
+                  content: (e) => ErrorContent(message: e.toString()),
+                );
+              }
+            },
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: Row(
                 children: [
                   Expanded(
                     child: Text(
-                      e.name,
+                      e.filename,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.titleMedium,

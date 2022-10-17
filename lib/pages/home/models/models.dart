@@ -29,7 +29,7 @@ class _ModelsPageState extends ConsumerState<ModelsPage>
             onTapUpload: () => _onTapUpload(context, category),
             onTapDelete: (file) => ref
                 .read(modelsRepositoryProvider)
-                .deleteModel(category.id, file.name),
+                .deleteModel(category.id, file.filename),
           ),
           errorWidget: (_) => const EmptyCard(
             icon: Icons.error,
