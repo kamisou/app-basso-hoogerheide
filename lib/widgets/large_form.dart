@@ -6,7 +6,7 @@ import 'package:easy_mask/easy_mask.dart';
 import 'package:flutter/material.dart';
 
 class LargeForm extends StatefulWidget {
-  const LargeForm.fromJson({
+  const LargeForm({
     super.key,
     required this.json,
     required this.filePicker,
@@ -65,6 +65,7 @@ class _LargeFormState extends State<LargeForm> {
                 key: field['key'],
                 title: field['title'],
                 icon: icon,
+                initialValue: field['initial_value'],
                 required: required,
                 options: (field['options'] as List? ?? []).cast<String>(),
               );
@@ -73,6 +74,9 @@ class _LargeFormState extends State<LargeForm> {
                 key: field['key'],
                 title: field['title'],
                 icon: icon,
+                initialValue: field['initial_value'] != null
+                    ? DateTime.parse(field['initial_value'])
+                    : null,
                 required: required,
                 firstDate: DateTime.parse(field['first_date']),
                 lastDate: DateTime.parse(field['last_date']),
@@ -89,6 +93,7 @@ class _LargeFormState extends State<LargeForm> {
             key: field['key'],
             title: field['title'],
             icon: icon,
+            initialValue: field['initial_value'],
             mask: field['mask'] is List
                 ? (field['mask'] as List? ?? []).cast<String>()
                 : field['mask'],
@@ -132,10 +137,8 @@ class _LargeFormState extends State<LargeForm> {
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        final LargeFormField field = section.fields[index];
-                        return _fieldBuilder(context, section, field);
-                      },
+                      itemBuilder: (_, index) =>
+                          _fieldBuilder(section, section.fields[index]),
                       separatorBuilder: (_, __) => const SizedBox(height: 10),
                     ),
                   ],
@@ -156,15 +159,12 @@ class _LargeFormState extends State<LargeForm> {
     );
   }
 
-  Widget _fieldBuilder(
-    BuildContext context,
-    LargeFormSection section,
-    LargeFormField field,
-  ) {
+  Widget _fieldBuilder(LargeFormSection section, LargeFormField field) {
     switch (field.runtimeType) {
       case LargeFormDateField:
         return DatePicker(
           firstDate: (field as LargeFormDateField).firstDate,
+          initialDate: field.initialValue,
           lastDate: field.lastDate,
           labelText: _fieldLabel(field),
           onChanged: (value) => _data[field.key] = value?.toIso8601String(),
@@ -174,6 +174,7 @@ class _LargeFormState extends State<LargeForm> {
         return SearchBar(
           options: (field as LargeFormOptionsField).options,
           icon: field.icon,
+          initialValue: field.initialValue,
           label: _fieldLabel(field),
           onChanged: (value) => _data[field.key] = value?.toString(),
           validator: (value) => _validator(field.required, value),
@@ -199,9 +200,9 @@ class _LargeFormState extends State<LargeForm> {
             labelText: _fieldLabel(field),
             prefixIcon: field.icon != null ? Icon(field.icon) : null,
           ),
-          inputFormatters: (field as LargeFormTextField).mask != null
-              ? [TextInputMask(mask: field.mask)]
-              : null,
+          initialValue: (field as LargeFormTextField).initialValue,
+          inputFormatters:
+              field.mask != null ? [TextInputMask(mask: field.mask)] : null,
           onChanged: (value) => _data[field.key] = value.isEmpty ? null : value,
           validator: (value) => _validator(field.required, value),
           textInputAction: TextInputAction.next,
@@ -257,9 +258,12 @@ class LargeFormTextField extends LargeFormField {
     required super.title,
     super.icon,
     super.required,
+    this.initialValue,
     this.mask,
     this.type = TextInputType.text,
   });
+
+  final String? initialValue;
 
   final Object? mask;
 
@@ -273,7 +277,10 @@ class LargeFormOptionsField extends LargeFormField {
     required this.options,
     super.icon,
     super.required,
+    this.initialValue,
   });
+
+  final String? initialValue;
 
   final List<String> options;
 }
@@ -286,7 +293,10 @@ class LargeFormDateField extends LargeFormField {
     required this.lastDate,
     super.icon,
     super.required,
+    this.initialValue,
   });
+
+  final DateTime? initialValue;
 
   final DateTime firstDate;
 

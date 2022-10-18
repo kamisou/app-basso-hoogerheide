@@ -31,7 +31,7 @@ class NewFolderPage extends ConsumerWidget {
                   ],
                 ),
                 const SizedBox(height: 24),
-                LargeForm.fromJson(
+                LargeForm(
                   json: data,
                   filePicker: ref.read(filePickerProvider),
                   sectionTitleStyle:

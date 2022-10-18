@@ -61,10 +61,7 @@ class _FoldersPageState extends ConsumerState<FoldersPage>
                 padding: const EdgeInsets.all(20),
                 child: const CircularProgressIndicator(),
               ),
-              onRefresh: () {
-                ref.refresh(foldersProvider);
-                return ref.read(foldersProvider.future);
-              },
+              onRefresh: () async => ref.refresh(foldersProvider),
               onReachingEnd: (finishFetching, reachEnd) async {
                 final folders = ref.read(foldersProvider).value!;
                 final newFolders = await ref
