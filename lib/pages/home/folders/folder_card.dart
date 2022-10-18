@@ -1,4 +1,5 @@
 import 'package:basso_hoogerheide/constants/theme_data.dart';
+import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/input/downloadable_file.dart';
 import 'package:basso_hoogerheide/models/input/folder/address_info.dart';
 import 'package:basso_hoogerheide/models/input/folder/contact_info.dart';
@@ -6,9 +7,10 @@ import 'package:basso_hoogerheide/models/input/folder/folder.dart';
 import 'package:basso_hoogerheide/models/input/folder/process_info.dart';
 import 'package:basso_hoogerheide/widgets/key_value_text.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher_string.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class FolderCard extends StatefulWidget {
+class FolderCard extends ConsumerStatefulWidget {
   const FolderCard({
     super.key,
     required this.folder,
@@ -20,10 +22,10 @@ class FolderCard extends StatefulWidget {
   final Folder folder;
 
   @override
-  State<FolderCard> createState() => _FolderCardState();
+  ConsumerState<FolderCard> createState() => _FolderCardState();
 }
 
-class _FolderCardState extends State<FolderCard> {
+class _FolderCardState extends ConsumerState<FolderCard> {
   bool _expanded = false;
 
   @override
@@ -50,13 +52,13 @@ class _FolderCardState extends State<FolderCard> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _cardHeader(context),
+                          _cardHeader(),
                           Column(
                             children: [
                               AnimatedContainer(
                                 duration: const Duration(milliseconds: 300),
                                 child: _expanded
-                                    ? _cardBody(context)
+                                    ? _cardBody()
                                     : const SizedBox(
                                         height: 0,
                                         width: double.infinity,
@@ -89,7 +91,7 @@ class _FolderCardState extends State<FolderCard> {
     );
   }
 
-  Widget _cardHeader(BuildContext context) {
+  Widget _cardHeader() {
     return Row(
       children: [
         Expanded(
@@ -126,7 +128,7 @@ class _FolderCardState extends State<FolderCard> {
     );
   }
 
-  Widget _cardBody(BuildContext context) {
+  Widget _cardBody() {
     final AddressInfo address = widget.folder.addressInfo;
     final ContactInfo contact = widget.folder.contactInfo;
     final ProcessInfo process = widget.folder.processInfo;
@@ -152,7 +154,7 @@ class _FolderCardState extends State<FolderCard> {
                   ?.copyWith(fontWeight: FontWeight.bold),
             ),
           ),
-        _cardSection(context, Icons.home_outlined, 'Endereço'),
+        _cardSection(Icons.home_outlined, 'Endereço'),
         Text(
           '${address.street} - ${address.district}',
           style: Theme.of(context).textTheme.titleMedium,
@@ -166,7 +168,7 @@ class _FolderCardState extends State<FolderCard> {
             address.cep!,
             style: Theme.of(context).textTheme.titleMedium,
           ),
-        _cardSection(context, Icons.phone_outlined, 'Contato'),
+        _cardSection(Icons.phone_outlined, 'Contato'),
         if (contact.email?.isNotEmpty ?? false)
           KeyValueText(
             keyString: 'E-mail',
@@ -182,7 +184,7 @@ class _FolderCardState extends State<FolderCard> {
             keyString: 'Celular',
             valueString: contact.cellphone!,
           ),
-        _cardSection(context, Icons.description_outlined, 'Detalhes'),
+        _cardSection(Icons.description_outlined, 'Detalhes'),
         KeyValueText(
           keyString: 'Natureza',
           valueString: process.nature,
@@ -202,11 +204,13 @@ class _FolderCardState extends State<FolderCard> {
             keyString: 'Vara',
             valueString: process.division!.toString(),
           ),
-        _cardSection(context, Icons.file_present_outlined, 'Arquivos'),
+        _cardSection(Icons.file_present_outlined, 'Arquivos'),
         ...widget.folder.files.map(
           (e) => InkWell(
-            onTap: () =>
-                launchUrlString(e.url, mode: LaunchMode.externalApplication),
+            onTap: () => launchUrl(
+              Uri.parse('${e.url}?token=${ref.read(authTokenProvider)}'),
+              mode: LaunchMode.externalApplication,
+            ),
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: Row(
@@ -260,11 +264,7 @@ class _FolderCardState extends State<FolderCard> {
     );
   }
 
-  Widget _cardSection(
-    BuildContext context,
-    IconData icon,
-    String title,
-  ) {
+  Widget _cardSection(IconData icon, String title) {
     return Container(
       decoration: BoxDecoration(
         border: Border(
