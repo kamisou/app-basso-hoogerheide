@@ -1,4 +1,5 @@
 import 'package:basso_hoogerheide/interface/file_picker.dart';
+import 'package:basso_hoogerheide/widgets/async_button.dart';
 import 'package:basso_hoogerheide/widgets/date_picker.dart';
 import 'package:basso_hoogerheide/widgets/file_picker_field.dart';
 import 'package:basso_hoogerheide/widgets/searchbar.dart';
@@ -20,7 +21,7 @@ class LargeForm extends StatefulWidget {
 
   final TextStyle? sectionTitleStyle;
 
-  final void Function(Map<String, dynamic>)? onSaved;
+  final Future<void> Function(Map<String, dynamic>)? onSaved;
 
   @override
   State<LargeForm> createState() => _LargeFormState();
@@ -74,9 +75,10 @@ class _LargeFormState extends State<LargeForm> {
                 key: field['key'],
                 title: field['title'],
                 icon: icon,
-                initialValue: field['initial_value'] != null
-                    ? DateTime.parse(field['initial_value'])
-                    : null,
+                initialValue:
+                    ((field['initial_value'] as String?)?.isNotEmpty ?? false)
+                        ? DateTime.parse(field['initial_value'])
+                        : null,
                 required: required,
                 firstDate: DateTime.parse(field['first_date']),
                 lastDate: DateTime.parse(field['last_date']),
@@ -144,12 +146,19 @@ class _LargeFormState extends State<LargeForm> {
                   ],
                 ),
               ),
-              ElevatedButton(
-                onPressed: () {
+              ElevatedAsyncButton(
+                onPressed: () async {
                   if (Form.of(context)!.validate()) {
-                    widget.onSaved?.call(_data);
+                    return widget.onSaved?.call(_data);
                   }
                 },
+                loadingChild: SizedBox(
+                  height: 25,
+                  width: 25,
+                  child: CircularProgressIndicator(
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
+                ),
                 child: const Text('Salvar'),
               ),
             ],

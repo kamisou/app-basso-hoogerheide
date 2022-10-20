@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/input/folder/folder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,8 +22,9 @@ final annotationOptionsProvider = FutureProvider.autoDispose(
   (ref) => ref.read(foldersRepositoryProvider).getNewAnnotationOptions(),
 );
 
-final folderFormData = FutureProvider.autoDispose(
-  (ref) => ref.read(foldersRepositoryProvider).getNewFolderFormData(),
+final folderFormData = FutureProvider.autoDispose.family(
+  (Ref ref, int? folderId) =>
+      ref.read(foldersRepositoryProvider).getNewFolderFormData(folderId),
 );
 
 class FoldersRepository {
@@ -48,10 +51,13 @@ class FoldersRepository {
       .get('/folders/annotations')
       .then((value) => (value['annotations'] as List? ?? []).cast<String>());
 
-  Future<void> addFolder(Map<String, dynamic> folder) => ref
+  Future<void> addFolder(Map<String, dynamic> folder) {
+    log(folder.toString());
+    return ref
       .read(restClientProvider)
       .post('/folders/add', body: folder)
       .then((_) => ref.refresh(foldersProvider));
+  }
 
   Future<void> addAnnotation(
     int folderId,
@@ -70,8 +76,14 @@ class FoldersRepository {
         'file_name': fileName,
       }).then((_) => ref.refresh(foldersProvider));
 
-  Future<Map<String, dynamic>> getNewFolderFormData() => ref
+  Future<void> deleteFolder(Folder folder) =>
+      ref.read(restClientProvider).delete(
+        '/folders/delete',
+        body: {'id': folder.id},
+      ).then((_) => ref.refresh(foldersProvider));
+
+  Future<Map<String, dynamic>> getNewFolderFormData([int? folderId]) => ref
       .read(restClientProvider)
-      .get('/folders/form_data')
+      .get('/folders/form_data/${folderId ?? ''}')
       .then((value) => value as Map<String, dynamic>);
 }

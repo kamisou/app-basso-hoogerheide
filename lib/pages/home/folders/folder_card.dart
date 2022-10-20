@@ -5,6 +5,8 @@ import 'package:basso_hoogerheide/models/input/folder/address_info.dart';
 import 'package:basso_hoogerheide/models/input/folder/contact_info.dart';
 import 'package:basso_hoogerheide/models/input/folder/folder.dart';
 import 'package:basso_hoogerheide/models/input/folder/process_info.dart';
+import 'package:basso_hoogerheide/models/repository/folders.dart';
+import 'package:basso_hoogerheide/widgets/error_snackbar.dart';
 import 'package:basso_hoogerheide/widgets/key_value_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -26,6 +28,8 @@ class FolderCard extends ConsumerStatefulWidget {
 }
 
 class _FolderCardState extends ConsumerState<FolderCard> {
+  TapDownDetails? _tapDetails;
+
   bool _expanded = false;
 
   @override
@@ -36,6 +40,8 @@ class _FolderCardState extends ConsumerState<FolderCard> {
         Card(
           child: InkWell(
             onTap: () => setState(() => _expanded = !_expanded),
+            onTapDown: (details) => _tapDetails = details,
+            onLongPress: _onLongPress,
             child: IntrinsicHeight(
               child: Row(
                 children: [
@@ -194,10 +200,10 @@ class _FolderCardState extends ConsumerState<FolderCard> {
             keyString: 'N° do Processo',
             valueString: process.number!.toString(),
           ),
-        if (process.district?.isNotEmpty ?? false)
+        if (process.county?.isNotEmpty ?? false)
           KeyValueText(
             keyString: 'Comarca',
-            valueString: process.district!.toString(),
+            valueString: process.county!.toString(),
           ),
         if (process.division?.isNotEmpty ?? false)
           KeyValueText(
@@ -290,5 +296,42 @@ class _FolderCardState extends ConsumerState<FolderCard> {
         ],
       ),
     );
+  }
+
+  void _onLongPress() async {
+    if (_tapDetails == null) return;
+    final double dx = _tapDetails!.globalPosition.dx;
+    final double dy = _tapDetails!.globalPosition.dy;
+    showMenu<String?>(
+      context: context,
+      position: RelativeRect.fromLTRB(dx, dy, dx, dy),
+      items: [
+        const PopupMenuItem(value: 'edit', child: Text('Editar pasta')),
+        PopupMenuItem(
+          textStyle: Theme.of(context)
+              .textTheme
+              .titleMedium
+              ?.copyWith(color: Theme.of(context).colorScheme.error),
+          value: 'delete',
+          child: const Text('Deletar pasta'),
+        ),
+      ],
+    ).then((value) {
+      if (value == 'edit') {
+        Navigator.pushNamed(context, '/newFolder', arguments: widget.folder.id);
+      } else if (value == 'delete') {
+        ref
+            .read(foldersRepositoryProvider)
+            .deleteFolder(widget.folder)
+            .catchError(
+              (e) => ErrorSnackbar(
+                context: context,
+                error: e,
+              ).on<RestException>(
+                content: (error) => ErrorContent(message: error.serverMessage),
+              ),
+            );
+      }
+    });
   }
 }

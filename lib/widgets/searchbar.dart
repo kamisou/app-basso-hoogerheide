@@ -197,6 +197,7 @@ class _SearchBarState<T> extends State<SearchBar<T>> {
                 validator: widget.validator != null
                     ? (_) => widget.validator!.call(_selected)
                     : null,
+                onChanged: (_) => _updateSelection(),
                 onEditingComplete: () {
                   _updateSelection();
                   _decideAction();

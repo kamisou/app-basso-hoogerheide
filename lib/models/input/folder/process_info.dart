@@ -7,8 +7,8 @@ class ProcessInfo {
         color = ColorExtension.parseHex(json['color'])!,
         attorney = json['attorney'],
         number = json['number'],
-        protocolDate = json['protocol_date'] as String,
-        district = json['district'],
+        protocolDate = json['protocol_date'],
+        county = json['county'],
         division = json['division'];
 
   final String nature;
@@ -21,7 +21,7 @@ class ProcessInfo {
 
   final String? protocolDate;
 
-  final String? district;
+  final String? county;
 
   final String? division;
 }

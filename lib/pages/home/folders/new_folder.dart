@@ -1,6 +1,8 @@
 import 'package:basso_hoogerheide/interface/file_picker.dart';
+import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/repository/folders.dart';
 import 'package:basso_hoogerheide/widgets/empty_card.dart';
+import 'package:basso_hoogerheide/widgets/error_snackbar.dart';
 import 'package:basso_hoogerheide/widgets/large_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,9 +12,10 @@ class NewFolderPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final int? folderId = ModalRoute.of(context)!.settings.arguments as int?;
     return Scaffold(
       appBar: AppBar(title: const Text('Cadastro Nova Pasta')),
-      body: ref.watch(folderFormData).when(
+      body: ref.watch(folderFormData(folderId)).when(
             data: (data) => ListView(
               padding: const EdgeInsets.symmetric(
                 horizontal: 32,
@@ -39,7 +42,16 @@ class NewFolderPage extends ConsumerWidget {
                             color: Theme.of(context).colorScheme.secondary,
                             fontWeight: FontWeight.bold,
                           ),
-                  onSaved: ref.read(foldersRepositoryProvider).addFolder,
+                  onSaved: (data) => ref
+                      .read(foldersRepositoryProvider)
+                      .addFolder(data)
+                      .then((_) => Navigator.pop(context),
+                          onError: (e) =>
+                              ErrorSnackbar(context: context, error: e)
+                                  .on<RestException>(
+                                content: (error) =>
+                                    ErrorContent(message: error.serverMessage),
+                              )),
                 ),
               ],
             ),
