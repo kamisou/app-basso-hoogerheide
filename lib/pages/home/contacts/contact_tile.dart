@@ -11,9 +11,12 @@ class ContactTile extends ConsumerStatefulWidget {
   const ContactTile({
     super.key,
     required this.contact,
+    this.editable = true,
   });
 
   final Contact contact;
+
+  final bool editable;
 
   @override
   ConsumerState<ContactTile> createState() => _ContactTileState();
@@ -27,7 +30,7 @@ class _ContactTileState extends ConsumerState<ContactTile> {
     final TextStyle? detailStyle = Theme.of(context).textTheme.labelMedium;
     return InkWell(
       onTapDown: (details) => setState(() => _tapDetails = details),
-      onLongPress: _onLongPress,
+      onLongPress: widget.editable ? _onLongPress : null,
       borderRadius: BorderRadius.circular(4),
       child: Padding(
         padding: const EdgeInsets.symmetric(

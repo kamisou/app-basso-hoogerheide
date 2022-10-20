@@ -162,6 +162,16 @@ class AppTheme {
             ),
           ),
         ),
+        labelStyle: TextStyle(
+          color: Color(0xFFF0F0F0),
+          fontFamily: fontFamily,
+          fontSize: 16,
+        ),
+        unselectedLabelStyle: TextStyle(
+          color: Color(0xFFF0F0F0),
+          fontFamily: fontFamily,
+          fontSize: 16,
+        ),
       ),
       textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(

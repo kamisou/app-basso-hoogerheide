@@ -68,7 +68,10 @@ class _ContactsPageState extends ConsumerState<ContactsPage>
                 AsyncCollection<Contact>(
                   asyncCollection: ref.watch(filteredFolderContactsProvider),
                   spacing: 0,
-                  itemBuilder: (_, item) => ContactTile(contact: item),
+                  itemBuilder: (_, item) => ContactTile(
+                    contact: item,
+                    editable: false,
+                  ),
                   emptyWidget: const Center(
                     child: EmptyCard(
                       icon: Icons.no_accounts_outlined,
