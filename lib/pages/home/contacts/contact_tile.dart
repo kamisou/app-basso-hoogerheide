@@ -68,7 +68,7 @@ class _ContactTileState extends ConsumerState<ContactTile> {
                         ),
                     ],
                   ),
-                  if (widget.contact.email != null)
+                  if (widget.contact.email?.isNotEmpty ?? false)
                     KeyValueText(
                       keyString: 'Email',
                       valueString: widget.contact.email!,

@@ -153,6 +153,16 @@ class AppTheme {
         ),
       ),
       splashColor: const Color(0x08FFFFFF),
+      tabBarTheme: const TabBarTheme(
+        indicator: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              color: Color(0xFFA81818),
+              width: 2,
+            ),
+          ),
+        ),
+      ),
       textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
           foregroundColor: MaterialStateProperty.all(const Color(0xFFF0F0F0)),

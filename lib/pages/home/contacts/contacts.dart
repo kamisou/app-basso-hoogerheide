@@ -15,7 +15,17 @@ class ContactsPage extends ConsumerStatefulWidget {
 }
 
 class _ContactsPageState extends ConsumerState<ContactsPage>
-    with AutomaticKeepAliveClientMixin {
+    with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
+  final TextEditingController _searchController = TextEditingController();
+
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -30,31 +40,79 @@ class _ContactsPageState extends ConsumerState<ContactsPage>
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: SearchBar(
+              controller: _searchController,
               hintText: 'Pesquisar contato...',
-              onChanged: (value) =>
-                  ref.read(contactsFilterProvider.notifier).state = value,
+              onEditingComplete: () => ref
+                  .read(contactsFilterProvider.notifier)
+                  .state = _searchController.text.trim(),
             ),
           ),
-          const SizedBox(height: 32),
+          TabBar(
+            controller: _tabController,
+            padding: const EdgeInsets.only(
+              bottom: 20,
+              left: 20,
+              right: 20,
+              top: 16,
+            ),
+            tabs: const [
+              Tab(text: 'Clientes'),
+              Tab(text: 'Contatos'),
+            ],
+          ),
           Expanded(
-            child: AsyncCollection<Contact>(
-              asyncCollection: ref.watch(filteredContactsProvider),
-              spacing: 0,
-              itemBuilder: (_, item) => ContactTile(contact: item),
-              emptyWidget: const EmptyCard(
-                icon: Icons.no_accounts_outlined,
-                message: 'Nenhum contato encontrado',
-              ),
-              errorWidget: (_) => const EmptyCard(
-                icon: Icons.error,
-                message: 'Houve um erro ao buscar os contatos',
-              ),
-              loadingWidget: Container(
-                alignment: Alignment.topCenter,
-                padding: const EdgeInsets.all(20),
-                child: const CircularProgressIndicator(),
-              ),
-              onRefresh: () async => ref.refresh(contactsProvider),
+            child: TabBarView(
+              controller: _tabController,
+              physics: const NeverScrollableScrollPhysics(),
+              children: [
+                AsyncCollection<Contact>(
+                  asyncCollection: ref.watch(filteredFolderContactsProvider),
+                  spacing: 0,
+                  itemBuilder: (_, item) => ContactTile(contact: item),
+                  emptyWidget: const Center(
+                    child: EmptyCard(
+                      icon: Icons.no_accounts_outlined,
+                      message: 'Nenhum contato encontrado',
+                    ),
+                  ),
+                  errorWidget: (_) => const Center(
+                    child: EmptyCard(
+                      icon: Icons.error,
+                      message: 'Houve um erro ao buscar os contatos',
+                    ),
+                  ),
+                  loadingWidget: Container(
+                    alignment: Alignment.topCenter,
+                    padding: const EdgeInsets.all(20),
+                    child: const CircularProgressIndicator(),
+                  ),
+                  onRefresh: () async =>
+                      ref.refresh(filteredFolderContactsProvider),
+                ),
+                AsyncCollection<Contact>(
+                  asyncCollection: ref.watch(filteredContactsProvider),
+                  spacing: 0,
+                  itemBuilder: (_, item) => ContactTile(contact: item),
+                  emptyWidget: const Center(
+                    child: EmptyCard(
+                      icon: Icons.no_accounts_outlined,
+                      message: 'Nenhum contato encontrado',
+                    ),
+                  ),
+                  errorWidget: (_) => const Center(
+                    child: EmptyCard(
+                      icon: Icons.error,
+                      message: 'Houve um erro ao buscar os contatos',
+                    ),
+                  ),
+                  loadingWidget: Container(
+                    alignment: Alignment.topCenter,
+                    padding: const EdgeInsets.all(20),
+                    child: const CircularProgressIndicator(),
+                  ),
+                  onRefresh: () async => ref.refresh(filteredContactsProvider),
+                ),
+              ],
             ),
           ),
         ],

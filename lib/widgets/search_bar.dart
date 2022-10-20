@@ -63,7 +63,10 @@ class _SearchBarState extends State<SearchBar> {
       ),
       focusNode: _focusNode,
       onChanged: widget.onChanged,
-      onEditingComplete: widget.onEditingComplete,
+      onEditingComplete: () {
+        _focusNode.unfocus();
+        widget.onEditingComplete?.call();
+      },
     );
   }
 }
