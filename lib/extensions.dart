@@ -14,6 +14,14 @@ extension DateTimeExtension on DateTime {
   DateTime dayOnly() => DateTime(year, month, day);
 }
 
+extension DurationExtension on Duration {
+  String string() {
+    if (inHours > 0) return '$inHours hora${inHours > 1 ? 's' : ''}';
+    if (inMinutes > 0) return '$inMinutes minuto${inMinutes > 1 ? 's' : ''}';
+    return '$inSeconds hora${inSeconds > 1 ? 's' : ''}';
+  }
+}
+
 extension TimeOfDayExtension on TimeOfDay {
   static TimeOfDay? parse(String? date) {
     if (date == null) return null;

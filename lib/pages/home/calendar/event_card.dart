@@ -1,3 +1,4 @@
+import 'package:basso_hoogerheide/extensions.dart';
 import 'package:basso_hoogerheide/interface/notifications.dart';
 import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/input/calendar_event.dart';
@@ -210,21 +211,83 @@ class _EventCardState extends ConsumerState<EventCard> {
   }
 
   void _onTapNotification(bool isEnabled) {
-    final notifications = ref.read(notificationsProvider);
-
-    final CalendarEvent event = widget.event;
-
-    if (isEnabled) {
-      notifications.removeNotification(event.id);
-    } else {
-      notifications.scheduleNotification(
-        LocalNotification(
-          id: event.id,
-          title: event.title,
-          body: event.description,
+    showDialog<Duration>(
+      context: context,
+      builder: (context) => Dialog(
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: Text(
+                  'Notificar...',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+              ),
+              ...[
+                const Duration(minutes: 15),
+                const Duration(minutes: 30),
+                const Duration(hours: 1),
+                const Duration(hours: 2),
+                const Duration(hours: 4),
+                const Duration(hours: 8),
+                const Duration(hours: 16),
+              ].map(
+                (e) => InkWell(
+                  onTap: () => Navigator.pop(context, e),
+                  borderRadius: BorderRadius.circular(4),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Text(
+                      '${e.string()} antes',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ),
+                ),
+              ),
+              if (isEnabled)
+                GestureDetector(
+                  onTap: () => Navigator.pop(
+                    context,
+                    const Duration(minutes: -1),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Text(
+                      'Remover notificação',
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.error,
+                          ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
         ),
-        event.startDateTime,
-      );
-    }
+      ),
+    ).then(
+      (value) {
+        if (value == null) return;
+        final CalendarEvent event = widget.event;
+        final Notifications notifications = ref.read(notificationsProvider);
+        if (value.isNegative) {
+          notifications.removeNotification(event.id);
+          return;
+        }
+        notifications.scheduleNotification(
+          LocalNotification(
+            id: event.id,
+            title: event.title,
+            body: event.description,
+          ),
+          event.startDateTime.subtract(value),
+        );
+      },
+    );
   }
 }
