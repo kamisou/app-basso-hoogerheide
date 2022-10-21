@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:basso_hoogerheide/constants/configuration.dart';
@@ -18,7 +17,6 @@ import 'package:basso_hoogerheide/pages/home/home.dart';
 import 'package:basso_hoogerheide/pages/login.dart';
 import 'package:basso_hoogerheide/pages/profile/profile.dart';
 import 'package:basso_hoogerheide/pages/splash.dart';
-import 'package:basso_hoogerheide/widgets/error_snackbar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
