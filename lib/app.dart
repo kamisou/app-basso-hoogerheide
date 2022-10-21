@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:basso_hoogerheide/constants/configuration.dart';
@@ -17,19 +18,25 @@ import 'package:basso_hoogerheide/pages/home/home.dart';
 import 'package:basso_hoogerheide/pages/login.dart';
 import 'package:basso_hoogerheide/pages/profile/profile.dart';
 import 'package:basso_hoogerheide/pages/splash.dart';
+import 'package:basso_hoogerheide/widgets/error_snackbar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-class App extends ConsumerWidget {
+class App extends ConsumerStatefulWidget {
   const App({super.key});
 
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() => _AppState();
+}
+
+class _AppState extends ConsumerState<App> {
   final AppTheme _appTheme = const AppTheme();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return MaterialApp(
       color: _appTheme.dark.colorScheme.primary,
       darkTheme: _appTheme.dark,
@@ -40,13 +47,13 @@ class App extends ConsumerWidget {
               PlatformDispatcher.instance.locale.toLanguageTag();
           await Firebase.initializeApp();
           await ref.read(notificationsProvider).initialize();
-          final bool isTokenValid = await _validateToken(ref);
+          final bool isTokenValid = await _validateToken();
           return isTokenValid ? '/home' : '/login';
         },
         afterWork: (route) async {
           switch (route) {
             case '/home':
-              await _initializeMessaging(ref);
+              await _initializeMessaging();
               break;
             case '/login':
               await ref.read(messagingProvider).unsubscribeFromTopic(
@@ -80,7 +87,7 @@ class App extends ConsumerWidget {
     );
   }
 
-  Future<bool> _validateToken(WidgetRef ref) async {
+  Future<bool> _validateToken() async {
     final String? authToken =
         await ref.read(secureStorageProvider).read(SecureStorageKey.authToken);
     if (authToken == null) return false;
@@ -93,7 +100,7 @@ class App extends ConsumerWidget {
     }
   }
 
-  Future<void> _initializeMessaging(WidgetRef ref) async {
+  Future<void> _initializeMessaging() async {
     final Messaging messaging = ref.read(messagingProvider);
     final bool isAuthorized = await messaging.initialize();
     if (isAuthorized) {

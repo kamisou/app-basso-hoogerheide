@@ -49,7 +49,9 @@ class _AsyncCollectionState<T> extends State<AsyncCollection<T>> {
   @override
   void initState() {
     super.initState();
-    _controller.addListener(_onControllerChange);
+    if (widget.onReachingEnd != null) {
+      _controller.addListener(_onControllerChange);
+    }
   }
 
   void _onControllerChange() {

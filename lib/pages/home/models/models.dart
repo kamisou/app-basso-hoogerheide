@@ -20,33 +20,28 @@ class _ModelsPageState extends ConsumerState<ModelsPage>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Column(
-      children: [
-        AsyncCollection<ModelCategory>(
-          asyncCollection: ref.watch(modelCategoriesProvider),
-          itemBuilder: (_, category) => ModelCard(
-            modelCategory: category,
-            onTapUpload: () => _onTapUpload(context, category),
-            onTapDelete: (file) => ref
-                .read(modelsRepositoryProvider)
-                .deleteModel(category.id, file.name),
-          ),
-          errorWidget: (_) => const EmptyCard(
-            icon: Icons.error,
-            message: 'Houve um erro ao buscar os modelos',
-          ),
-          emptyWidget: const EmptyCard(
-            icon: Icons.file_download_off_outlined,
-            message: 'Nenhum modelo encontrado',
-          ),
-          loadingWidget: Container(
-            alignment: Alignment.topCenter,
-            padding: const EdgeInsets.all(20),
-            child: const CircularProgressIndicator(),
-          ),
-          onRefresh: () async => ref.refresh(modelCategoriesProvider),
-        ),
-      ],
+    return AsyncCollection<ModelCategory>(
+      asyncCollection: ref.watch(modelCategoriesProvider),
+      itemBuilder: (_, category) => ModelCard(
+        modelCategory: category,
+        onTapUpload: () => _onTapUpload(context, category),
+        onTapDelete: (file) =>
+            ref.read(modelsRepositoryProvider).deleteModel(category, file.name),
+      ),
+      errorWidget: (_) => const EmptyCard(
+        icon: Icons.error,
+        message: 'Houve um erro ao buscar os modelos',
+      ),
+      emptyWidget: const EmptyCard(
+        icon: Icons.file_download_off_outlined,
+        message: 'Nenhum modelo encontrado',
+      ),
+      loadingWidget: Container(
+        alignment: Alignment.topCenter,
+        padding: const EdgeInsets.all(20),
+        child: const CircularProgressIndicator(),
+      ),
+      onRefresh: () async => ref.refresh(modelCategoriesProvider),
     );
   }
 
@@ -75,7 +70,7 @@ class _ModelsPageState extends ConsumerState<ModelsPage>
         context,
         ref
             .read(modelsRepositoryProvider)
-            .uploadModelFile(category.id, value.first),
+            .uploadModelFile(category, value.first),
       );
     });
   }

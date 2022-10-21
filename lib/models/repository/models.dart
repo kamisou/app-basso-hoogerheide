@@ -22,15 +22,15 @@ class ModelsRepository {
           .map(ModelCategory.fromJson)
           .toList());
 
-  Future<void> deleteModel(int categoryId, String fileName) =>
+  Future<void> deleteModel(ModelCategory category, String fileName) =>
       ref.read(restClientProvider).delete(
         '/models/categories/files/delete',
-        body: {'category_id': categoryId, 'file_name': fileName},
+        body: {'category': category.title, 'file_name': fileName},
       ).then((_) => ref.refresh(modelsRepositoryProvider));
 
-  Future<void> uploadModelFile(int categoryId, File file) => ref
+  Future<void> uploadModelFile(ModelCategory category, File file) => ref
       .read(restClientProvider)
-      .uploadImage('POST', '/models/categories/$categoryId/files/new',
+      .uploadImage('POST', '/models/categories/files/upload',
           field: 'model_file', file: file)
       .then((_) => ref.refresh(modelCategoriesProvider));
 }
