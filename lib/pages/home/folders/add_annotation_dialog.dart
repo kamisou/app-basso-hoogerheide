@@ -1,22 +1,17 @@
-import 'package:basso_hoogerheide/widgets/searchbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddAnnotationDialog extends ConsumerStatefulWidget {
+class AddAnnotationDialog extends StatefulWidget {
   const AddAnnotationDialog({super.key});
 
   @override
-  ConsumerState<AddAnnotationDialog> createState() =>
-      _AddAnnotationDialogState();
+  State<AddAnnotationDialog> createState() => _AddAnnotationDialogState();
 }
 
-class _AddAnnotationDialogState extends ConsumerState<AddAnnotationDialog> {
-  String? _annotation;
+class _AddAnnotationDialogState extends State<AddAnnotationDialog> {
+  final TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, dynamic> args =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     return Dialog(
       insetPadding: const EdgeInsets.all(16),
       child: Padding(
@@ -37,17 +32,10 @@ class _AddAnnotationDialogState extends ConsumerState<AddAnnotationDialog> {
                 builder: (context) => Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text(
-                      'Assunto:',
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
-                    const SizedBox(height: 4),
-                    SearchBar<String>(
-                      options: args['options'],
-                      onChanged: (value) => _annotation = value,
-                      validator: (value) => (value?.isEmpty ?? true)
-                          ? 'Insira um assunto para a anotação'
-                          : null,
+                    TextFormField(
+                      controller: _controller,
+                      decoration: const InputDecoration(labelText: 'Anotação'),
+                      maxLines: 2,
                     ),
                     const SizedBox(height: 24),
                     Row(
@@ -64,10 +52,7 @@ class _AddAnnotationDialogState extends ConsumerState<AddAnnotationDialog> {
                         GestureDetector(
                           onTap: () {
                             if (Form.of(context)!.validate()) {
-                              Navigator.pop(
-                                context,
-                                {'annotation': _annotation},
-                              );
+                              Navigator.pop(context, _controller.text);
                             }
                           },
                           child: Text(

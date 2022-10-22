@@ -1,8 +1,10 @@
+import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/input/folder/annotation.dart';
 import 'package:basso_hoogerheide/models/input/folder/folder.dart';
 import 'package:basso_hoogerheide/models/repository/folders.dart';
 import 'package:basso_hoogerheide/pages/home/folders/add_annotation_dialog.dart';
 import 'package:basso_hoogerheide/widgets/avatar_circle.dart';
+import 'package:basso_hoogerheide/widgets/error_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -17,15 +19,28 @@ class AnnotationsPage extends ConsumerWidget {
       appBar: AppBar(title: Text('${folder.id} - ${folder.name}')),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.note_add),
-        onPressed: () => ref.read(annotationOptionsProvider.future).then(
-              (value) => showDialog<Map<String, dynamic>?>(
-                context: context,
-                builder: (context) => const AddAnnotationDialog(),
-                routeSettings: RouteSettings(arguments: {'options': value}),
-              ).then((annotation) => ref
-                  .read(foldersRepositoryProvider)
-                  .addAnnotation(folder.id, annotation)),
+        onPressed: () => showDialog<String?>(
+          context: context,
+          builder: (context) => const AddAnnotationDialog(),
+        ).then(
+          (annotation) => ref
+              .read(foldersRepositoryProvider)
+              .addAnnotation(folder.id, annotation)
+              .then(
+            (_) {
+              ref.refresh(foldersRepositoryProvider);
+              Navigator.pop(context);
+            },
+            onError: (e) => ErrorSnackbar(
+              context: context,
+              error: e,
+            ).on<RestException>(
+              content: (error) => ErrorContent(
+                message: error.serverMessage,
+              ),
             ),
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32),

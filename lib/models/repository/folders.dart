@@ -18,10 +18,6 @@ final searchFoldersProvider = FutureProvider.autoDispose(
       .getFolders(searchTerm: ref.watch(searchTermProvider)),
 );
 
-final annotationOptionsProvider = FutureProvider.autoDispose(
-  (ref) => ref.read(foldersRepositoryProvider).getNewAnnotationOptions(),
-);
-
 final folderFormData = FutureProvider.autoDispose.family(
   (Ref ref, int? folderId) =>
       ref.read(foldersRepositoryProvider).getNewFolderFormData(folderId),
@@ -46,28 +42,20 @@ class FoldersRepository {
           .map(Folder.fromJson)
           .toList());
 
-  Future<List<String>> getNewAnnotationOptions() => ref
-      .read(restClientProvider)
-      .get('/folders/annotations')
-      .then((value) => (value['annotations'] as List? ?? []).cast<String>());
-
   Future<void> addFolder(Map<String, dynamic> folder) {
     log(folder.toString());
     return ref
-      .read(restClientProvider)
-      .post('/folders/add', body: folder)
-      .then((_) => ref.refresh(foldersProvider));
+        .read(restClientProvider)
+        .post('/folders/add', body: folder)
+        .then((_) => ref.refresh(foldersProvider));
   }
 
-  Future<void> addAnnotation(
-    int folderId,
-    Map<String, dynamic>? annotation,
-  ) async {
+  Future<void> addAnnotation(int folderId, String? annotation) async {
     if (annotation == null) return;
-    await ref
-        .read(restClientProvider)
-        .post('/folders/$folderId/annotations/add', body: annotation)
-        .then((_) => ref.refresh(foldersProvider));
+    await ref.read(restClientProvider).post('/folders/add_annotation', body: {
+      'annotation': annotation,
+      'folder_id': folderId
+    }).then((_) => ref.refresh(foldersProvider));
   }
 
   Future<void> deleteFolderFile(int folderId, String fileName) =>
