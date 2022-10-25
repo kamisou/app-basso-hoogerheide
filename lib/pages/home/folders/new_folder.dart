@@ -1,4 +1,3 @@
-import 'package:basso_hoogerheide/interface/file_picker.dart';
 import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/repository/folders.dart';
 import 'package:basso_hoogerheide/widgets/empty_card.dart';
@@ -36,7 +35,6 @@ class NewFolderPage extends ConsumerWidget {
                 const SizedBox(height: 24),
                 LargeForm(
                   json: data,
-                  filePicker: ref.read(filePickerProvider),
                   sectionTitleStyle:
                       Theme.of(context).textTheme.titleMedium?.copyWith(
                             color: Theme.of(context).colorScheme.secondary,

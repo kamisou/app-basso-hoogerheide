@@ -1,4 +1,3 @@
-import 'package:basso_hoogerheide/interface/file_picker.dart';
 import 'package:basso_hoogerheide/widgets/async_button.dart';
 import 'package:basso_hoogerheide/widgets/date_picker.dart';
 import 'package:basso_hoogerheide/widgets/file_picker_field.dart';
@@ -10,14 +9,11 @@ class LargeForm extends StatefulWidget {
   const LargeForm({
     super.key,
     required this.json,
-    required this.filePicker,
     this.sectionTitleStyle,
     this.onSaved,
   });
 
   final Map<String, dynamic> json;
-
-  final FilePicker filePicker;
 
   final TextStyle? sectionTitleStyle;
 
@@ -55,10 +51,12 @@ class _LargeFormState extends State<LargeForm> {
         key: section['key'],
         title: section['title'],
         fields: fields.map((field) {
-          final IconData icon = IconData(
-            int.parse(field['icon'], radix: 16),
-            fontFamily: 'MaterialIcons',
-          );
+          final IconData? icon = field['icon'] != null
+              ? IconData(
+                  int.parse(field['icon'], radix: 16),
+                  fontFamily: 'MaterialIcons',
+                )
+              : null;
           final bool required = field['required'] ?? true;
           switch (field['type']) {
             case 'options':
@@ -82,13 +80,6 @@ class _LargeFormState extends State<LargeForm> {
                 required: required,
                 firstDate: DateTime.parse(field['first_date']),
                 lastDate: DateTime.parse(field['last_date']),
-              );
-            case 'file':
-              return LargeFormFileField(
-                key: field['key'],
-                title: field['title'],
-                required: field['required'],
-                multiple: field['multiple'] ?? false,
               );
           }
           return LargeFormTextField(
@@ -188,19 +179,6 @@ class _LargeFormState extends State<LargeForm> {
           onChanged: (value) => _data[field.key] = value?.toString(),
           validator: (value) => _validator(field.required, value),
           textInputAction: TextInputAction.next,
-        );
-      case LargeFormFileField:
-        return FilePickerField(
-          filePicker: widget.filePicker,
-          hintText: 'Anexar arquivos',
-          icon: Icons.attach_file_outlined,
-          allowMultiple: true,
-          onDocumentAdded: (files) => _data[field.key] = files
-              .map((e) => {
-                    'title': e.path.split('/').last,
-                    'path': e.path,
-                  })
-              .toList(),
         );
       case LargeFormTextField:
       default:
@@ -310,15 +288,4 @@ class LargeFormDateField extends LargeFormField {
   final DateTime firstDate;
 
   final DateTime lastDate;
-}
-
-class LargeFormFileField extends LargeFormField {
-  const LargeFormFileField({
-    required super.key,
-    required super.title,
-    super.required,
-    this.multiple = false,
-  });
-
-  final bool multiple;
 }
