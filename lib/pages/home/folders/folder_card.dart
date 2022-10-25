@@ -239,6 +239,7 @@ class _FolderCardState extends ConsumerState<FolderCard> {
             ),
           ),
         ),
+        // TODO: botão para upload de anexo
         Container(
           width: double.infinity,
           margin: const EdgeInsets.only(top: 16),

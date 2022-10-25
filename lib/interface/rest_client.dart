@@ -84,6 +84,7 @@ class RestClient {
     String endpoint, {
     required String field,
     required File file,
+    Map<String, String>? fields,
   }) async {
     final request = http.MultipartRequest(method, Uri.parse('$host$endpoint'));
     request.files.add(
@@ -93,6 +94,9 @@ class RestClient {
         filename: file.path.substring(file.path.lastIndexOf('/') + 1),
       ),
     );
+    if (fields != null) {
+      request.fields.addAll(fields);
+    }
     if (defaultHeaders != null) {
       request.headers.addAll(defaultHeaders!);
     }
