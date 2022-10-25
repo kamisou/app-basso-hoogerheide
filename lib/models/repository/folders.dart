@@ -1,10 +1,8 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/input/folder/folder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart';
 
 final foldersRepositoryProvider = Provider.autoDispose(FoldersRepository.new);
 
@@ -52,7 +50,7 @@ class FoldersRepository {
   Future<void> addFolderFile(int folderId, File file) =>
       ref.read(restClientProvider).uploadImage(
         'POST',
-        '/folders/add',
+        '/folders/add_file',
         field: 'new_file',
         file: file,
         fields: {'folder_id': folderId.toString()},

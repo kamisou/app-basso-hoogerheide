@@ -1,4 +1,5 @@
 import 'package:basso_hoogerheide/constants/theme_data.dart';
+import 'package:basso_hoogerheide/interface/file_picker.dart';
 import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/input/downloadable_file.dart';
 import 'package:basso_hoogerheide/models/input/folder/address_info.dart';
@@ -239,7 +240,43 @@ class _FolderCardState extends ConsumerState<FolderCard> {
             ),
           ),
         ),
-        // TODO: botão para upload de anexo
+        InkWell(
+          onTap: () => ref
+              .read(filePickerProvider)
+              .pickFiles(dialogTitle: 'Escolha um anexo')
+              .then((value) {
+            if (value == null) return;
+            ref
+                .read(foldersRepositoryProvider)
+                .addFolderFile(widget.folder.id, value.first)
+                .then(
+                  (_) => ref.refresh(foldersProvider),
+                  onError: (e) => ErrorSnackbar(
+                    context: context,
+                    error: e,
+                  ).on<RestException>(
+                    content: (error) => ErrorContent(
+                      message: error.serverMessage,
+                    ),
+                  ),
+                );
+          }),
+          borderRadius: BorderRadius.circular(4),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.attachment_outlined),
+                const SizedBox(width: 4),
+                Text(
+                  'Anexar arquivo',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+              ],
+            ),
+          ),
+        ),
         Container(
           width: double.infinity,
           margin: const EdgeInsets.only(top: 16),

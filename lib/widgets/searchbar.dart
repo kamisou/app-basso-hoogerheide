@@ -150,7 +150,17 @@ class _SearchBarState<T> extends State<SearchBar<T>> {
                                   ))
                               .toList(),
                         )
-                      : const SizedBox.shrink(),
+                      : Center(
+                          child: Text(
+                            'Nenhuma opção encontrada',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
+                                  color: Theme.of(context).disabledColor,
+                                ),
+                          ),
+                        ),
                 ),
               ),
             ),
@@ -194,9 +204,12 @@ class _SearchBarState<T> extends State<SearchBar<T>> {
                 keyboardType: TextInputType.text,
                 enabled: widget.options.isNotEmpty,
                 focusNode: _focusNode,
-                validator: widget.validator != null
-                    ? (_) => widget.validator!.call(_selected)
-                    : null,
+                validator: (_) {
+                  if (_selected == null) {
+                    return 'Selecione uma opção válida';
+                  }
+                  return widget.validator?.call(_selected);
+                },
                 onChanged: (_) => _updateSelection(),
                 onEditingComplete: () {
                   _updateSelection();
