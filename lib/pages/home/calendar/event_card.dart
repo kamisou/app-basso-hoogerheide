@@ -237,19 +237,23 @@ class _EventCardState extends ConsumerState<EventCard> {
                 const Duration(hours: 4),
                 const Duration(hours: 8),
                 const Duration(hours: 16),
-              ].map(
-                (e) => InkWell(
-                  onTap: () => Navigator.pop(context, e),
-                  borderRadius: BorderRadius.circular(4),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Text(
-                      '${e.string()} antes',
-                      style: Theme.of(context).textTheme.titleMedium,
+              ]
+                  .where((e) => widget.event.startDateTime
+                      .subtract(e)
+                      .isAfter(DateTime.now()))
+                  .map(
+                    (e) => InkWell(
+                      onTap: () => Navigator.pop(context, e),
+                      borderRadius: BorderRadius.circular(4),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Text(
+                          '${e.string()} antes',
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
               if (isEnabled)
                 GestureDetector(
                   onTap: () => Navigator.pop(

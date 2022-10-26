@@ -74,30 +74,30 @@ class _ModelCardState extends ConsumerState<ModelCard> {
                             child: _document(e),
                           ),
                         ),
-                        // Row(
-                        //   mainAxisAlignment: MainAxisAlignment.center,
-                        //   children: [
-                        //     GestureDetector(
-                        //       onTap: widget.onTapUpload,
-                        //       child: Row(
-                        //         mainAxisSize: MainAxisSize.min,
-                        //         children: [
-                        //           Icon(
-                        //             Icons.upload_outlined,
-                        //             color:
-                        //                 Theme.of(context).colorScheme.primary,
-                        //           ),
-                        //           const SizedBox(width: 10),
-                        //           Text(
-                        //             'Novo Modelo',
-                        //             style:
-                        //                 Theme.of(context).textTheme.labelLarge,
-                        //           ),
-                        //         ],
-                        //       ),
-                        //     ),
-                        //   ],
-                        // ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                              onTap: widget.onTapUpload,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.upload_outlined,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Text(
+                                    'Novo Modelo',
+                                    style:
+                                        Theme.of(context).textTheme.labelLarge,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   )

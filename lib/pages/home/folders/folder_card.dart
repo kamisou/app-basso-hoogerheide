@@ -9,6 +9,7 @@ import 'package:basso_hoogerheide/models/input/folder/process_info.dart';
 import 'package:basso_hoogerheide/models/repository/folders.dart';
 import 'package:basso_hoogerheide/widgets/error_snackbar.dart';
 import 'package:basso_hoogerheide/widgets/key_value_text.dart';
+import 'package:basso_hoogerheide/widgets/loading_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -54,27 +55,27 @@ class _FolderCardState extends ConsumerState<FolderCard> {
                     ),
                   ),
                   Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _cardHeader(),
-                          Column(
-                            children: [
-                              AnimatedContainer(
-                                duration: const Duration(milliseconds: 300),
-                                child: _expanded
-                                    ? _cardBody()
-                                    : const SizedBox(
-                                        height: 0,
-                                        width: double.infinity,
-                                      ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: _cardHeader(),
+                        ),
+                        Column(
+                          children: [
+                            AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              child: _expanded
+                                  ? _cardBody()
+                                  : const SizedBox(
+                                      height: 0,
+                                      width: double.infinity,
+                                    ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   )
                 ],
@@ -140,146 +141,162 @@ class _FolderCardState extends ConsumerState<FolderCard> {
     final ContactInfo contact = widget.folder.contactInfo;
     final ProcessInfo process = widget.folder.processInfo;
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (widget.folder.writtenOff)
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(4),
-              color:
-                  Theme.of(context).extension<SuccessThemeExtension>()?.success,
-            ),
-            padding: const EdgeInsets.symmetric(
-              horizontal: 7,
-              vertical: 1,
-            ),
-            child: Text(
-              'Baixado',
-              style: Theme.of(context)
-                  .textTheme
-                  .labelLarge
-                  ?.copyWith(fontWeight: FontWeight.bold),
-            ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              if (widget.folder.writtenOff)
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4),
+                    color: Theme.of(context)
+                        .extension<SuccessThemeExtension>()
+                        ?.success,
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 7,
+                    vertical: 1,
+                  ),
+                  child: Text(
+                    'Baixado',
+                    style: Theme.of(context)
+                        .textTheme
+                        .labelLarge
+                        ?.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              _cardSection(Icons.home_outlined, 'Endereço'),
+              Text(
+                '${address.street} - ${address.district}',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              Text(
+                '${address.city} - ${address.state}',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              if (address.cep?.isNotEmpty ?? false)
+                Text(
+                  address.cep!,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+              _cardSection(Icons.phone_outlined, 'Contato'),
+              if (contact.email?.isNotEmpty ?? false)
+                KeyValueText(
+                  keyString: 'E-mail',
+                  valueString: contact.email!,
+                ),
+              if (contact.telephone?.isNotEmpty ?? false)
+                KeyValueText(
+                  keyString: 'Telefone',
+                  valueString: contact.telephone!,
+                ),
+              if (contact.cellphone?.isNotEmpty ?? false)
+                KeyValueText(
+                  keyString: 'Celular',
+                  valueString: contact.cellphone!,
+                ),
+              _cardSection(Icons.description_outlined, 'Detalhes'),
+              KeyValueText(
+                keyString: 'Natureza',
+                valueString: process.nature,
+              ),
+              if (process.number?.isNotEmpty ?? false)
+                KeyValueText(
+                  keyString: 'N° do Processo',
+                  valueString: process.number!.toString(),
+                ),
+              if (process.county?.isNotEmpty ?? false)
+                KeyValueText(
+                  keyString: 'Comarca',
+                  valueString: process.county!.toString(),
+                ),
+              if (process.division?.isNotEmpty ?? false)
+                KeyValueText(
+                  keyString: 'Vara',
+                  valueString: process.division!.toString(),
+                ),
+              _cardSection(Icons.file_present_outlined, 'Arquivos'),
+            ],
           ),
-        _cardSection(Icons.home_outlined, 'Endereço'),
-        Text(
-          '${address.street} - ${address.district}',
-          style: Theme.of(context).textTheme.titleMedium,
         ),
-        Text(
-          '${address.city} - ${address.state}',
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-        if (address.cep?.isNotEmpty ?? false)
-          Text(
-            address.cep!,
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-        _cardSection(Icons.phone_outlined, 'Contato'),
-        if (contact.email?.isNotEmpty ?? false)
-          KeyValueText(
-            keyString: 'E-mail',
-            valueString: contact.email!,
-          ),
-        if (contact.telephone?.isNotEmpty ?? false)
-          KeyValueText(
-            keyString: 'Telefone',
-            valueString: contact.telephone!,
-          ),
-        if (contact.cellphone?.isNotEmpty ?? false)
-          KeyValueText(
-            keyString: 'Celular',
-            valueString: contact.cellphone!,
-          ),
-        _cardSection(Icons.description_outlined, 'Detalhes'),
-        KeyValueText(
-          keyString: 'Natureza',
-          valueString: process.nature,
-        ),
-        if (process.number?.isNotEmpty ?? false)
-          KeyValueText(
-            keyString: 'N° do Processo',
-            valueString: process.number!.toString(),
-          ),
-        if (process.county?.isNotEmpty ?? false)
-          KeyValueText(
-            keyString: 'Comarca',
-            valueString: process.county!.toString(),
-          ),
-        if (process.division?.isNotEmpty ?? false)
-          KeyValueText(
-            keyString: 'Vara',
-            valueString: process.division!.toString(),
-          ),
-        _cardSection(Icons.file_present_outlined, 'Arquivos'),
         ...widget.folder.files.map(
-          (e) => InkWell(
-            onTap: () => launchUrl(
-              Uri.parse('${e.url}?token=${ref.read(authTokenProvider)}'),
-              mode: LaunchMode.externalApplication,
+          (e) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: InkWell(
+              onTap: () => launchUrl(
+                Uri.parse('${e.url}?token=${ref.read(authTokenProvider)}'),
+                mode: LaunchMode.externalApplication,
+              ),
+              borderRadius: BorderRadius.circular(4),
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        e.name,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Icon(
+                      Icons.open_in_new_outlined,
+                      color: Theme.of(context).disabledColor,
+                    ),
+                  ],
+                ),
+              ),
             ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: InkWell(
+            onTap: () => ref
+                .read(filePickerProvider)
+                .pickFiles(dialogTitle: 'Escolha um anexo')
+                .then((value) {
+              if (value == null) return;
+              LoadingSnackbar(
+                contentBuilder: (context) => Text(
+                  'Fazendo upload do arquivo...',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                errorBuilder: (context, _) => Text(
+                  'Houve um erro ao fazer o upload do arquivo!',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+              ).show(
+                context,
+                ref
+                    .read(foldersRepositoryProvider)
+                    .addFolderFile(widget.folder.id, value.first),
+              );
+            }),
+            borderRadius: BorderRadius.circular(4),
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Expanded(
-                    child: Text(
-                      e.name,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Icon(
-                    Icons.open_in_new_outlined,
-                    color: Theme.of(context).disabledColor,
+                  const Icon(Icons.attachment_outlined),
+                  const SizedBox(width: 4),
+                  Text(
+                    'Anexar arquivo',
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ],
               ),
             ),
           ),
         ),
-        InkWell(
-          onTap: () => ref
-              .read(filePickerProvider)
-              .pickFiles(dialogTitle: 'Escolha um anexo')
-              .then((value) {
-            if (value == null) return;
-            ref
-                .read(foldersRepositoryProvider)
-                .addFolderFile(widget.folder.id, value.first)
-                .then(
-                  (_) => ref.refresh(foldersProvider),
-                  onError: (e) => ErrorSnackbar(
-                    context: context,
-                    error: e,
-                  ).on<RestException>(
-                    content: (error) => ErrorContent(
-                      message: error.serverMessage,
-                    ),
-                  ),
-                );
-          }),
-          borderRadius: BorderRadius.circular(4),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.attachment_outlined),
-                const SizedBox(width: 4),
-                Text(
-                  'Anexar arquivo',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-              ],
-            ),
-          ),
-        ),
         Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           width: double.infinity,
-          margin: const EdgeInsets.only(top: 16),
           child: ElevatedButton(
             onPressed: () => Navigator.pushNamed(
               context,

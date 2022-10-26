@@ -30,7 +30,7 @@ class ModelsRepository {
 
   Future<void> uploadModelFile(ModelCategory category, File file) => ref
       .read(restClientProvider)
-      .uploadImage('POST', '/models/categories/files/upload',
+      .uploadImage('POST', '/models/${category.title}/add_file',
           field: 'model_file', file: file)
       .then((_) => ref.refresh(modelCategoriesProvider));
 }
