@@ -105,18 +105,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           ),
           child: const Text('Login'),
         ),
-        // const SizedBox(height: 18),
-        // Center(
-        //   child: GestureDetector(
-        //     // TODO: mostrar diálogo para inserção de e-mail
-        //     onTap: () =>
-        //         ref.read(profileRepository).recoverPassword({'email': null}),
-        //     child: Text(
-        //       'Esqueceu sua senha?',
-        //       style: Theme.of(context).textTheme.labelLarge,
-        //     ),
-        //   ),
-        // ),
       ],
     );
   }

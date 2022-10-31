@@ -8,8 +8,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final messagingProvider = Provider.autoDispose(Messaging.new);
 
-// TODO: ache uma maneira mais elegante para lidar com as notificações que não seja hardcoded
-
 Future<void> onBackgroundMessage(RemoteMessage message) async {
   final notifications = AwesomeNotifications();
   notifications.initialize(
