@@ -1,8 +1,9 @@
+import 'package:basso_hoogerheide/controllers/folders.dart';
 import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/input/folder/annotation.dart';
 import 'package:basso_hoogerheide/models/input/folder/folder.dart';
-import 'package:basso_hoogerheide/models/repository/folders.dart';
 import 'package:basso_hoogerheide/pages/home/folders/add_annotation_dialog.dart';
+import 'package:basso_hoogerheide/repositories/folders.dart';
 import 'package:basso_hoogerheide/widgets/avatar_circle.dart';
 import 'package:basso_hoogerheide/widgets/error_snackbar.dart';
 import 'package:flutter/material.dart';
@@ -31,11 +32,11 @@ class _AnnotationsPageState extends ConsumerState<AnnotationsPage> {
           builder: (context) => const AddAnnotationDialog(),
         ).then(
           (annotation) => ref
-              .read(foldersRepositoryProvider)
+              .read(foldersControllerProvider)
               .addAnnotation(folder.id, annotation)
               .then(
             (_) {
-              ref.refresh(foldersRepositoryProvider);
+              ref.invalidate(foldersRepositoryProvider);
               Navigator.pop(context);
             },
             onError: (e) => ErrorSnackbar(
@@ -184,7 +185,7 @@ class _AnnotationsPageState extends ConsumerState<AnnotationsPage> {
     ).then((value) {
       if (value == 'delete') {
         ref
-            .read(foldersRepositoryProvider)
+            .read(foldersControllerProvider)
             .deleteAnnotation(annotation.id)
             .then(
               (_) => Navigator.pop(context),

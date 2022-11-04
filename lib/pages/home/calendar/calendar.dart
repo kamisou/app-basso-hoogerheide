@@ -1,6 +1,6 @@
 import 'package:basso_hoogerheide/extensions.dart';
-import 'package:basso_hoogerheide/models/repository/calendar.dart';
 import 'package:basso_hoogerheide/pages/home/calendar/day.dart';
+import 'package:basso_hoogerheide/repositories/calendar.dart';
 import 'package:basso_hoogerheide/widgets/empty_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -98,7 +98,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage>
     final initialDate = ref.read(initialDateRepositoryProvider.notifier);
     if (initialDate.state != date) {
       initialDate.state = date;
-      ref.refresh(initialCalendarEventsProvider);
+      ref.invalidate(initialCalendarEventsProvider);
     } else {
       _controller.animateTo(
         0,

@@ -1,7 +1,7 @@
 import 'dart:io';
 
+import 'package:basso_hoogerheide/controllers/sign_in.dart';
 import 'package:basso_hoogerheide/interface/rest_client.dart';
-import 'package:basso_hoogerheide/models/repository/profile.dart';
 import 'package:basso_hoogerheide/widgets/async_button.dart';
 import 'package:basso_hoogerheide/widgets/error_snackbar.dart';
 import 'package:basso_hoogerheide/widgets/text_form_field.dart';
@@ -112,7 +112,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   Future<void> _signIn(BuildContext context) async {
     if (Form.of(context)!.validate()) {
       FocusManager.instance.primaryFocus?.unfocus();
-      return ref.read(profileRepository).signIn({
+      return ref.read(signInControllerProvider).signIn({
         'email': _emailController.text,
         'password': _passwordController.text,
       }).then(

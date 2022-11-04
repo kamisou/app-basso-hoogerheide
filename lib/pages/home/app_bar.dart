@@ -1,4 +1,5 @@
-import 'package:basso_hoogerheide/models/repository/profile.dart';
+import 'package:basso_hoogerheide/controllers/sign_in.dart';
+import 'package:basso_hoogerheide/repositories/profile.dart';
 import 'package:basso_hoogerheide/widgets/avatar_circle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -69,7 +70,7 @@ class _HomeAppBarState extends ConsumerState<HomeAppBar> {
                 ),
                 error: (_, __) => GestureDetector(
                   onTap: () {
-                    ref.read(profileRepository).logout();
+                    ref.read(signInControllerProvider).logout();
                     Navigator.pushNamedAndRemoveUntil(
                         context, '/login', (_) => false);
                   },
@@ -150,7 +151,7 @@ class _HomeAppBarState extends ConsumerState<HomeAppBar> {
           const SizedBox(width: 32),
           GestureDetector(
             onTap: () {
-              ref.read(profileRepository).logout();
+              ref.read(signInControllerProvider).logout();
               Navigator.pushNamedAndRemoveUntil(
                   context, '/login', (_) => false);
             },

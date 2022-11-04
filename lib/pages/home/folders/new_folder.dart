@@ -1,5 +1,6 @@
+import 'package:basso_hoogerheide/controllers/folders.dart';
 import 'package:basso_hoogerheide/interface/rest_client.dart';
-import 'package:basso_hoogerheide/models/repository/folders.dart';
+import 'package:basso_hoogerheide/repositories/folders.dart';
 import 'package:basso_hoogerheide/widgets/empty_card.dart';
 import 'package:basso_hoogerheide/widgets/error_snackbar.dart';
 import 'package:basso_hoogerheide/widgets/large_form.dart';
@@ -41,7 +42,7 @@ class NewFolderPage extends ConsumerWidget {
                             fontWeight: FontWeight.bold,
                           ),
                   onSaved: (data) => ref
-                      .read(foldersRepositoryProvider)
+                      .read(foldersControllerProvider)
                       .addFolder(data)
                       .then((_) => Navigator.pop(context),
                           onError: (e) =>

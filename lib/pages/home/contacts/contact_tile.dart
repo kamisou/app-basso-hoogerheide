@@ -1,6 +1,6 @@
+import 'package:basso_hoogerheide/controllers/contacts.dart';
 import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/input/contact.dart';
-import 'package:basso_hoogerheide/models/repository/contacts.dart';
 import 'package:basso_hoogerheide/widgets/avatar_circle.dart';
 import 'package:basso_hoogerheide/widgets/error_snackbar.dart';
 import 'package:basso_hoogerheide/widgets/key_value_text.dart';
@@ -121,7 +121,7 @@ class _ContactTileState extends ConsumerState<ContactTile> {
         Navigator.pushNamed(context, '/newContact', arguments: widget.contact);
       } else if (value == 'delete') {
         ref
-            .read(contactsRepositoryProvider)
+            .read(contactsControllerProvider)
             .deleteContact(widget.contact)
             .catchError(
               (e) => ErrorSnackbar(
