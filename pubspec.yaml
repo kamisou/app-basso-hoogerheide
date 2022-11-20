@@ -2,8 +2,8 @@ name: basso_hoogerheide
 version: 0.1.0+16
 
 environment:
-  flutter: 3.3.4
-  sdk: 2.18.2
+  flutter: ^3.3.8
+  sdk: ^2.18.4
 
 dependencies:
   flutter:
@@ -17,12 +17,12 @@ dependencies:
   intl: ^0.17.0
   shimmer: ^2.0.0
   file_picker: ^5.2.1
-  flutter_riverpod: 1.0.4
+  flutter_riverpod: ^2.1.1
   flutter_secure_storage: ^6.0.0
   http: ^0.13.5
   awesome_notifications: ^0.7.1
-  firebase_core: ^1.24.0
-  firebase_messaging: ^13.1.0
+  firebase_core: ^2.3.0
+  firebase_messaging: ^14.1.1
   url_launcher: ^6.1.6
 
 dev_dependencies:
