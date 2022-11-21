@@ -1,4 +1,5 @@
 import 'package:basso_hoogerheide/constants/theme_data.dart';
+import 'package:basso_hoogerheide/controllers/folders.dart';
 import 'package:basso_hoogerheide/interface/file_picker.dart';
 import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/input/downloadable_file.dart';
@@ -6,7 +7,6 @@ import 'package:basso_hoogerheide/models/input/folder/address_info.dart';
 import 'package:basso_hoogerheide/models/input/folder/contact_info.dart';
 import 'package:basso_hoogerheide/models/input/folder/folder.dart';
 import 'package:basso_hoogerheide/models/input/folder/process_info.dart';
-import 'package:basso_hoogerheide/models/repository/folders.dart';
 import 'package:basso_hoogerheide/widgets/error_snackbar.dart';
 import 'package:basso_hoogerheide/widgets/key_value_text.dart';
 import 'package:basso_hoogerheide/widgets/loading_snackbar.dart';
@@ -273,7 +273,7 @@ class _FolderCardState extends ConsumerState<FolderCard> {
               ).show(
                 context,
                 ref
-                    .read(foldersRepositoryProvider)
+                    .read(foldersControllerProvider)
                     .addFolderFile(widget.folder.id, value.first),
               );
             }),
@@ -376,7 +376,7 @@ class _FolderCardState extends ConsumerState<FolderCard> {
         Navigator.pushNamed(context, '/newFolder', arguments: widget.folder.id);
       } else if (value == 'delete') {
         ref
-            .read(foldersRepositoryProvider)
+            .read(foldersControllerProvider)
             .deleteFolder(widget.folder)
             .catchError(
               (e) => ErrorSnackbar(

@@ -1,8 +1,9 @@
+import 'package:basso_hoogerheide/controllers/calendar.dart';
 import 'package:basso_hoogerheide/extensions.dart';
 import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/input/calendar_event.dart';
 import 'package:basso_hoogerheide/models/output/new_calendar_event.dart';
-import 'package:basso_hoogerheide/models/repository/calendar.dart';
+import 'package:basso_hoogerheide/repositories/calendar.dart';
 import 'package:basso_hoogerheide/widgets/async_button.dart';
 import 'package:basso_hoogerheide/widgets/color_picker.dart';
 import 'package:basso_hoogerheide/widgets/date_picker.dart';
@@ -156,11 +157,11 @@ class _NewEventPageState extends ConsumerState<NewEventPage> {
 
   Future<void> _onSave(BuildContext context) async {
     if (Form.of(context)!.validate()) {
-      final CalendarRepository calendarRepository =
-          ref.read(calendarRepositoryProvider);
+      final CalendarController calendarController =
+          ref.read(calendarControllerProvider);
       return (_event.id == null
-              ? calendarRepository.addEvent(_event)
-              : calendarRepository.editEvent(_event))
+              ? calendarController.addEvent(_event)
+              : calendarController.editEvent(_event))
           .then(
         (_) => Navigator.pop(context),
         onError: (e) => ErrorSnackbar(

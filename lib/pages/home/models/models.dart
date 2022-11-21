@@ -1,7 +1,8 @@
+import 'package:basso_hoogerheide/controllers/models.dart';
 import 'package:basso_hoogerheide/interface/file_picker.dart';
 import 'package:basso_hoogerheide/models/input/model_category.dart';
-import 'package:basso_hoogerheide/models/repository/models.dart';
 import 'package:basso_hoogerheide/pages/home/models/model_card.dart';
+import 'package:basso_hoogerheide/repositories/models.dart';
 import 'package:basso_hoogerheide/widgets/collection.dart';
 import 'package:basso_hoogerheide/widgets/empty_card.dart';
 import 'package:basso_hoogerheide/widgets/loading_snackbar.dart';
@@ -26,7 +27,7 @@ class _ModelsPageState extends ConsumerState<ModelsPage>
         modelCategory: category,
         onTapUpload: () => _onTapUpload(context, category),
         onTapDelete: (file) =>
-            ref.read(modelsRepositoryProvider).deleteModel(category, file.name),
+            ref.read(modelsControllerProvider).deleteModel(category, file.name),
       ),
       errorWidget: (_) => const EmptyCard(
         icon: Icons.error,
@@ -69,7 +70,7 @@ class _ModelsPageState extends ConsumerState<ModelsPage>
       ).show(
         context,
         ref
-            .read(modelsRepositoryProvider)
+            .read(modelsControllerProvider)
             .uploadModelFile(category, value.first),
       );
     });

@@ -1,8 +1,8 @@
+import 'package:basso_hoogerheide/controllers/calendar.dart';
 import 'package:basso_hoogerheide/extensions.dart';
 import 'package:basso_hoogerheide/interface/notifications.dart';
 import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/input/calendar_event.dart';
-import 'package:basso_hoogerheide/models/repository/calendar.dart';
 import 'package:basso_hoogerheide/widgets/error_snackbar.dart';
 import 'package:basso_hoogerheide/widgets/key_value_text.dart';
 import 'package:flutter/material.dart';
@@ -196,7 +196,7 @@ class _EventCardState extends ConsumerState<EventCard> {
         Navigator.pushNamed(context, '/newEvent', arguments: widget.event);
       } else if (value == 'delete') {
         ref
-            .read(calendarRepositoryProvider)
+            .read(calendarControllerProvider)
             .deleteEvent(widget.event)
             .catchError(
               (e) => ErrorSnackbar(

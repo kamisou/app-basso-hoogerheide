@@ -1,7 +1,9 @@
+import 'package:basso_hoogerheide/controllers/profile.dart';
+import 'package:basso_hoogerheide/controllers/sign_in.dart';
 import 'package:basso_hoogerheide/interface/file_picker.dart';
 import 'package:basso_hoogerheide/interface/rest_client.dart';
-import 'package:basso_hoogerheide/models/repository/profile.dart';
 import 'package:basso_hoogerheide/pages/profile/profile_option.dart';
+import 'package:basso_hoogerheide/repositories/profile.dart';
 import 'package:basso_hoogerheide/widgets/async_button.dart';
 import 'package:basso_hoogerheide/widgets/error_snackbar.dart';
 import 'package:basso_hoogerheide/widgets/loading_snackbar.dart';
@@ -156,7 +158,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
           Center(
             child: GestureDetector(
               onTap: () {
-                ref.read(profileRepository).logout();
+                ref.read(signInControllerProvider).logout();
                 Navigator.pushNamedAndRemoveUntil(
                     context, '/login', (_) => false);
               },
@@ -208,7 +210,10 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
             ],
           );
         },
-      ).show(context, ref.read(profileRepository).changeAvatar(value.first));
+      ).show(
+        context,
+        ref.read(profileControllerProvider).changeAvatar(value.first),
+      );
     });
   }
 
@@ -237,7 +242,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     );
 
     if (result == 'delete') {
-      return ref.read(profileRepository).deleteAvatar();
+      return ref.read(profileControllerProvider).deleteAvatar();
     }
   }
 
@@ -284,7 +289,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               onPressed: () async {
                 if (Form.of(context)!.validate()) {
                   return ref
-                      .read(profileRepository)
+                      .read(profileControllerProvider)
                       .changePassword(passwordController.text)
                       .then(
                         (_) => close(),

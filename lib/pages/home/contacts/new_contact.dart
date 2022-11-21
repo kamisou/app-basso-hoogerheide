@@ -1,7 +1,7 @@
+import 'package:basso_hoogerheide/controllers/contacts.dart';
 import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/input/contact.dart';
 import 'package:basso_hoogerheide/models/output/new_contact.dart';
-import 'package:basso_hoogerheide/models/repository/contacts.dart';
 import 'package:basso_hoogerheide/widgets/async_button.dart';
 import 'package:basso_hoogerheide/widgets/error_snackbar.dart';
 import 'package:easy_mask/easy_mask.dart';
@@ -140,12 +140,12 @@ class _NewContactPageState extends ConsumerState<NewContactPage> {
 
   Future<void> _onSave(BuildContext context) async {
     if (Form.of(context)!.validate()) {
-      final ContactsRepository contactsRepository =
-          ref.read(contactsRepositoryProvider);
+      final ContactsController contactsController =
+          ref.read(contactsControllerProvider);
 
       return (_contact.id == null
-              ? contactsRepository.addContact(_contact)
-              : contactsRepository.editContact(_contact))
+              ? contactsController.addContact(_contact)
+              : contactsController.editContact(_contact))
           .then(
         (_) => Navigator.pop(context),
         onError: (e) => ErrorSnackbar(

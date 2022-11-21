@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:basso_hoogerheide/interface/notifications.dart';
-import 'package:basso_hoogerheide/models/repository/profile.dart';
+import 'package:basso_hoogerheide/repositories/profile.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
