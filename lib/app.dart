@@ -40,21 +40,8 @@ class _AppState extends ConsumerState<App> {
       darkTheme: _appTheme.dark,
       debugShowCheckedModeBanner: false,
       home: SplashPage(
-        initialWork: () async {
-          Intl.defaultLocale =
-              PlatformDispatcher.instance.locale.toLanguageTag();
-          await Firebase.initializeApp();
-          await ref.read(notificationsProvider).initialize();
-          final bool isTokenValid = await _validateToken();
-          return isTokenValid ? '/home' : '/login';
-        },
-        afterWork: (route) async {
-          switch (route) {
-            case '/home':
-              await _initializeMessaging();
-              break;
-          }
-        },
+        initialWork: _initialWork,
+        afterWork: _afterWork,
       ),
       supportedLocales: const [
         Locale('en', 'US'),
@@ -81,11 +68,32 @@ class _AppState extends ConsumerState<App> {
     );
   }
 
+  Future<String> _initialWork() async {
+    Intl.defaultLocale = PlatformDispatcher.instance.locale.toLanguageTag();
+
+    await Firebase.initializeApp();
+    await ref.read(notificationsProvider).initialize();
+
+    final bool isTokenValid = await _validateToken();
+    return isTokenValid ? '/home' : '/login';
+  }
+
+  Future<void> _afterWork(String route) async {
+    switch (route) {
+      case '/home':
+        await _initializeMessaging();
+        break;
+    }
+  }
+
   Future<bool> _validateToken() async {
+    final SecureStorage secureStorage = ref.read(secureStorageProvider);
+
     final String? authToken =
-        await ref.read(secureStorageProvider).read(SecureStorageKey.authToken);
+        await secureStorage.read(SecureStorageKey.authToken);
     if (authToken == null) return false;
     ref.read(authTokenProvider.notifier).state = authToken;
+
     try {
       await ref.read(appUserProvider.future);
       return true;
