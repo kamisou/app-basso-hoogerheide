@@ -53,10 +53,6 @@ class _AppState extends ConsumerState<App> {
             case '/home':
               await _initializeMessaging();
               break;
-            case '/login':
-              await ref.read(messagingProvider).unsubscribeFromTopic(
-                  ref.read(configurationProvider).calendarEventsMessagingTopic);
-              break;
           }
         },
       ),
@@ -94,6 +90,9 @@ class _AppState extends ConsumerState<App> {
       await ref.read(appUserProvider.future);
       return true;
     } on RestException {
+      ref.read(messagingProvider).unsubscribeFromTopic(
+            ref.read(configurationProvider).calendarEventsMessagingTopic,
+          );
       return false;
     }
   }
