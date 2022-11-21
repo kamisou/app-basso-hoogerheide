@@ -28,74 +28,77 @@ class _ContactTileState extends ConsumerState<ContactTile> {
   @override
   Widget build(BuildContext context) {
     final TextStyle? detailStyle = Theme.of(context).textTheme.labelMedium;
-    return InkWell(
-      onTapDown: (details) => setState(() => _tapDetails = details),
-      onLongPress: widget.editable ? _onLongPress : null,
-      borderRadius: BorderRadius.circular(4),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: 10,
-          horizontal: 8,
-        ),
-        child: Row(
-          children: [
-            AvatarCircle(initials: widget.contact.initials, radius: 48),
-            const SizedBox(width: 24),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.contact.name,
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  Row(
-                    children: [
-                      if (widget.contact.telephone?.isNotEmpty ?? false) ...[
-                        Flexible(
-                          child: KeyValueText(
-                            keyString: 'Tel',
-                            valueString: widget.contact.telephone!,
-                            style: detailStyle,
-                          ),
+    final Widget child = Padding(
+      padding: const EdgeInsets.symmetric(
+        vertical: 10,
+        horizontal: 8,
+      ),
+      child: Row(
+        children: [
+          AvatarCircle(initials: widget.contact.initials, radius: 48),
+          const SizedBox(width: 24),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.contact.name,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                Row(
+                  children: [
+                    if (widget.contact.telephone?.isNotEmpty ?? false) ...[
+                      Flexible(
+                        child: KeyValueText(
+                          keyString: 'Tel',
+                          valueString: widget.contact.telephone!,
+                          style: detailStyle,
                         ),
-                        const SizedBox(width: 8),
-                      ],
-                      if (widget.contact.cellphone?.isNotEmpty ?? false)
-                        Flexible(
-                          child: KeyValueText(
-                            keyString: 'Cel',
-                            valueString: widget.contact.cellphone!,
-                            style: detailStyle,
-                          ),
-                        ),
+                      ),
+                      const SizedBox(width: 8),
                     ],
+                    if (widget.contact.cellphone?.isNotEmpty ?? false)
+                      Flexible(
+                        child: KeyValueText(
+                          keyString: 'Cel',
+                          valueString: widget.contact.cellphone!,
+                          style: detailStyle,
+                        ),
+                      ),
+                  ],
+                ),
+                if (widget.contact.email?.isNotEmpty ?? false)
+                  KeyValueText(
+                    keyString: 'Email',
+                    valueString: widget.contact.email!,
+                    style: detailStyle,
                   ),
-                  if (widget.contact.email?.isNotEmpty ?? false)
-                    KeyValueText(
-                      keyString: 'Email',
-                      valueString: widget.contact.email!,
-                      style: detailStyle,
-                    ),
-                  if (widget.contact.fax != null)
-                    KeyValueText(
-                      keyString: 'Fax',
-                      valueString: widget.contact.fax!,
-                      style: detailStyle,
-                    ),
-                  if (widget.contact.address != null)
-                    KeyValueText(
-                      keyString: 'Endereço',
-                      valueString: widget.contact.address!,
-                      style: detailStyle,
-                    ),
-                ],
-              ),
+                if (widget.contact.fax != null)
+                  KeyValueText(
+                    keyString: 'Fax',
+                    valueString: widget.contact.fax!,
+                    style: detailStyle,
+                  ),
+                if (widget.contact.address != null)
+                  KeyValueText(
+                    keyString: 'Endereço',
+                    valueString: widget.contact.address!,
+                    style: detailStyle,
+                  ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
+    return widget.editable
+        ? InkWell(
+            onTapDown: (details) => setState(() => _tapDetails = details),
+            onLongPress: widget.editable ? _onLongPress : null,
+            borderRadius: BorderRadius.circular(4),
+            child: child,
+          )
+        : child;
   }
 
   void _onLongPress() async {
