@@ -19,7 +19,7 @@ class Notifications {
   final _notifications = AwesomeNotifications();
 
   Future<bool> initialize() => _notifications.initialize(
-        null,
+        'resource://drawable/notification.png',
         [
           NotificationChannel(
             channelKey: 'default',
