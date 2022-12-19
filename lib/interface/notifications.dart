@@ -14,7 +14,7 @@ final scheduledNotificationsProvider = FutureProvider.autoDispose(
 class Notifications {
   Notifications(this.ref);
 
-  final Ref ref;
+  final Ref? ref;
 
   final _notifications = AwesomeNotifications();
 
@@ -74,7 +74,7 @@ class Notifications {
             date: scheduledDate,
           ),
         )
-        .then((_) => ref.refresh(scheduledNotificationsProvider));
+        .then((_) => ref!.refresh(scheduledNotificationsProvider));
   }
 
   Future<void> cancelNotification(int id) {
@@ -86,7 +86,7 @@ class Notifications {
     log('removeNotification $id');
     return _notifications
         .cancel(id)
-        .then((_) => ref.refresh(scheduledNotificationsProvider));
+        .then((_) => ref!.refresh(scheduledNotificationsProvider));
   }
 }
 

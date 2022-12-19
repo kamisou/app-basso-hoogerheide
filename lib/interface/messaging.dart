@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:basso_hoogerheide/interface/notifications.dart';
 import 'package:basso_hoogerheide/repositories/profile.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -8,18 +7,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final messagingProvider = Provider.autoDispose(Messaging.new);
 
-Future<void> onBackgroundMessage(RemoteMessage message) async {
-  final notifications = AwesomeNotifications();
-  notifications.initialize(
-    null,
-    [
-      NotificationChannel(
-        channelKey: 'default',
-        channelName: null,
-        channelDescription: null,
-      ),
-    ],
-  );
+Future<void> _onBackgroundMessage(RemoteMessage message) async {
+  final notifications = Notifications(null);
+  await notifications.initialize();
+  _handleMessage(notifications, message);
+}
+
+void _handleMessage(Notifications notifications, RemoteMessage message) async {
   switch (message.data['type']) {
     case 'event':
       final String? action = message.data['action'];
@@ -27,19 +21,16 @@ Future<void> onBackgroundMessage(RemoteMessage message) async {
 
       final Map<String, dynamic> event = json.decode(message.data['event']);
 
-      await notifications.cancel(event['id']);
+      await notifications.cancelNotification(event['id']);
 
       if (action == 'edit') {
-        await notifications.createNotification(
-          content: NotificationContent(
+        await notifications.scheduleNotification(
+          LocalNotification(
             id: event['id'],
-            channelKey: 'default',
             title: event['title'],
             body: event['description'],
           ),
-          schedule: NotificationCalendar.fromDate(
-            date: DateTime.parse(event['start']),
-          ),
+          DateTime.parse(event['start']),
         );
       }
   }
@@ -67,7 +58,7 @@ class Messaging {
     }
 
     FirebaseMessaging.onMessage.listen(onMessage);
-    FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
+    FirebaseMessaging.onBackgroundMessage(_onBackgroundMessage);
 
     return true;
   }
@@ -75,25 +66,7 @@ class Messaging {
   Future<void> onMessage(RemoteMessage message) async {
     final notifications = ref.read(notificationsProvider);
 
-    switch (message.data['type']) {
-      case 'event':
-        final String? action = message.data['action'];
-        if (action == 'add') break;
-
-        final Map<String, dynamic> event = json.decode(message.data['event']);
-
-        await notifications.cancelNotification(event['id']);
-        if (action == 'edit') {
-          await notifications.scheduleNotification(
-            LocalNotification(
-              id: event['id'],
-              title: event['title'],
-              body: event['description'],
-            ),
-            DateTime.parse(event['start']),
-          );
-        }
-    }
+    _handleMessage(notifications, message);
 
     if (ref.read(appUserProvider).value!.id !=
         int.parse(message.data['author_id'])) {
