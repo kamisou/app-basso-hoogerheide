@@ -66,7 +66,7 @@ class _ColorPickerState extends State<ColorPicker> {
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(100),
-                            color: color,
+                            color: color.withOpacity(1),
                           ),
                         ),
                       );
@@ -86,7 +86,7 @@ class _ColorPickerState extends State<ColorPicker> {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          color: _color,
+          color: _color.withOpacity(1),
         ),
         height: 32,
         width: 32,

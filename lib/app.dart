@@ -1,20 +1,14 @@
 import 'dart:ui';
 
 import 'package:basso_hoogerheide/constants/configuration.dart';
+import 'package:basso_hoogerheide/constants/routes.dart';
 import 'package:basso_hoogerheide/constants/secure_storage_keys.dart';
 import 'package:basso_hoogerheide/constants/theme_data.dart';
 import 'package:basso_hoogerheide/interface/messaging.dart';
 import 'package:basso_hoogerheide/interface/notifications.dart';
 import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/interface/secure_storage.dart';
-import 'package:basso_hoogerheide/pages/home/calendar/new_event.dart';
-import 'package:basso_hoogerheide/pages/home/contacts/new_contact.dart';
-import 'package:basso_hoogerheide/pages/home/folders/annotations.dart';
-import 'package:basso_hoogerheide/pages/home/folders/folder_search.dart';
-import 'package:basso_hoogerheide/pages/home/folders/new_folder.dart';
-import 'package:basso_hoogerheide/pages/home/home.dart';
-import 'package:basso_hoogerheide/pages/login.dart';
-import 'package:basso_hoogerheide/pages/profile/profile.dart';
+
 import 'package:basso_hoogerheide/pages/splash.dart';
 import 'package:basso_hoogerheide/repositories/profile.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -53,16 +47,7 @@ class _AppState extends ConsumerState<App> {
         GlobalCupertinoLocalizations.delegate,
       ],
       restorationScopeId: 'basso_hoogerheide',
-      routes: {
-        '/login': (_) => const LoginPage(),
-        '/home': (_) => const HomePage(),
-        '/newEvent': (_) => const NewEventPage(),
-        '/newContact': (_) => const NewContactPage(),
-        '/newFolder': (_) => const NewFolderPage(),
-        '/folderSearch': (_) => const FolderSearchPage(),
-        '/annotations': (_) => const AnnotationsPage(),
-        '/profile': (_) => const ProfilePage(),
-      },
+      routes: appRoutes,
       themeMode: ThemeMode.dark,
       title: 'Basso Hoogerheide',
     );

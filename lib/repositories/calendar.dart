@@ -68,7 +68,7 @@ class CalendarRepository {
       .get('/events/colors')
       .then((value) => (value['colors'] as List? ?? [])
           .cast<String>()
-          .map((e) => ColorExtension.parseHex(e)!.withOpacity(1))
+          .map((e) => ColorExtension.parseHex(e)!)
           .toList());
 }
 

@@ -57,13 +57,20 @@ class Messaging {
       return false;
     }
 
-    FirebaseMessaging.onMessage.listen(onMessage);
+    FirebaseMessaging.onMessage.listen(_onMessage);
     FirebaseMessaging.onBackgroundMessage(_onBackgroundMessage);
 
     return true;
   }
 
-  Future<void> onMessage(RemoteMessage message) async {
+  Future<String?> getInitialMessageType() async {
+    final RemoteMessage? message =
+        await FirebaseMessaging.instance.getInitialMessage();
+    if (message == null) return null;
+    return message.data['type'];
+  }
+
+  Future<void> _onMessage(RemoteMessage message) async {
     final notifications = ref.read(notificationsProvider);
 
     _handleMessage(notifications, message);

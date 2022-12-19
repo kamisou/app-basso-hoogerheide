@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({
@@ -32,8 +33,20 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(child: CircularProgressIndicator()),
+    return Scaffold(
+      body: Center(
+        child: SizedBox(
+          width: 200,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SvgPicture.asset('assets/icons/logo.svg'),
+              const SizedBox(height: 32),
+              const LinearProgressIndicator(color: Colors.white),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
