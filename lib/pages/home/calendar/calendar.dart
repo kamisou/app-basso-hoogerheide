@@ -99,7 +99,11 @@ class _CalendarPageState extends ConsumerState<CalendarPage>
     if (initialDate.state != date) {
       initialDate.state = date;
       ref.invalidate(initialCalendarEventsProvider);
-      _controller.animateTo(0, duration: const Duration());
+      _controller.animateTo(
+        0,
+        duration: const Duration(),
+        curve: Curves.linear,
+      );
     } else {
       _controller.animateTo(
         0,
