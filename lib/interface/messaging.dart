@@ -1,45 +1,22 @@
-import 'dart:convert';
-
+import 'package:basso_hoogerheide/interface/message_handlers/event_handler.dart';
+import 'package:basso_hoogerheide/interface/message_handlers/message_handler.dart';
 import 'package:basso_hoogerheide/interface/notifications.dart';
-import 'package:basso_hoogerheide/repositories/profile.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final messagingProvider = Provider.autoDispose(Messaging.new);
 
-Future<void> _onBackgroundMessage(RemoteMessage message) async {
-  final notifications = Notifications(null);
-  await notifications.initialize();
-  _handleMessage(notifications, message);
-}
-
-void _handleMessage(Notifications notifications, RemoteMessage message) async {
-  switch (message.data['type']) {
-    case 'event':
-      final String? action = message.data['action'];
-      if (action == 'add') return;
-
-      final Map<String, dynamic> event = json.decode(message.data['event']);
-
-      await notifications.cancelNotification(event['id']);
-
-      if (action == 'edit') {
-        await notifications.scheduleNotification(
-          LocalNotification(
-            id: event['id'],
-            title: event['title'],
-            body: event['description'],
-          ),
-          DateTime.parse(event['start']),
-        );
-      }
-  }
-}
-
 class Messaging {
-  const Messaging(this.ref);
+  static const Map<String, Function(Notifications, RemoteMessage)>
+      _backgroundHandlers = {
+    'events': EventMessageHandler.onBackgroundMessage,
+  };
+
+  Messaging(this.ref);
 
   final Ref ref;
+
+  final Map<String, Function(RemoteMessage)> _messageHandlers = {};
 
   Future<bool> initialize() async {
     NotificationSettings settings =
@@ -63,33 +40,22 @@ class Messaging {
     return true;
   }
 
-  Future<String?> getInitialMessageType() async {
-    final RemoteMessage? message =
-        await FirebaseMessaging.instance.getInitialMessage();
-    if (message == null) return null;
-    return message.data['type'];
+  void _onMessage(RemoteMessage message) =>
+      _messageHandlers[message.from]?.call(message);
+
+  Future<void> _onBackgroundMessage(RemoteMessage message) async {
+    final notifications = Notifications(null);
+    await notifications.initialize();
+    _backgroundHandlers[message.from]?.call(notifications, message);
   }
 
-  Future<void> _onMessage(RemoteMessage message) async {
-    final notifications = ref.read(notificationsProvider);
-
-    _handleMessage(notifications, message);
-
-    if (ref.read(appUserProvider).value!.id !=
-        int.parse(message.data['author_id'])) {
-      notifications.showNotification(
-        LocalNotification(
-          id: message.hashCode,
-          title: message.notification?.title,
-          body: message.notification?.body,
-        ),
-      );
-    }
+  Future<void> subscribeToTopic(String topic, MessageHandler handler) {
+    _messageHandlers[topic] = handler.onMessage;
+    return FirebaseMessaging.instance.subscribeToTopic(topic);
   }
 
-  Future<void> subscribeToTopic(String topic) =>
-      FirebaseMessaging.instance.subscribeToTopic(topic);
-
-  Future<void> unsubscribeFromTopic(String topic) =>
-      FirebaseMessaging.instance.unsubscribeFromTopic(topic);
+  Future<void> unsubscribeFromTopic(String topic) {
+    _messageHandlers.remove(topic);
+    return FirebaseMessaging.instance.unsubscribeFromTopic(topic);
+  }
 }

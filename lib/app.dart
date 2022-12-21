@@ -1,14 +1,13 @@
 import 'dart:ui';
 
-import 'package:basso_hoogerheide/constants/configuration.dart';
 import 'package:basso_hoogerheide/constants/routes.dart';
 import 'package:basso_hoogerheide/constants/secure_storage_keys.dart';
 import 'package:basso_hoogerheide/constants/theme_data.dart';
+import 'package:basso_hoogerheide/interface/message_handlers/event_handler.dart';
 import 'package:basso_hoogerheide/interface/messaging.dart';
 import 'package:basso_hoogerheide/interface/notifications.dart';
 import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/interface/secure_storage.dart';
-
 import 'package:basso_hoogerheide/pages/splash.dart';
 import 'package:basso_hoogerheide/repositories/profile.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -83,9 +82,7 @@ class _AppState extends ConsumerState<App> {
       await ref.read(appUserProvider.future);
       return true;
     } on RestException {
-      ref.read(messagingProvider).unsubscribeFromTopic(
-            ref.read(configurationProvider).calendarEventsMessagingTopic,
-          );
+      ref.read(messagingProvider).unsubscribeFromTopic('events');
       return false;
     }
   }
@@ -95,7 +92,8 @@ class _AppState extends ConsumerState<App> {
     final bool isAuthorized = await messaging.initialize();
     if (isAuthorized) {
       messaging.subscribeToTopic(
-        ref.read(configurationProvider).calendarEventsMessagingTopic,
+        'events',
+        ref.read(eventMessageHandlerProvider),
       );
     }
   }
