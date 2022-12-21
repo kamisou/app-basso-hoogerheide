@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:basso_hoogerheide/constants/routes.dart';
 import 'package:basso_hoogerheide/constants/secure_storage_keys.dart';
 import 'package:basso_hoogerheide/constants/theme_data.dart';
-import 'package:basso_hoogerheide/interface/message_handlers/event_handler.dart';
+import 'package:basso_hoogerheide/interface/message_handlers/event_message_handler.dart';
 import 'package:basso_hoogerheide/interface/messaging.dart';
 import 'package:basso_hoogerheide/interface/notifications.dart';
 import 'package:basso_hoogerheide/interface/rest_client.dart';

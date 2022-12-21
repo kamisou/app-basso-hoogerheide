@@ -1,4 +1,4 @@
-import 'package:basso_hoogerheide/interface/message_handlers/event_handler.dart';
+import 'package:basso_hoogerheide/interface/message_handlers/event_message_handler.dart';
 import 'package:basso_hoogerheide/interface/message_handlers/message_handler.dart';
 import 'package:basso_hoogerheide/interface/notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -41,9 +41,9 @@ class Messaging {
   }
 
   void _onMessage(RemoteMessage message) =>
-      _messageHandlers[message.from]?.call(message);
+      _messageHandlers[message.from?.split('/').last]?.call(message);
 
-  Future<void> _onBackgroundMessage(RemoteMessage message) async {
+  static Future<void> _onBackgroundMessage(RemoteMessage message) async {
     final notifications = Notifications(null);
     await notifications.initialize();
     _backgroundHandlers[message.from]?.call(notifications, message);
