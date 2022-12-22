@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -34,7 +35,7 @@ class AsyncCollection<T> extends StatefulWidget {
   final double spacing;
 
   @override
-  State<AsyncCollection<T>> createState() => _AsyncCollectionState<T>();
+  State<AsyncCollection> createState() => _AsyncCollectionState<T>();
 }
 
 class _AsyncCollectionState<T> extends State<AsyncCollection<T>> {
@@ -51,6 +52,18 @@ class _AsyncCollectionState<T> extends State<AsyncCollection<T>> {
     super.initState();
     if (widget.onReachingEnd != null) {
       _controller.addListener(_onControllerChange);
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant AsyncCollection<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!listEquals(
+      oldWidget.asyncCollection.value,
+      widget.asyncCollection.value,
+    )) {
+      _fetching = false;
+      _reachedEnd = false;
     }
   }
 

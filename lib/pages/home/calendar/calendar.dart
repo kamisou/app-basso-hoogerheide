@@ -98,8 +98,8 @@ class _CalendarPageState extends ConsumerState<CalendarPage>
     final initialDate = ref.read(initialDateRepositoryProvider.notifier);
     if (initialDate.state != date) {
       initialDate.state = date;
-      ref.invalidate(initialCalendarEventsProvider);
       _controller.jumpTo(0);
+      ref.invalidate(initialCalendarEventsProvider);
     } else {
       _controller.animateTo(
         0,

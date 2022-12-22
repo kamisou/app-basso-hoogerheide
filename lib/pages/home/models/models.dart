@@ -3,7 +3,7 @@ import 'package:basso_hoogerheide/interface/file_picker.dart';
 import 'package:basso_hoogerheide/models/input/model_category.dart';
 import 'package:basso_hoogerheide/pages/home/models/model_card.dart';
 import 'package:basso_hoogerheide/repositories/models.dart';
-import 'package:basso_hoogerheide/widgets/collection.dart';
+import 'package:basso_hoogerheide/widgets/async_collection.dart';
 import 'package:basso_hoogerheide/widgets/empty_card.dart';
 import 'package:basso_hoogerheide/widgets/loading_snackbar.dart';
 import 'package:flutter/material.dart';

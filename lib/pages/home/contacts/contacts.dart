@@ -1,7 +1,7 @@
 import 'package:basso_hoogerheide/models/input/contact.dart';
 import 'package:basso_hoogerheide/pages/home/contacts/contact_tile.dart';
 import 'package:basso_hoogerheide/repositories/contacts.dart';
-import 'package:basso_hoogerheide/widgets/collection.dart';
+import 'package:basso_hoogerheide/widgets/async_collection.dart';
 import 'package:basso_hoogerheide/widgets/empty_card.dart';
 import 'package:basso_hoogerheide/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
