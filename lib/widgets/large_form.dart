@@ -1,4 +1,4 @@
-import 'package:basso_hoogerheide/widgets/async_button.dart';
+import 'package:basso_hoogerheide/widgets/async_button/elevated_async_button.dart';
 import 'package:basso_hoogerheide/widgets/date_picker.dart';
 import 'package:basso_hoogerheide/widgets/searchbar.dart';
 import 'package:easy_mask/easy_mask.dart';
@@ -23,6 +23,8 @@ class LargeForm extends StatefulWidget {
 }
 
 class _LargeFormState extends State<LargeForm> {
+  final GlobalKey<FormState> _formKey = GlobalKey();
+
   late List<LargeFormSection> _sections;
 
   Map<String, dynamic> _data = {};
@@ -102,46 +104,45 @@ class _LargeFormState extends State<LargeForm> {
   @override
   Widget build(BuildContext context) {
     return Form(
+      key: _formKey,
       child: Builder(
         builder: (context) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               ..._sections.map(
-                (section) => Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          section.title,
-                          style: widget.sectionTitleStyle,
-                        ),
-                        const SizedBox(width: 8),
-                        const Expanded(
-                          child: Divider(thickness: 2, height: 20),
-                        ),
-                      ],
-                    ),
-                    ListView.separated(
-                      itemCount: section.fields.length,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (_, index) =>
-                          _fieldBuilder(section, section.fields[index]),
-                      separatorBuilder: (_, __) => const SizedBox(height: 10),
-                    ),
-                  ],
+                (section) => Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            section.title,
+                            style: widget.sectionTitleStyle,
+                          ),
+                          const SizedBox(width: 8),
+                          const Expanded(
+                            child: Divider(thickness: 2, height: 20),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: section.fields
+                            .map((e) => Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 6),
+                                  child: _fieldBuilder(section, e),
+                                ))
+                            .toList(),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               ElevatedAsyncButton(
-                onPressed: () async {
-                  if (Form.of(context)!.validate()) {
-                    return widget.onSaved?.call(_data);
-                  }
-                },
+                onPressed: _onTapSave,
                 loadingChild: SizedBox(
                   height: 25,
                   width: 25,
@@ -205,6 +206,12 @@ class _LargeFormState extends State<LargeForm> {
 
   String _fieldLabel(LargeFormField field) =>
       "${field.required ? '* ' : ''}${field.title}";
+
+  Future<void> _onTapSave() async {
+    if (_formKey.currentState?.validate() ?? false) {
+      return widget.onSaved?.call(_data);
+    }
+  }
 }
 
 class LargeFormSection {

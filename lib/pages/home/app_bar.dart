@@ -69,18 +69,14 @@ class _HomeAppBarState extends ConsumerState<HomeAppBar> {
                   ),
                 ),
                 error: (_, __) => GestureDetector(
-                  onTap: () {
-                    ref.read(signInControllerProvider).logout();
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, '/login', (_) => false);
-                  },
+                  onTap: _onTapLogout,
                   child: Container(
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       border: Border.all(
                         color: Theme.of(context).colorScheme.error,
                       ),
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: const BorderRadius.all(Radius.circular(20)),
                     ),
                     width: 40,
                     height: 40,
@@ -99,7 +95,7 @@ class _HomeAppBarState extends ConsumerState<HomeAppBar> {
                       Theme.of(context).inputDecorationTheme.fillColor!,
                   child: Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: const BorderRadius.all(Radius.circular(20)),
                       color: Theme.of(context).colorScheme.surface,
                     ),
                     width: 40,
@@ -150,15 +146,16 @@ class _HomeAppBarState extends ConsumerState<HomeAppBar> {
           ),
           const SizedBox(width: 32),
           GestureDetector(
-            onTap: () {
-              ref.read(signInControllerProvider).logout();
-              Navigator.pushNamedAndRemoveUntil(
-                  context, '/login', (_) => false);
-            },
+            onTap: _onTapLogout,
             child: const Icon(Icons.exit_to_app),
           ),
         ],
       ),
     );
+  }
+
+  void _onTapLogout() {
+    ref.read(signInControllerProvider).logout();
+    Navigator.pushNamedAndRemoveUntil(context, '/login', (_) => false);
   }
 }

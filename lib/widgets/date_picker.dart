@@ -56,8 +56,8 @@ class _DatePickerState extends State<DatePicker> {
 
   @override
   void dispose() {
+    _focusNode.dispose();
     super.dispose();
-    _focusNode.removeListener(_showDatePicker);
   }
 
   void _showDatePicker() {

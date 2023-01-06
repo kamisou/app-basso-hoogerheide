@@ -87,7 +87,7 @@ class _AnnotationsPageState extends ConsumerState<AnnotationsPage> {
         children: [
           Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6),
+              borderRadius: const BorderRadius.all(Radius.circular(6)),
               color: Theme.of(context).disabledColor,
             ),
             height: 12,

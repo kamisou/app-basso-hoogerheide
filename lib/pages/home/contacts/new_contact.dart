@@ -2,7 +2,7 @@ import 'package:basso_hoogerheide/controllers/contacts.dart';
 import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/input/contact.dart';
 import 'package:basso_hoogerheide/models/output/new_contact.dart';
-import 'package:basso_hoogerheide/widgets/async_button.dart';
+import 'package:basso_hoogerheide/widgets/async_button/elevated_async_button.dart';
 import 'package:basso_hoogerheide/widgets/error_snackbar.dart';
 import 'package:easy_mask/easy_mask.dart';
 import 'package:flutter/material.dart';

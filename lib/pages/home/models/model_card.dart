@@ -114,7 +114,7 @@ class _ModelCardState extends ConsumerState<ModelCard> {
         Uri.parse('${file.url}?token=${ref.read(authTokenProvider)}'),
         mode: LaunchMode.externalApplication,
       ),
-      borderRadius: BorderRadius.circular(4),
+      borderRadius: const BorderRadius.all(Radius.circular(4)),
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: Row(

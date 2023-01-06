@@ -56,6 +56,12 @@ class _AsyncCollectionState<T> extends State<AsyncCollection<T>> {
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   void didUpdateWidget(covariant AsyncCollection<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (!listEquals(
@@ -81,14 +87,14 @@ class _AsyncCollectionState<T> extends State<AsyncCollection<T>> {
 
   void _reachEnd() => _reachedEnd = true;
 
+  Future<void> _refresh() {
+    _fetching = false;
+    _reachedEnd = false;
+    return widget.onRefresh!.call();
+  }
+
   @override
   Widget build(BuildContext context) {
-    Future<void> refresh() {
-      _fetching = false;
-      _reachedEnd = false;
-      return widget.onRefresh!.call();
-    }
-
     return widget.asyncCollection.when(
       data: (data) {
         final Widget child = data.isNotEmpty
@@ -121,16 +127,17 @@ class _AsyncCollectionState<T> extends State<AsyncCollection<T>> {
                 ),
               );
         return widget.onRefresh != null
-            ? RefreshIndicator(onRefresh: refresh, child: child)
+            ? RefreshIndicator(onRefresh: _refresh, child: child)
             : child;
       },
       error: (error, _) {
-        final Widget child = SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          child: Column(children: [widget.errorWidget(error)]),
+        final Widget child = ListView(
+          children: [
+            widget.errorWidget(error),
+          ],
         );
         return widget.onRefresh != null
-            ? RefreshIndicator(onRefresh: refresh, child: child)
+            ? RefreshIndicator(onRefresh: _refresh, child: child)
             : child;
       },
       loading: () => widget.loadingWidget,

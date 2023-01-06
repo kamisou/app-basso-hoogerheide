@@ -62,25 +62,16 @@ class _TimeIntervalPickerState extends State<TimeIntervalPicker> {
                     border: Border.all(
                       color: Theme.of(context).colorScheme.error,
                     ),
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(4),
+                    ),
                   )
                 : null,
             child: Row(
               children: [
                 Expanded(
                   child: GestureDetector(
-                    onTap: () async {
-                      final TimeOfDay? time = await showTimePicker(
-                        context: context,
-                        initialTime:
-                            _start ?? TimeOfDay.fromDateTime(DateTime.now()),
-                      );
-                      if (time == null) return;
-                      if (_end?.isBefore(time) ?? true) {
-                        _setEndTime(time);
-                      }
-                      _setStartTime(time);
-                    },
+                    onTap: _onTapStartDate,
                     child: AbsorbPointer(
                       child: TextFormField(
                         controller: _startController,
@@ -98,22 +89,7 @@ class _TimeIntervalPickerState extends State<TimeIntervalPicker> {
                 ),
                 Expanded(
                   child: GestureDetector(
-                    onTap: () async {
-                      final TimeOfDay? time = await showTimePicker(
-                        context: context,
-                        initialTime: _end ??
-                            TimeOfDay.fromDateTime(
-                              DateTime.now().add(
-                                const Duration(hours: 1),
-                              ),
-                            ),
-                      );
-                      if (time == null) return;
-                      if (time.isBefore(_start!)) {
-                        _setStartTime(time);
-                      }
-                      _setEndTime(time);
-                    },
+                    onTap: _onTapEndDate,
                     child: AbsorbPointer(
                       child: TextFormField(
                         controller: _endController,
@@ -144,6 +120,35 @@ class _TimeIntervalPickerState extends State<TimeIntervalPicker> {
         ],
       ),
     );
+  }
+
+  void _onTapStartDate() async {
+    final TimeOfDay? time = await showTimePicker(
+      context: context,
+      initialTime: _start ?? TimeOfDay.fromDateTime(DateTime.now()),
+    );
+    if (time == null) return;
+    if (_end?.isBefore(time) ?? true) {
+      _setEndTime(time);
+    }
+    _setStartTime(time);
+  }
+
+  void _onTapEndDate() async {
+    final TimeOfDay? time = await showTimePicker(
+      context: context,
+      initialTime: _end ??
+          TimeOfDay.fromDateTime(
+            DateTime.now().add(
+              const Duration(hours: 1),
+            ),
+          ),
+    );
+    if (time == null) return;
+    if (time.isBefore(_start!)) {
+      _setStartTime(time);
+    }
+    _setEndTime(time);
   }
 
   void _setStartTime(TimeOfDay? time) {

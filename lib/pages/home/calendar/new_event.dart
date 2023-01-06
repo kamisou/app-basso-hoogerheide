@@ -4,7 +4,7 @@ import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/models/input/calendar_event.dart';
 import 'package:basso_hoogerheide/models/output/new_calendar_event.dart';
 import 'package:basso_hoogerheide/repositories/calendar.dart';
-import 'package:basso_hoogerheide/widgets/async_button.dart';
+import 'package:basso_hoogerheide/widgets/async_button/elevated_async_button.dart';
 import 'package:basso_hoogerheide/widgets/color_picker.dart';
 import 'package:basso_hoogerheide/widgets/date_picker.dart';
 import 'package:basso_hoogerheide/widgets/empty_card.dart';

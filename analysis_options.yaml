@@ -1,9 +1,14 @@
 include: package:flutter_lints/flutter.yaml
 
+analyzer:
+  plugins:
+    - dart_code_metrics
+
 linter:
   rules:
     always_use_package_imports: true
     directives_ordering: true
 
-# Additional information about this file can be found at
-# https://dart.dev/guides/language/analysis-options
+dart_code_metrics:
+  extends:
+    - package:dart_code_metrics/presets/flutter_all.yaml

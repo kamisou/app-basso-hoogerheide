@@ -4,7 +4,7 @@ import 'package:basso_hoogerheide/interface/file_picker.dart';
 import 'package:basso_hoogerheide/interface/rest_client.dart';
 import 'package:basso_hoogerheide/pages/profile/profile_option.dart';
 import 'package:basso_hoogerheide/repositories/profile.dart';
-import 'package:basso_hoogerheide/widgets/async_button.dart';
+import 'package:basso_hoogerheide/widgets/async_button/text_async_button.dart';
 import 'package:basso_hoogerheide/widgets/error_snackbar.dart';
 import 'package:basso_hoogerheide/widgets/loading_snackbar.dart';
 import 'package:basso_hoogerheide/widgets/shimmering_image.dart';
@@ -19,7 +19,7 @@ class ProfilePage extends ConsumerStatefulWidget {
 }
 
 class _ProfilePageState extends ConsumerState<ProfilePage> {
-  TapDownDetails? _tapDetails;
+  final GlobalKey<FormState> _formKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +34,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                     Center(
                       child: GestureDetector(
                         onTap: () => _onTapProfilePic(context, ref),
-                        onTapDown: (details) => _tapDetails = details,
-                        onLongPress: _onLongPressProfilePic,
+                        onLongPressStart: _onLongPressProfilePic,
                         child: Stack(
                           alignment: Alignment.topRight,
                           clipBehavior: Clip.none,
@@ -44,7 +43,9 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                               alignment: Alignment.center,
                               clipBehavior: Clip.antiAlias,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50),
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(50),
+                                ),
                                 color: Theme.of(context).colorScheme.surface,
                               ),
                               height: 100,
@@ -67,7 +68,9 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                               right: -4,
                               child: Container(
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16),
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(16),
+                                  ),
                                   boxShadow: const [
                                     BoxShadow(
                                       blurRadius: 8,
@@ -141,6 +144,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
             bodyBuilder: (_, close) => Padding(
               padding: const EdgeInsets.all(16),
               child: Form(
+                key: _formKey,
                 child: Builder(
                   builder: (context) =>
                       _changePasswordFormBuilder(context, ref, close),
@@ -157,11 +161,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
           const SizedBox(height: 40),
           Center(
             child: GestureDetector(
-              onTap: () {
-                ref.read(signInControllerProvider).logout();
-                Navigator.pushNamedAndRemoveUntil(
-                    context, '/login', (_) => false);
-              },
+              onTap: _onTapLogout,
               child: Text(
                 'Sair',
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -217,14 +217,13 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
     });
   }
 
-  Future<void> _onLongPressProfilePic() async {
-    if (ref.read(appUserProvider).value?.avatarUrl == null ||
-        _tapDetails == null) {
+  Future<void> _onLongPressProfilePic(LongPressStartDetails details) async {
+    if (ref.read(appUserProvider).value?.avatarUrl == null) {
       return;
     }
 
-    final double dx = _tapDetails!.globalPosition.dx;
-    final double dy = _tapDetails!.globalPosition.dy;
+    final double dx = details.globalPosition.dx;
+    final double dy = details.globalPosition.dy;
 
     final String? result = await showMenu<String?>(
       context: context,
@@ -275,33 +274,14 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               ),
               keyboardType: TextInputType.visiblePassword,
               obscureText: true,
-              validator: (value) {
-                if (value?.isEmpty ?? true) {
-                  return 'Repita a nova senha';
-                } else if (passwordController.text != value) {
-                  return 'As senhas não coincidem';
-                }
-                return null;
-              },
+              validator: (value) => _validatePasswordConfirm(
+                value,
+                passwordController.text,
+              ),
             ),
             const SizedBox(height: 16),
             TextAsyncButton(
-              onPressed: () async {
-                if (Form.of(context)!.validate()) {
-                  return ref
-                      .read(profileControllerProvider)
-                      .changePassword(passwordController.text)
-                      .then(
-                        (_) => close(),
-                        onError: (e) =>
-                            ErrorSnackbar(context: context, error: e)
-                              ..on<RestException>(
-                                content: (error) =>
-                                    ErrorContent(message: error.serverMessage),
-                              ),
-                      );
-                }
-              },
+              onPressed: () => _onTapSave(passwordController.text, close),
               loadingChild: const SizedBox(
                 width: 16,
                 height: 16,
@@ -316,5 +296,31 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
         );
       },
     );
+  }
+
+  void _onTapLogout() {
+    ref.read(signInControllerProvider).logout();
+    Navigator.pushNamedAndRemoveUntil(context, '/login', (_) => false);
+  }
+
+  String? _validatePasswordConfirm(String? value, String password) {
+    if (value?.isEmpty ?? true) {
+      return 'Repita a nova senha';
+    } else if (password != value) {
+      return 'As senhas não coincidem';
+    }
+    return null;
+  }
+
+  Future<void> _onTapSave(String value, VoidCallback close) async {
+    if (_formKey.currentState?.validate() ?? false) {
+      return ref.read(profileControllerProvider).changePassword(value).then(
+            (_) => close(),
+            onError: (e) => ErrorSnackbar(context: context, error: e)
+              ..on<RestException>(
+                content: (error) => ErrorContent(message: error.serverMessage),
+              ),
+          );
+    }
   }
 }

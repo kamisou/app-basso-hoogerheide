@@ -14,13 +14,13 @@ class AppTheme {
           fontWeight: FontWeight.bold,
         ),
       ),
-      cardTheme: CardTheme(
+      cardTheme: const CardTheme(
         clipBehavior: Clip.antiAlias,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.all(Radius.circular(4)),
         ),
-        surfaceTintColor: const Color(0x00000000),
+        surfaceTintColor: Color(0x00000000),
       ),
       colorScheme: const ColorScheme(
         brightness: Brightness.dark,
@@ -36,10 +36,10 @@ class AppTheme {
         onSurface: Color(0xFFF0F0F0),
         surfaceTint: Color(0x00000000),
       ),
-      dialogTheme: DialogTheme(
-        backgroundColor: const Color(0xFF1A1A1A),
+      dialogTheme: const DialogTheme(
+        backgroundColor: Color(0xFF1A1A1A),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.all(Radius.circular(4)),
         ),
       ),
       disabledColor: const Color(0xFF3F3F3F),
@@ -51,7 +51,11 @@ class AppTheme {
             const EdgeInsets.symmetric(vertical: 12),
           ),
           shape: MaterialStateProperty.all(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+            const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(4),
+              ),
+            ),
           ),
           textStyle: MaterialStateProperty.all(
             const TextStyle(
@@ -65,9 +69,9 @@ class AppTheme {
       extensions: const [
         SuccessThemeExtension(success: Color(0xFF318E31)),
       ],
-      floatingActionButtonTheme: FloatingActionButtonThemeData(
+      floatingActionButtonTheme: const FloatingActionButtonThemeData(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(32),
+          borderRadius: BorderRadius.all(Radius.circular(32)),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
@@ -117,12 +121,12 @@ class AppTheme {
                 ),
         ),
       ),
-      popupMenuTheme: PopupMenuThemeData(
-        color: const Color(0xFF1A1A1A),
+      popupMenuTheme: const PopupMenuThemeData(
+        color: Color(0xFF1A1A1A),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.all(Radius.circular(4)),
         ),
-        textStyle: const TextStyle(
+        textStyle: TextStyle(
           color: Color(0xFFF0F0F0),
           fontFamily: fontFamily,
           fontSize: 16,
@@ -144,12 +148,12 @@ class AppTheme {
         thickness: MaterialStateProperty.all(6),
       ),
       shadowColor: const Color(0x3F000000),
-      snackBarTheme: SnackBarThemeData(
-        actionTextColor: const Color(0xFFF34923),
-        backgroundColor: const Color(0xFF1A1A1A),
+      snackBarTheme: const SnackBarThemeData(
+        actionTextColor: Color(0xFFF34923),
+        backgroundColor: Color(0xFF1A1A1A),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.all(Radius.circular(4)),
         ),
       ),
       splashColor: const Color(0x08FFFFFF),
@@ -177,7 +181,11 @@ class AppTheme {
         style: ButtonStyle(
           foregroundColor: MaterialStateProperty.all(const Color(0xFFF0F0F0)),
           shape: MaterialStateProperty.all(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+            const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(4),
+              ),
+            ),
           ),
           textStyle: MaterialStateProperty.all(
             const TextStyle(

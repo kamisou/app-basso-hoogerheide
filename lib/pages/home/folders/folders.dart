@@ -1,9 +1,9 @@
 import 'package:basso_hoogerheide/controllers/folders.dart';
 import 'package:basso_hoogerheide/models/input/folder/folder.dart';
-import 'package:basso_hoogerheide/pages/home/folders/folder_card.dart';
 import 'package:basso_hoogerheide/repositories/folders.dart';
 import 'package:basso_hoogerheide/widgets/async_collection.dart';
 import 'package:basso_hoogerheide/widgets/empty_card.dart';
+import 'package:basso_hoogerheide/widgets/folder_card/folder_card.dart';
 import 'package:basso_hoogerheide/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,11 +15,9 @@ class FoldersPage extends ConsumerStatefulWidget {
   ConsumerState<FoldersPage> createState() => _FoldersPageState();
 }
 
-class _FoldersPageState extends ConsumerState<FoldersPage>
-    with AutomaticKeepAliveClientMixin {
+class _FoldersPageState extends ConsumerState<FoldersPage> {
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         heroTag: 'folder_fab',
@@ -63,15 +61,7 @@ class _FoldersPageState extends ConsumerState<FoldersPage>
                 child: const CircularProgressIndicator(),
               ),
               onRefresh: () async => ref.refresh(foldersProvider),
-              onReachingEnd: (finishFetching, reachEnd) async {
-                final folders = ref.read(foldersProvider).value!;
-                final newFolders = await ref
-                    .read(foldersRepositoryProvider)
-                    .getFolders(afterPage: folders.last.id);
-                folders.addAll(newFolders);
-                finishFetching();
-                if (newFolders.isEmpty) reachEnd();
-              },
+              onReachingEnd: _onFolderListReachingEnd,
             ),
           ),
         ],
@@ -79,6 +69,16 @@ class _FoldersPageState extends ConsumerState<FoldersPage>
     );
   }
 
-  @override
-  bool get wantKeepAlive => true;
+  Future<void> _onFolderListReachingEnd(
+    VoidCallback finishFetching,
+    VoidCallback reachEnd,
+  ) async {
+    final folders = ref.read(foldersProvider).value!;
+    final newFolders = await ref
+        .read(foldersRepositoryProvider)
+        .getFolders(afterPage: folders.last.id);
+    folders.addAll(newFolders);
+    finishFetching();
+    if (newFolders.isEmpty) reachEnd();
+  }
 }

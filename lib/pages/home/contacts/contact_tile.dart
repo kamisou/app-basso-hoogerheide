@@ -95,7 +95,7 @@ class _ContactTileState extends ConsumerState<ContactTile> {
         ? InkWell(
             onTapDown: (details) => setState(() => _tapDetails = details),
             onLongPress: widget.editable ? _onLongPress : null,
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: const BorderRadius.all(Radius.circular(4)),
             child: child,
           )
         : child;

@@ -131,14 +131,7 @@ class _SearchBarState<T> extends State<SearchBar<T>> {
                           itemExtent: 40,
                           children: options
                               .map((option) => GestureDetector(
-                                    onTap: () {
-                                      _textEditingController.text =
-                                          option.toString();
-                                      _focusNode.unfocus();
-                                      widget.onChanged?.call(option);
-                                      _removeOverlay();
-                                      _selected = option;
-                                    },
+                                    onTap: () => _onTapOption(option),
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 8),
@@ -190,37 +183,58 @@ class _SearchBarState<T> extends State<SearchBar<T>> {
   }
 
   @override
-  Widget build(BuildContext context) => CompositedTransformTarget(
-        link: _layerLink,
-        child: Row(
-          children: [
-            Expanded(
-              child: TextFormField(
-                controller: _textEditingController,
-                decoration: InputDecoration(
-                  labelText: widget.label,
-                  prefixIcon: widget.icon != null ? Icon(widget.icon) : null,
-                ),
-                keyboardType: TextInputType.text,
-                enabled: widget.options.isNotEmpty,
-                focusNode: _focusNode,
-                validator: (_) {
-                  if (_selected == null) {
-                    return 'Selecione uma opção válida';
-                  }
-                  return widget.validator?.call(_selected);
-                },
-                onChanged: (_) => _updateSelection(),
-                onEditingComplete: () {
-                  _updateSelection();
-                  _decideAction();
-                },
-                textInputAction: widget.textInputAction,
+  void dispose() {
+    _textEditingController.dispose();
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  void _onTapOption(T option) {
+    _textEditingController.text = option.toString();
+    _focusNode.unfocus();
+    widget.onChanged?.call(option);
+    _removeOverlay();
+    _selected = option;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CompositedTransformTarget(
+      link: _layerLink,
+      child: Row(
+        children: [
+          Expanded(
+            child: TextFormField(
+              controller: _textEditingController,
+              decoration: InputDecoration(
+                labelText: widget.label,
+                prefixIcon: widget.icon != null ? Icon(widget.icon) : null,
               ),
+              keyboardType: TextInputType.text,
+              enabled: widget.options.isNotEmpty,
+              focusNode: _focusNode,
+              validator: _validateOption,
+              onChanged: (_) => _updateSelection(),
+              onEditingComplete: _onEditingComplete,
+              textInputAction: widget.textInputAction,
             ),
-          ],
-        ),
-      );
+          ),
+        ],
+      ),
+    );
+  }
+
+  String? _validateOption(String? _) {
+    if (_selected == null) {
+      return 'Selecione uma opção válida';
+    }
+    return widget.validator?.call(_selected);
+  }
+
+  void _onEditingComplete() {
+    _updateSelection();
+    _decideAction();
+  }
 
   void _decideAction() {
     switch (widget.textInputAction) {

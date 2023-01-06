@@ -53,7 +53,7 @@ class _CalendarPageState extends ConsumerState<CalendarPage>
                   final DateTime thisDate =
                       initialDate.add(Duration(days: index));
                   return Padding(
-                    padding: const EdgeInsets.only(bottom: 32),
+                    padding: const EdgeInsets.only(bottom: 16),
                     child: DayWidget(
                       date: thisDate,
                       today: today,

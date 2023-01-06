@@ -10,6 +10,8 @@ class AddAnnotationDialog extends StatefulWidget {
 class _AddAnnotationDialogState extends State<AddAnnotationDialog> {
   final TextEditingController _controller = TextEditingController();
 
+  final GlobalKey<FormState> _formKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -28,6 +30,7 @@ class _AddAnnotationDialogState extends State<AddAnnotationDialog> {
             ),
             const SizedBox(height: 16),
             Form(
+              key: _formKey,
               child: Builder(
                 builder: (context) => Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -50,11 +53,7 @@ class _AddAnnotationDialogState extends State<AddAnnotationDialog> {
                         ),
                         const SizedBox(width: 16),
                         GestureDetector(
-                          onTap: () {
-                            if (Form.of(context)!.validate()) {
-                              Navigator.pop(context, _controller.text);
-                            }
-                          },
+                          onTap: _onTapSave,
                           child: Text(
                             'Salvar',
                             style: Theme.of(context)
@@ -73,5 +72,11 @@ class _AddAnnotationDialogState extends State<AddAnnotationDialog> {
         ),
       ),
     );
+  }
+
+  void _onTapSave() {
+    if (_formKey.currentState?.validate() ?? false) {
+      Navigator.pop(context, _controller.text);
+    }
   }
 }

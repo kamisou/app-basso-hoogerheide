@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:basso_hoogerheide/controllers/sign_in.dart';
 import 'package:basso_hoogerheide/interface/rest_client.dart';
-import 'package:basso_hoogerheide/widgets/async_button.dart';
+import 'package:basso_hoogerheide/widgets/async_button/elevated_async_button.dart';
 import 'package:basso_hoogerheide/widgets/error_snackbar.dart';
 import 'package:basso_hoogerheide/widgets/text_form_field.dart';
 import 'package:flutter/material.dart';

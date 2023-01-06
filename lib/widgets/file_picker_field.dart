@@ -26,30 +26,34 @@ class FilePickerField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FormField<List<File>>(
-      builder: (state) {
-        return GestureDetector(
-          onTap: () async {
-            final List<File>? files = await filePicker.pickFiles(
-              dialogTitle: hintText,
-              allowMultiple: allowMultiple,
-            );
-            if (files != null) {
-              onDocumentAdded?.call(files);
-            }
-            state.didChange(files ?? state.value);
-          },
-          child: TextFormField(
-            decoration: InputDecoration(
-              hintText: state.value == null
-                  ? hintText
-                  : state.value!.map((e) => e.path.split('/').last).join('\n'),
-              hintMaxLines: state.value?.length,
-              prefixIcon: icon != null ? Icon(icon) : null,
-            ),
-            enabled: false,
-          ),
-        );
-      },
+      builder: _formFieldBuilder,
     );
+  }
+
+  Widget _formFieldBuilder(FormFieldState<List<File>> state) {
+    return GestureDetector(
+      onTap: () => _onTapFormField(state),
+      child: TextFormField(
+        decoration: InputDecoration(
+          hintText: state.value == null
+              ? hintText
+              : state.value!.map((e) => e.path.split('/').last).join('\n'),
+          hintMaxLines: state.value?.length,
+          prefixIcon: icon != null ? Icon(icon) : null,
+        ),
+        enabled: false,
+      ),
+    );
+  }
+
+  void _onTapFormField(FormFieldState<List<File>> state) async {
+    final List<File>? files = await filePicker.pickFiles(
+      dialogTitle: hintText,
+      allowMultiple: allowMultiple,
+    );
+    if (files != null) {
+      onDocumentAdded?.call(files);
+    }
+    state.didChange(files ?? state.value);
   }
 }

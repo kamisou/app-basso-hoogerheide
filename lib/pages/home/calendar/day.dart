@@ -32,7 +32,7 @@ class DayWidget extends ConsumerWidget {
                   Container(
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(24),
+                      borderRadius: const BorderRadius.all(Radius.circular(24)),
                       color: today == date
                           ? Theme.of(context).colorScheme.primary
                           : Theme.of(context).colorScheme.surface,
@@ -67,13 +67,13 @@ class DayWidget extends ConsumerWidget {
           ),
           const SizedBox(height: 24),
           if (events != null)
-            ListView.separated(
-              itemBuilder: (_, index) => EventCard(event: events![index]),
-              separatorBuilder: (_, __) => const SizedBox(height: 10),
-              itemCount: events!.length,
-              padding: EdgeInsets.zero,
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
+            Column(
+              children: events!
+                  .map((e) => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        child: EventCard(event: e),
+                      ))
+                  .toList(),
             ),
         ],
       );

@@ -33,7 +33,6 @@ class NewFolderPage extends ConsumerWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 24),
                 LargeForm(
                   json: data,
                   sectionTitleStyle:

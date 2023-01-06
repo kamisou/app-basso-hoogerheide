@@ -1,8 +1,8 @@
 import 'package:basso_hoogerheide/models/input/folder/folder.dart';
-import 'package:basso_hoogerheide/pages/home/folders/folder_card.dart';
 import 'package:basso_hoogerheide/repositories/folders.dart';
 import 'package:basso_hoogerheide/widgets/async_collection.dart';
 import 'package:basso_hoogerheide/widgets/empty_card.dart';
+import 'package:basso_hoogerheide/widgets/folder_card/folder_card.dart';
 import 'package:basso_hoogerheide/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -38,11 +38,7 @@ class _FolderSearchPageState extends ConsumerState<FolderSearchPage> {
                       autofocus: true,
                       controller: _controller,
                       hintText: 'N° da pasta, cliente, procurador, CPF...',
-                      onEditingComplete: () {
-                        ref.read(searchTermProvider.notifier).state =
-                            _controller.text;
-                        FocusManager.instance.primaryFocus?.unfocus();
-                      },
+                      onEditingComplete: _onSearchEditingComplete,
                     ),
                   ),
                 ],
@@ -69,22 +65,31 @@ class _FolderSearchPageState extends ConsumerState<FolderSearchPage> {
                   padding: const EdgeInsets.all(20),
                   child: const CircularProgressIndicator(),
                 ),
-                onReachingEnd: (finishFetching, reachEnd) async {
-                  final folders = ref.read(searchFoldersProvider).value!;
-                  final newFolders =
-                      await ref.read(foldersRepositoryProvider).getFolders(
-                            afterPage: folders.last.id,
-                            searchTerm: ref.read(searchTermProvider),
-                          );
-                  folders.addAll(newFolders);
-                  finishFetching();
-                  if (newFolders.isEmpty) reachEnd();
-                },
+                onReachingEnd: _onFolderListReachingEnd,
               ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  void _onSearchEditingComplete() {
+    ref.read(searchTermProvider.notifier).state = _controller.text;
+    FocusManager.instance.primaryFocus?.unfocus();
+  }
+
+  Future<void> _onFolderListReachingEnd(
+    VoidCallback finishFetching,
+    VoidCallback reachEnd,
+  ) async {
+    final folders = ref.read(searchFoldersProvider).value!;
+    final newFolders = await ref.read(foldersRepositoryProvider).getFolders(
+          afterPage: folders.last.id,
+          searchTerm: ref.read(searchTermProvider),
+        );
+    folders.addAll(newFolders);
+    finishFetching();
+    if (newFolders.isEmpty) reachEnd();
   }
 }

@@ -20,15 +20,34 @@ class EventCard extends ConsumerStatefulWidget {
   ConsumerState<EventCard> createState() => _EventCardState();
 }
 
-class _EventCardState extends ConsumerState<EventCard> {
+class _EventCardState extends ConsumerState<EventCard>
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+  late AnimationController _animationController;
+
+  late CurvedAnimation _curvedAnimation;
+
   bool _expanded = false;
 
   TapDownDetails? _tapDetails;
 
   @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+    _curvedAnimation = CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOutQuart,
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     final LocalNotification? notification =
         ref.watch(scheduledNotificationsProvider).value?[widget.event.id];
+    super.build(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -48,7 +67,7 @@ class _EventCardState extends ConsumerState<EventCard> {
                     )
                   : null,
               child: InkWell(
-                onTap: () => setState(() => _expanded = !_expanded),
+                onTap: _onTapCard,
                 onTapDown: (details) => _tapDetails = details,
                 onLongPress: _onLongPress,
                 child: Padding(
@@ -83,7 +102,7 @@ class _EventCardState extends ConsumerState<EventCard> {
                 right: -12,
                 child: Container(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: const BorderRadius.all(Radius.circular(16)),
                     color: Theme.of(context).colorScheme.surface,
                   ),
                   width: 24,
@@ -97,80 +116,80 @@ class _EventCardState extends ConsumerState<EventCard> {
               ),
           ],
         ),
-        AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
-          child: _expanded
-              ? Container(
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(4),
-                      bottomRight: Radius.circular(4),
-                    ),
-                    color: Theme.of(context).colorScheme.surface,
-                  ),
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+        SizeTransition(
+          sizeFactor: _curvedAnimation,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(4),
+                bottomRight: Radius.circular(4),
+              ),
+              color: Theme.of(context).colorScheme.surface,
+            ),
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                KeyValueText(
-                                  keyString: 'Início',
-                                  valueString:
-                                      widget.event.startTime.format(context),
-                                ),
-                                KeyValueText(
-                                  keyString: 'Término',
-                                  valueString:
-                                      widget.event.endTime.format(context),
-                                ),
-                              ],
-                            ),
+                          KeyValueText(
+                            keyString: 'Início',
+                            valueString: widget.event.startTime.format(context),
                           ),
-                          if (widget.event.startDateTime
-                              .isAfter(DateTime.now()))
-                            GestureDetector(
-                              onTap: () =>
-                                  _onTapNotification(notification != null),
-                              child: Icon(
-                                notification != null
-                                    ? Icons.notifications_active
-                                    : Icons.notifications_outlined,
-                                color: Theme.of(context).colorScheme.secondary,
-                              ),
-                            ),
+                          KeyValueText(
+                            keyString: 'Término',
+                            valueString: widget.event.endTime.format(context),
+                          ),
                         ],
                       ),
-                      widget.event.description?.isNotEmpty ?? false
-                          ? KeyValueText(
-                              keyString: 'Descrição',
-                              valueString: widget.event.description!,
-                            )
-                          : Text(
-                              '(Nenhuma informação sobre o evento)',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium
-                                  ?.copyWith(
-                                    color:
-                                        Theme.of(context).colorScheme.secondary,
-                                  ),
-                            )
-                    ],
-                  ),
-                )
-              : const SizedBox(
-                  height: 0,
-                  width: double.infinity,
+                    ),
+                    if (widget.event.startDateTime.isAfter(DateTime.now()))
+                      GestureDetector(
+                        onTap: () => _onTapNotification(notification != null),
+                        child: Icon(
+                          notification != null
+                              ? Icons.notifications_active
+                              : Icons.notifications_outlined,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                      ),
+                  ],
                 ),
+                widget.event.description?.isNotEmpty ?? false
+                    ? KeyValueText(
+                        keyString: 'Descrição',
+                        valueString: widget.event.description!,
+                      )
+                    : Text(
+                        '(Nenhuma informação sobre o evento)',
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium
+                            ?.copyWith(
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
+                      )
+              ],
+            ),
+          ),
         ),
       ],
     );
+  }
+
+  void _onTapCard() async {
+    if (_animationController.isAnimating) return;
+    if (_expanded) {
+      await _animationController.reverse();
+    } else {
+      await _animationController.forward();
+    }
+    setState(() => _expanded = !_expanded);
   }
 
   void _onLongPress() async {
@@ -210,8 +229,8 @@ class _EventCardState extends ConsumerState<EventCard> {
     });
   }
 
-  void _onTapNotification(bool isEnabled) {
-    showDialog<Duration>(
+  void _onTapNotification(bool isEnabled) async {
+    final Duration? duration = await showDialog(
       context: context,
       builder: (context) => Dialog(
         child: Padding(
@@ -244,7 +263,7 @@ class _EventCardState extends ConsumerState<EventCard> {
                   .map(
                     (e) => InkWell(
                       onTap: () => Navigator.pop(context, e),
-                      borderRadius: BorderRadius.circular(4),
+                      borderRadius: const BorderRadius.all(Radius.circular(4)),
                       child: Padding(
                         padding: const EdgeInsets.all(8),
                         child: Text(
@@ -274,24 +293,28 @@ class _EventCardState extends ConsumerState<EventCard> {
           ),
         ),
       ),
-    ).then(
-      (value) {
-        if (value == null) return;
-        final CalendarEvent event = widget.event;
-        final Notifications notifications = ref.read(notificationsProvider);
-        if (value.isNegative) {
-          notifications.removeNotification(event.id);
-          return;
-        }
-        notifications.scheduleNotification(
-          LocalNotification(
-            id: event.id,
-            title: event.title,
-            body: event.description,
-          ),
-          event.startDateTime.subtract(value),
-        );
-      },
+    );
+
+    if (duration == null) return;
+
+    final CalendarEvent event = widget.event;
+    final Notifications notifications = ref.read(notificationsProvider);
+
+    if (duration.isNegative) {
+      notifications.removeNotification(event.id);
+      return;
+    }
+
+    notifications.scheduleNotification(
+      LocalNotification(
+        id: event.id,
+        title: event.title,
+        body: event.description,
+      ),
+      event.startDateTime.subtract(duration),
     );
   }
+  
+  @override
+  bool get wantKeepAlive => _expanded;
 }
