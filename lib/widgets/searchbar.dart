@@ -63,7 +63,7 @@ class _SearchBarState<T> extends State<SearchBar<T>> {
     }
     _focusNode.addListener(_focusNodeListener);
     _textEditingController.addListener(_textEditingControllerListener);
-    _overlayState = Overlay.of(context)!;
+    _overlayState = Overlay.of(context);
   }
 
   void _focusNodeListener() {

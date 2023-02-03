@@ -287,7 +287,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
             const SizedBox(height: 16),
             TextAsyncButton(
               onPressed: () async {
-                if (Form.of(context)!.validate()) {
+                if (Form.of(context).validate()) {
                   return ref
                       .read(profileControllerProvider)
                       .changePassword(passwordController.text)

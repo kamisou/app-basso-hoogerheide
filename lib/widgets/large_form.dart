@@ -138,7 +138,7 @@ class _LargeFormState extends State<LargeForm> {
               ),
               ElevatedAsyncButton(
                 onPressed: () async {
-                  if (Form.of(context)!.validate()) {
+                  if (Form.of(context).validate()) {
                     return widget.onSaved?.call(_data);
                   }
                 },

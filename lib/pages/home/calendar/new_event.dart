@@ -156,7 +156,7 @@ class _NewEventPageState extends ConsumerState<NewEventPage> {
   }
 
   Future<void> _onSave(BuildContext context) async {
-    if (Form.of(context)!.validate()) {
+    if (Form.of(context).validate()) {
       final CalendarController calendarController =
           ref.read(calendarControllerProvider);
       return (_event.id == null

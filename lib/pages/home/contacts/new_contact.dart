@@ -139,7 +139,7 @@ class _NewContactPageState extends ConsumerState<NewContactPage> {
   }
 
   Future<void> _onSave(BuildContext context) async {
-    if (Form.of(context)!.validate()) {
+    if (Form.of(context).validate()) {
       final ContactsController contactsController =
           ref.read(contactsControllerProvider);
 

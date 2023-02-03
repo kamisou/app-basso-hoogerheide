@@ -110,7 +110,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   }
 
   Future<void> _signIn(BuildContext context) async {
-    if (Form.of(context)!.validate()) {
+    if (Form.of(context).validate()) {
       FocusManager.instance.primaryFocus?.unfocus();
       return ref.read(signInControllerProvider).signIn({
         'email': _emailController.text,

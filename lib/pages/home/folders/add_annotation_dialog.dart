@@ -51,7 +51,7 @@ class _AddAnnotationDialogState extends State<AddAnnotationDialog> {
                         const SizedBox(width: 16),
                         GestureDetector(
                           onTap: () {
-                            if (Form.of(context)!.validate()) {
+                            if (Form.of(context).validate()) {
                               Navigator.pop(context, _controller.text);
                             }
                           },
