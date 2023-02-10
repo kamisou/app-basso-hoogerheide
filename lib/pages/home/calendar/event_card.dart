@@ -241,19 +241,27 @@ class _EventCardState extends ConsumerState<EventCard> {
                   .where((e) => widget.event.startDateTime
                       .subtract(e)
                       .isAfter(DateTime.now()))
-                  .map(
-                    (e) => InkWell(
-                      onTap: () => Navigator.pop(context, e),
-                      borderRadius: BorderRadius.circular(4),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Text(
-                          '${e.string()} antes',
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                      ),
+                  .map((e) {
+                final String period;
+                if (e.inHours > 0) {
+                  period = '$e.inHours hora${e.inHours > 1 ? 's' : ''}';
+                } else if (e.inMinutes > 0) {
+                  period = '$e.inMinutes minuto${e.inMinutes > 1 ? 's' : ''}';
+                } else {
+                  period = '$e.inSeconds hora${e.inSeconds > 1 ? 's' : ''}';
+                }
+                return InkWell(
+                  onTap: () => Navigator.pop(context, e),
+                  borderRadius: BorderRadius.circular(4),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Text(
+                      '$period antes',
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ),
+                );
+              }),
               if (isEnabled)
                 GestureDetector(
                   onTap: () => Navigator.pop(
