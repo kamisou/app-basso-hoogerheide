@@ -45,8 +45,8 @@ class _TimeIntervalPickerState extends State<TimeIntervalPicker> {
     super.initState();
     _start = widget.initialStartTime;
     _end = widget.initialEndTime;
-    _startController.text = _start?.fmt() ?? '';
-    _endController.text = _end?.fmt() ?? '';
+    _startController.text = _start == null ? '' : _formatTime(_start!);
+    _endController.text = _end == null ? '' : _formatTime(_end!);
   }
 
   @override
@@ -148,13 +148,17 @@ class _TimeIntervalPickerState extends State<TimeIntervalPicker> {
 
   void _setStartTime(TimeOfDay? time) {
     _start = time;
-    _startController.text = _start?.fmt() ?? '';
+    _startController.text = _start == null ? '' : _formatTime(_start!);
     widget.onStartTimeChanged?.call(time);
   }
 
   void _setEndTime(TimeOfDay? time) {
     _end = time;
-    _endController.text = _end?.fmt() ?? '';
+    _endController.text = _end == null ? '' : _formatTime(_end!);
     widget.onEndTimeChanged?.call(time);
+  }
+
+  String _formatTime(TimeOfDay time) {
+    return '${time.toString().padLeft(2, '0')}:${time.toString().padLeft(2, '0')}';
   }
 }

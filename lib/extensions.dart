@@ -20,13 +20,6 @@ extension TimeOfDayExtension on TimeOfDay {
     return TimeOfDay.fromDateTime(DateTime.parse(date));
   }
 
-  String fmt([bool twentyFourHours = true]) {
-    final int h = twentyFourHours ? hour : hour % 12;
-    final String ampm = twentyFourHours ? '' : ' ${hour >= 12 ? 'PM' : 'AM'}';
-    return '${h.toString().padLeft(2, '0')}:'
-        '${minute.toString().padLeft(2, '0')}$ampm';
-  }
-
   bool isAfter(TimeOfDay other) =>
       (hour * 60 + minute) > (other.hour * 60 + other.minute);
 
